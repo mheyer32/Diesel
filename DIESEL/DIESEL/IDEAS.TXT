@@ -1,0 +1,17 @@
+====================================================================================================================
+portal-speedup:
+
+//project the portalsurface onto the screen, get a bounding rectangle and set glScissor() before rendering the portalview
+
+=====================================================================================================================
+
+
+TODO:
+
+- redesign texture classes inheritance, support for cubemaps
+- find good way for vid_restart
+- fix FIXMEs
+- remove support for more than one portal at once (never worked well anyway)
+- turn dlight-test into real dlight support
+- autosprite2 code doesn´t work in all cases
+- autosprite faces sometimes have wrong texture coordinates and are falsly oriented in rare cases

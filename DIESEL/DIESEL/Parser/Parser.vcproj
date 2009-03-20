@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding = "Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.00"
+	Name="Parser"
+	ProjectGUID="{A0DDAA3F-7966-4B61-8B76-C14550D08103}"
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="f:\j2sdk1.4.0_01\bin\java -classpath e:\myprojects\libraries\ANTLR-2.7.0 antlr.Tool  Doom3.g"
+				Output="DoomLexer.hpp, doomlexer.cpp, DoomTokenTypes.hpp, DoomParser.hpp, DoomParser.cpp"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="f:\j2sdk1.4.0_01\bin\java -classpath e:\myprojects\libraries\ANTLR-2.7.0 antlr.Tool  Doom3.g"
+				Output="DoomLexer.hpp, doomlexer.cpp, DoomTokenTypes.hpp, DoomParser.hpp, DoomParser.cpp"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<File
+			RelativePath="Doom3.g">
+		</File>
+		<File
+			RelativePath="StdCParser.g">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
