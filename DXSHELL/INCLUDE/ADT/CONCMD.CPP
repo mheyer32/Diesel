@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <defs.h>
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 #include <memorytracker.h>
 //////////////////////////////////////////////////////////////////////
@@ -39,7 +40,13 @@ ConCmd ConCmd::saycmd("say",ConCmd::EchoCmd);
 
 using namespace std;
 
-ConCmd::ConCmd(const std::string &Command,ConCmd::CALLBACKFUNC CallbackFunc)
+bool ConCmd::myless::operator () (const std::string &s1, const std::string &s2) const
+{
+	std::string::size_type l1 = s1.size(), l2=s2.size();
+	return strnicmp(s1.c_str(),s2.c_str(), l2>l1 ? l2 : l1)<0;
+}
+
+ConCmd::ConCmd(const std::string &Command,ConCmd::CMDCALLBACKFUNC CallbackFunc)
 {
 	setCommand(Command,CallbackFunc);
 }
@@ -76,9 +83,10 @@ COMMANDITERATOR c;
 	return NULL;
 }
 
-void ConCmd::setCommand(const std::string &Command, ConCmd::CALLBACKFUNC CallbackFunc)
+void ConCmd::setCommand(const std::string &Command, ConCmd::CMDCALLBACKFUNC CallbackFunc)
 {
-	if (!CommandList) CommandList=new COMMANDMAP;
+	if (!CommandList) 
+		CommandList=new COMMANDMAP;
 
 	command=Command;
 	(*CommandList)[command]=this;
@@ -168,12 +176,12 @@ COMMANDITERATOR c;
 	}
 }
 
-#pragma optimize ("g", off) // it seems that this is causing my problems
 void ConCmd::AliasCmd(ConCmd &Command,const std::string &Arg)
-{CAliasCmd *alias;
-ConCmd *cmd;
-char aliasname[256] ;
-char cmdline[1024] ;
+{
+	CAliasCmd *alias;
+	ConCmd *cmd;
+	char aliasname[256] ;
+	char cmdline[1024] ;
 
 	if (Arg.empty())
 	{
@@ -209,7 +217,6 @@ char cmdline[1024] ;
 	}
 
 }
-#pragma optimize ("", on)
 
 void ConCmd::EchoCmd(ConCmd &Command,const std::string &Arg)
 {

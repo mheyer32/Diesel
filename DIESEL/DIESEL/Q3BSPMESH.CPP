@@ -749,7 +749,7 @@ bool Q3BSPMesh::BrushRayTest(int brushnum,const VECTOR3 &p1, const VECTOR3 &p2, 
 	BRUSH *b=&brushes[brushnum];
 	int bs=b->startbrushside;
 	int lastbs=bs+b->num_brushsides;
-	int brushside;
+	int brushside=-1;
 
 	float tnear=-1.0f;
 	float tfar=1.0f;

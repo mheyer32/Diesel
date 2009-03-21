@@ -20,46 +20,35 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#pragma warning ( disable : 4786 )
-
-#if !defined(AFX_CONCMD_H__52961BA4_0B26_4659_8174_80D311BE8622__INCLUDED_)
-#define AFX_CONCMD_H__52961BA4_0B26_4659_8174_80D311BE8622__INCLUDED_
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#include <boost/noncopyable.hpp>
 
 #include <map>
 #include <string>
-#include <string.h>
 
-class ConCmd  
+class ConCmd  : boost::noncopyable
 {
 //FIXME: vielleicht eine statische Funktion einbauen, die ConCmd Objekte erzeugt und
 // verhindert, dass mehrere Commandos gleichen Namens erzeugt werden
 // + Konstruktor verstecken
 public:
 
-class myless
+struct myless
 {
-public:
-	bool operator () (const std::string &s1, const std::string &s2) const
-	{
-		std::string::size_type l1 = s1.size(), l2=s2.size();
-		return strnicmp(s1.c_str(),s2.c_str(), l2>l1 ? l2 : l1)<0;
-	}
-
+	bool operator () (const std::string &s1, const std::string &s2) const;
 };
 
 typedef std::map<std::string,ConCmd*, myless> COMMANDMAP;
 typedef COMMANDMAP::iterator COMMANDITERATOR;
 
-	typedef void (*CALLBACKFUNC)(ConCmd &Command,const std::string &Arg);
+	typedef void (*CMDCALLBACKFUNC)(ConCmd &Command,const std::string &Arg);
 
-	ConCmd(const std::string &Command="",CALLBACKFUNC CallbackFunc=NULL);
+	ConCmd(const std::string &Command="",CMDCALLBACKFUNC CallbackFunc=NULL);
 	virtual ~ConCmd();
 
-	void setCommand(const std::string &Command,CALLBACKFUNC CallbackFunc);
+	void setCommand(const std::string &Command,CMDCALLBACKFUNC CallbackFunc);
 	void execute(const std::string &Arg="");
 	std::string getCommandName() const;
 
@@ -72,7 +61,7 @@ typedef COMMANDMAP::iterator COMMANDITERATOR;
 protected:
 
 	std::string		command;
-	CALLBACKFUNC	callback;
+	CMDCALLBACKFUNC	callback;
 
 	static COMMANDMAP *CommandList;
 	
@@ -105,4 +94,3 @@ protected:
 	static void AliasCallback(ConCmd &Command,const std::string &Arg);
 };
 
-#endif // !defined(AFX_CONCMD_H__52961BA4_0B26_4659_8174_80D311BE8622__INCLUDED_)

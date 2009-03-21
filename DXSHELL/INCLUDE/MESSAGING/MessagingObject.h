@@ -5,8 +5,6 @@
 #ifndef MESSAGINGOBJ_H_93CA5ACC22A645D2B467FF025A4FA399_INCLUDED
 #define MESSAGINGOBJ_H_93CA5ACC22A645D2B467FF025A4FA399_INCLUDED
 
-#pragma warning(disable:4786)
-
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 #include <windows.h>
@@ -131,7 +129,7 @@ namespace Msg
 			{
 				// CAUTION: this operator does the opposite, which will force the list
 				// to be sorted backwards, biggest priority first
-				return !(m_priority<msghandler.m_priority);
+				return (m_priority>msghandler.m_priority);
 
 			}
 		};
@@ -148,11 +146,8 @@ namespace Msg
 		**/
 		void unregisterListener(MessagingObject *listener, MESSAGEID msgId);
 
-#pragma warning (push)
-#pragma warning (disable: 4251 )
 		MSGIDTOLISTENERMAP			m_msgid2listeners;///<serverobjects use this map to store the listeners interested for a certain message
 		static MSGOBJECTSET			*s_livingObjects;///<MessagingObject objects will automatically put themselves into that map at construction time and
-#pragma warning (pop)
 													/// remove themselves inside their destructor.
 													/// Used to verify the existance of MessagingObject objects.
 	};

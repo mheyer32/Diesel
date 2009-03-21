@@ -28,9 +28,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "ramfile.h"
+#include "RamFile.h"
 #include "Path.h"
-#include <contrib/minizip/unzip.h>
+
+extern "C"
+{
+#define ZLIB_WINAPI	//muss zu den defines passen, mit denen ZLib gebaut wurde
+#define ASMV
+#define ASMINF
+#include "contrib/minizip/unzip.h"
+};
 
 class CZipFile : public CRamFile  
 {

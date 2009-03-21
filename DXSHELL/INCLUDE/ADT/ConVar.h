@@ -21,35 +21,32 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_CVAR_H__BB92632B_B2D8_4FCE_A264_275B2EA1F25A__INCLUDED_)
-#define AFX_CVAR_H__BB92632B_B2D8_4FCE_A264_275B2EA1F25A__INCLUDED_
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
 #include "ConCmd.h"
 
-#include <string>
-#include <list>
 #include <adt/refcount.h>
 #include <adt/smartpointer.h>
+
+#include <string>
+#include <list>
 
 #define CVARFLAG_READONLY (1<<0)
 #define CVARFLAG_ARCHIVE  (1<<1)
 
-// FIXME: remove refcounting (boost::shared_prt)!!!
-class ConVar :protected ConCmd, public CRefCount
+class ConVar : public CRefCount, public ConCmd
 {
 
 public:
 
-	typedef void (*CALLBACKFUNC)(ConVar &CVar);
+	typedef void (*VARCALLBACKFUNC)(ConVar &CVar);
 
-	ConVar(const std::string &Command,const std::string &InitVal="",int Flags=0,CALLBACKFUNC cb=NULL);
+	ConVar(const std::string &Command,const std::string &InitVal="",int Flags=0,VARCALLBACKFUNC cb=NULL);
 	virtual ~ConVar();
 
-	void setOnChangeCallback(CALLBACKFUNC changecallback);
+	void setOnChangeCallback(VARCALLBACKFUNC changecallback);
 
 	int getFlags() const;
 	void setFlags(int flags);
@@ -93,9 +90,8 @@ protected:
 	float		fval;
 	int flags;
 
-	CALLBACKFUNC changecallback;
+	VARCALLBACKFUNC changecallback;
 
 	static std::list< SmartPointer<ConVar> > allocatedvars;
 
 };
-#endif // !defined(AFX_CVAR_H__BB92632B_B2D8_4FCE_A264_275B2EA1F25A__INCLUDED_)

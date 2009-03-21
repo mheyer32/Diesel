@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef WINMAIN_H
 #define WINMAIN_H
 
-#pragma warning (disable: 4786)  // STL-überlängen-Meldungen unterdruecken
-
-
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <misc/history.h>

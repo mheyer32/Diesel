@@ -28,26 +28,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
-#pragma comment( lib, "dinput.lib" )
-#pragma comment( lib, "dxguid.lib" )
-
 #ifdef DIRECTINPUT_VERSION
 #undef DIRECTINPUT_VERSION
 #endif
 
-#define DIRECTINPUT_VERSION 0x0700
+#define DIRECTINPUT_VERSION 0x0800
 
 #include <dinput.h>
 
-#if DIRECTINPUT_VERSION==0x700
-	typedef LPDIRECTINPUT7			LPDINPUT;
-	typedef LPDIRECTINPUTDEVICE7	LPDINPUTDEVICE;
-#else
-	typedef LPDIRECTINPUT			LPDINPUT; 
-	typedef	LPDIRECTNPUTDEVICE		LPDINPUTDEVICE;
+typedef LPDIRECTINPUT8			LPDINPUT;
+typedef LPDIRECTINPUTDEVICE8 	LPDINPUTDEVICE;
 
-#endif
-
+#pragma comment( lib, "dinput8.lib" )
+#pragma comment( lib, "dxguid.lib" )
 
 #include <adt/Singleton.h>
 
@@ -56,8 +49,6 @@ class CDirectInput: public Singleton<CDirectInput>
 DECLARE_SINGLETON(CDirectInput)
 
 public:
-
-
 
 	bool InitDirectInput();
 	void ShutDownDirectInput();

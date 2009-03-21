@@ -90,8 +90,8 @@ int num_brackets,pos;
 
 int ParseHelper::Readln(const char* String, char* Line)
 {
-int len;
-char *lineend;
+	int len;
+	const char *lineend;
 
 	if (!(lineend=strchr(String,'\n'))) return 0;
 	len=lineend-String-1;
@@ -104,7 +104,7 @@ char *lineend;
 char* ParseHelper::FindNextLine(const char* String)
 {
 	char *LineEnd=const_cast<char*>(String);
-	if (!(LineEnd=strchr(String,'\n'))) return 0;
+	if (!(LineEnd=strchr(LineEnd,'\n'))) return 0;
 	LineEnd++;
 	return LineEnd;	
 }

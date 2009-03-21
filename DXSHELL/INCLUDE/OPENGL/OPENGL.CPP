@@ -816,7 +816,7 @@ void COpenGL::setGamma(double gamma,int overbrightbits)
 	gamma=1.0/gamma;
 	for (int i=0;i<256;i++)
 	{
-		value=(WORD)min(65535.0,max(0,pow((double)i*div,gamma)*65535.0));
+		value=(WORD)min(65535.0,max(0.0,pow((double)i*div,gamma)*65535.0));
 		m_gammaramp[i]=value;
 		m_gammaramp[i+256]=value;
 		m_gammaramp[i+512]=value;

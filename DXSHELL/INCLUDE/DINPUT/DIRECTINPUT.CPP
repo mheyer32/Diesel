@@ -25,9 +25,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "dierr.h"
 #include <misc/exception.h>
 #include <defs.h>
-#include <iostream>
+
 #include <win/WinMain.h>
 #include <win/DriverSelector.h>
+
+#include <iostream>
+
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
@@ -46,15 +49,10 @@ bool CDirectInput::InitDirectInput()
 {
 HRESULT dirval;
 
-std::cout<<std::endl<<"======== CDirectInput::initialize() ========"<<std::endl<<std::endl;
+	std::cout<<std::endl<<"======== CDirectInput::initialize() ========"<<std::endl<<std::endl;
 
-#if DIRECTINPUT_VERSION==0x700
-	std::cout<<"DirectInputCreateEx().... ";
-	dirval = DirectInputCreateEx(getInstanceHandle(), DIRECTINPUT_VERSION,IID_IDirectInput7,(void**)&lpDI, NULL);
-#else
 	std::cout<<"DirectInputCreate().... ";
-	dirval=DirectInputCreate(getInstanceHandle(),DIRECTINPUT_VERSION,&lpDI,NULL); // FIXME: 2x Access-Violation im Kernel
-#endif
+	dirval=DirectInput8Create(getInstanceHandle(),DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&lpDI, NULL); 
 	
 	if (dirval!=DI_OK) 
 	{ 
@@ -98,22 +96,22 @@ CHAR temp[255];
 	strcat(temp,nl);
 	switch(GET_DIDEVICE_TYPE(lpddi->dwDevType))
 	{
-	case DIDEVTYPE_MOUSE:
+	case DI8DEVTYPE_MOUSE:
 		strcat(temp,"Devicetype:  Mouse");
 		strcat(temp,nl);
 		strcat(temp,nl);
 		switch(GET_DIDEVICE_SUBTYPE(lpddi->dwDevType))
 		{
-		case DIDEVTYPEMOUSE_TRADITIONAL:
+		case DI8DEVTYPEMOUSE_TRADITIONAL:
 			strcat(temp,"The device is a traditional mouse.");
 			break;
-		case DIDEVTYPEMOUSE_FINGERSTICK:
+		case DI8DEVTYPEMOUSE_FINGERSTICK:
 			strcat(temp,"The device is a fingerstick.");
 			break;
-		case DIDEVTYPEMOUSE_TOUCHPAD:
+		case DI8DEVTYPEMOUSE_TOUCHPAD:
 			strcat(temp,"The Device is a touchpad.");
 			break;
-		case DIDEVTYPEMOUSE_TRACKBALL:
+		case DI8DEVTYPEMOUSE_TRACKBALL:
 			strcat(temp,"The device is a trackball.");
 			break;
 		default:
@@ -122,33 +120,21 @@ CHAR temp[255];
 		}
 		strcat(temp,nl);
 		break;
-	case DIDEVTYPE_KEYBOARD:
+	case DI8DEVTYPE_KEYBOARD:
 		strcat(temp,"Devicetype:  Keyboard");
 		strcat(temp,nl);
 		break;
-	case DIDEVTYPE_JOYSTICK:
+	case DI8DEVTYPE_JOYSTICK:
 		strcat(temp,"Devicetype:  Joystick");
 		strcat(temp,nl);
 		strcat(temp,nl);
 		switch(GET_DIDEVICE_SUBTYPE(lpddi->dwDevType))
 		{
-		case DIDEVTYPEJOYSTICK_TRADITIONAL:
-			strcat(temp,"A traditional joystick.");
+		case DI8DEVTYPEJOYSTICK_LIMITED:
+			strcat(temp,"Joystick that does not provide the minimum number of device objects for action mapping.");
 			break;
-		case DIDEVTYPEJOYSTICK_FLIGHTSTICK:
-			strcat(temp,"A joystick optimized for flight simulation.");
-			break;
-		case DIDEVTYPEJOYSTICK_GAMEPAD:
-			strcat(temp,"A device whose primary purpose is to provide button input.");
-			break;
-		case DIDEVTYPEJOYSTICK_RUDDER:
-			strcat(temp,"A device for yaw control.");
-			break;
-		case DIDEVTYPEJOYSTICK_WHEEL:
-			strcat(temp,"A steering wheel.");
-			break;
-		case DIDEVTYPEJOYSTICK_HEADTRACKER:
-			strcat(temp,"A device that tracks the movement of the user's head.");
+		case DI8DEVTYPEJOYSTICK_STANDARD:
+			strcat(temp,"Standard joystick that provides the minimum number of device objects for action mapping.");
 			break;
 		default:
 			strcat(temp,"The subtype could not be determined.");

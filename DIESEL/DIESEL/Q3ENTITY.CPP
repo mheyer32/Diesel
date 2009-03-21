@@ -491,8 +491,6 @@ void Q3Entity::setPortalFace()
 		return;
 	}
 
-BREAK_OUT:
-
 	bbox-=origin;
 	// the entity must be linked into the worldmodel properly, so give it a
 	// pseudo-mesh that contains nothing but a bbox

@@ -28,8 +28,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
-#pragma warning ( disable : 4786 )
-
 #include <string>
 #include <list>
 

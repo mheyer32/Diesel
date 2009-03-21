@@ -73,11 +73,12 @@ protected:
 	HANDLE				DeviceEvents[2];
 	HANDLE				ThreadHandle;
 
-	bool Format_autodetected;
+	bool				Format_autodetected;
+	
 	typedef std::list<DIDEVICEOBJECTINSTANCE> DIDOBJLIST;
 	typedef DIDOBJLIST::iterator DIDOBJITERATOR;
 
-	DIDOBJLIST ObjectList;
+	DIDOBJLIST			ObjectList;
 
 	LPDINPUTDEVICE		Device;
 

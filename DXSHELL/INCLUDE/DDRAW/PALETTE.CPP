@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Palette.h"
 
 #include <ddraw/ddutil.h>
-#include <d3d.h>
 #include "directdraw.h"
 
 #include "ddrawexception.h"
@@ -39,7 +38,7 @@ CPalette::CPalette()
 {
 	for (int i=0; i<256; i++)
 	{
-		pe[i].peFlags=D3DPAL_FREE;
+		pe[i].peFlags=0;
 	}
 	DDPalette=NULL;
 
@@ -98,7 +97,7 @@ LPDIRECTDRAWPALETTE tempPal;
 	tempPal->Release();
 
 	for (int i=0; i<256; i++){
-		pe[i].peFlags|=D3DPAL_FREE|PC_RESERVED;
+		pe[i].peFlags|=PC_RESERVED;
 	}
 	HRESULT ddrval=DDPalette->SetEntries(0,0,256,pe);
 	if (ddrval!=DD_OK)
@@ -116,7 +115,7 @@ bool CPalette::setFrom(LPDIRECTDRAWPALETTE Palette)
 
 	for (int i=0; i<256; i++)
 	{
-		pe[i].peFlags=D3DPAL_FREE;
+		pe[i].peFlags=0;
 	}
 	DDPalette=Palette;
 	DDPalette->AddRef();	// now WE have a pointer to it, too
@@ -262,7 +261,7 @@ void CPalette::createShadeTable(int Threshold)
 		greenstep = (255.0f-(float)pe[color].peGreen)/(255.0f-(float)Threshold);
 		bluestep = (255.0f-(float)pe[color].peBlue)/(255.0f-(float)Threshold);
 
-		for (shade=Threshold;shade<256;shade++)
+		for (int shade=Threshold;shade<256;shade++)
 		{
 			red+=redstep;
 			green+=greenstep;

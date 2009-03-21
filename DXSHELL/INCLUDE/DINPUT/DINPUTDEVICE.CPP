@@ -100,13 +100,8 @@ HRESULT dirval;
 	guid=DeviceGUID;
 	cooplevel=Cooplevel;
 
-#if DIRECTINPUT_VERSION==0x700
 	std::cout<<"CreateDeviceEx().... ";
-	dirval = CDirectInput::Instance()->getlpDI()->CreateDeviceEx(DeviceGUID, IID_IDirectInputDevice7,(void**)&Device, NULL); 
-#else
-	std::cout<<"CreateDevice().... ";
-	dirval = CDirectInput::Instance()->getlpDI()->CreateDevice(DeviceGUID,&Device,NULL);
-#endif 
+	dirval = CDirectInput::Instance()->getlpDI()->CreateDevice(DeviceGUID, &Device, NULL); 
 
 	if (dirval!=DI_OK) 
 	{ 

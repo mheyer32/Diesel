@@ -37,15 +37,11 @@ HRESULT dirval;
 	std::cout<<"======== CJoystick::CJoystick() ========"<<std::endl;
 
 
-	if (CDirectInput::Instance()->selectDevice(Joystick_GUID,DIEDFL_ATTACHEDONLY  ,DIDEVTYPE_JOYSTICK))
+	if (CDirectInput::Instance()->selectDevice(Joystick_GUID, DIEDFL_ATTACHEDONLY, DI8DEVCLASS_GAMECTRL))
 	{
 
 		std::cout<<"found an attached joystick"<<std::endl;
-#if DIRECTINPUT_VERSION==0x700
-	dirval=InitDevice(Joystick_GUID,(_DIDATAFORMAT *)&c_dfDIJoystick,CoopLevel);
-#else
-	dirval=InitDevice(Joystick_GUID,NULL,CoopLevel);		
-#endif
+		dirval=InitDevice(Joystick_GUID,(_DIDATAFORMAT *)&c_dfDIJoystick,CoopLevel);
 
 		SetRange(DIJOFS_X);
 		SetRange(DIJOFS_Y);

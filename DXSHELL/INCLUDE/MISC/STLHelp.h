@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace STLHelp
 {
+/*
 	struct _deleteObject
 	{ 
 		template <class T> void operator()(const T* ptr) const 
@@ -38,11 +39,13 @@ namespace STLHelp
 		}
 	}; 
 
-	template<class T> stlwipe (T& container)
+	template<class T>
+	stlwipe (T& container)
 	{
 		std::for_each(container.begin(), container.end(), _deleteObject());
 		container.clear();
 	}
+*/
 
 	inline void tolower (std::string &s)
 	{

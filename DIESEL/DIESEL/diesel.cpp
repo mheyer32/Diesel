@@ -160,7 +160,8 @@ bool GameInit(){
 	headlight.used_attribs=DIRECTIONAL_LIGHT;
 
 
-	CDirectInput::Instance()->CDirectInput::InitDirectInput(getInstanceHandle(), CAppWindow::Instance()->getHWND());
+	CDirectInput::Instance()->InitDirectInput();
+	//CDirectInput::Instance()->CDirectInput::InitDirectInput(getInstanceHandle(), CAppWindow::Instance()->getHWND());
 
 	Keyboard = CKeyboard::Instance();
 	Keyboard->initialize();

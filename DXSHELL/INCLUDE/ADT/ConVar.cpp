@@ -36,7 +36,8 @@ std::list<SmartPointer<ConVar> > ConVar::allocatedvars;
 
 using namespace std;
 
-ConVar::ConVar(const std::string &Command,const std::string &InitVal, int Flags,CALLBACKFUNC cb): ConCmd(Command,&ConVar::CVarCallback)
+ConVar::ConVar(const std::string &Command,const std::string &InitVal, int Flags, VARCALLBACKFUNC cb):
+ConCmd(Command, &ConVar::CVarCallback)
 {
 	flags=Flags;
 	setString(InitVal);
@@ -46,6 +47,7 @@ ConVar::ConVar(const std::string &Command,const std::string &InitVal, int Flags,
 
 ConVar::~ConVar()
 {
+	std::cout<<"blah";
 }
 ConVar& ConVar::operator =(const int i)
 {
@@ -87,7 +89,7 @@ ConVar* ConVar::findCVar(const std::string & varname)
 	return dynamic_cast<ConVar*>(ConCmd::findCommand(varname));
 }
 
-void ConVar::setOnChangeCallback(CALLBACKFUNC newchangecallback)
+void ConVar::setOnChangeCallback(VARCALLBACKFUNC newchangecallback)
 {
 	changecallback=newchangecallback;
 }
@@ -111,11 +113,11 @@ void ConVar::setFromConsole(const std::string &args)
 	}
 }
 
-void ConVar::CVarCallback(ConCmd &Command,const std::string &Arg)
+void ConVar::CVarCallback(ConCmd & cmd,const std::string &Arg)
 {
-ConVar *cvar;
+	ConVar *cvar=dynamic_cast<ConVar*>(&cmd);
 
-	if (!(cvar=dynamic_cast<ConVar*>(&Command)))
+	if (!cvar)
 	{
 		std::cout<<"CVarCallback was called for non-cvar command"<<std::endl;	
 		return;
@@ -123,7 +125,6 @@ ConVar *cvar;
 	cvar->setFromConsole(Arg);
 }
 
-#pragma optimize ("g", off) // it seems that this is causing my problems
 void ConVar::set(ConCmd &Command, const std::string &Arg)
 {
 
@@ -162,4 +163,3 @@ void ConVar::set(ConCmd &Command, const std::string &Arg)
 		cvar->setFlags(cvar->getFlags()|CVARFLAG_ARCHIVE);
 	}
 }
-#pragma optimize ("", on)
