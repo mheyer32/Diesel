@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define D3D_OVERLOADS
 
-#include <d3d7
+#include <d3d.h>
 #include <ddraw/DirectDraw.h>
 #include <ddraw/Surface.h>
 #include <win/DriverSelector.h>
