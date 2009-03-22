@@ -44,8 +44,7 @@ CException::CException(const std::string &error_text)
 }
 CException::CException(const std::string &error_text,const std::string &error_text2)
 {
-	addText(error_text2);
-	addText(error_text);
+	addText(error_text+error_text2);
 }
 
 

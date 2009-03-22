@@ -111,7 +111,7 @@ void CSurface::createAsBackbuffer(CSurface &From)
     HRESULT ddrval = From.Surface->GetAttachedSurface(&ddscaps, &Surface);
     if( ddrval != DD_OK )
     {
-		throw CDDrawException("CSurface::IsBackBufferFrom() -> GetAttachedSurface() failed ",ddrval);
+		throw CDDrawException("CSurface::createAsBackbuffer() -> GetAttachedSurface() failed ",ddrval);
 		return;
 	}
 	Is_BackBuffer=true;
@@ -274,7 +274,11 @@ void CSurface::loadBitmap(const std::string &File)
 {
 	Filename=File;
 	File_loaded=true;
-	DDReLoadBitmap(Surface, File.c_str());
+	HRESULT rval=DDReLoadBitmap(Surface, File.c_str());
+	if (rval!=S_OK)
+	{
+		throw CException("CSurface::loadBitmap() bitmap loading failed for file: ", File);
+	}
 	registerForMessage(CAppWindow::Instance(), Msg::RESTORE_SURFACES, 16786);
 }
 

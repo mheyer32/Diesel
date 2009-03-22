@@ -50,14 +50,14 @@ class CSurface : public Msg::MessagingObject
 {
 public:
 
-	CSurface(DWORD w,DWORD h,DWORD bc,DWORD caps,LPDDPIXELFORMAT pf=NULL);
+	CSurface(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps,LPDDPIXELFORMAT pf=NULL);
 	CSurface();
 	virtual ~CSurface();
 
 	HRESULT lock() ;
 	void unlock() const;
 
-	virtual HRESULT create(DWORD w,DWORD h,DWORD bc,DWORD caps,LPDDPIXELFORMAT lpDDPixFmt=NULL);
+	virtual HRESULT create(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps,LPDDPIXELFORMAT lpDDPixFmt=NULL);
 	virtual void createFromFile(const std::string &File);
 	virtual void createAsBackbuffer(CSurface &From);
 

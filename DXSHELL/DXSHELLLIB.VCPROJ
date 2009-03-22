@@ -63,7 +63,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1031"
-				ResourceOutputFileName="lib\DXShellLib.res"
+				ResourceOutputFileName=".\lib\DXShellLib.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -146,7 +146,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1031"
-				ResourceOutputFileName="lib\DXShelllib.res"
+				ResourceOutputFileName=".\lib\DXShelllib.res"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"

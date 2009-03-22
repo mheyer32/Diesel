@@ -117,26 +117,30 @@ HRESULT ddrval=DD_OK;
 		{
 			std::cout<<"failed"<<std::endl;
 			std::cout<<"trying FOURCC pixelformats:"<<std::endl;
-			DWORD	*FourCCCodes,NumCodes;
 
+			DWORD	NumCodes;
 			LPDDRAW lpDDx=CDirectDraw::Instance()->getLPDD();
 			lpDDx->GetFourCCCodes(&NumCodes,NULL);
 
 			std::cout<<NumCodes<<" available FOURCC codes"<<std::endl;
 
-			FourCCCodes=new DWORD[NumCodes]; 
-			lpDDx->GetFourCCCodes(&NumCodes,FourCCCodes);
+			union FOURCC
+			{
+				DWORD code;
+				char  name[4];
+			};
+
+			FOURCC *FourCCCodes=new FOURCC[NumCodes]; 
+			lpDDx->GetFourCCCodes(&NumCodes, &FourCCCodes[0].code);
 			ddsd.ddpfPixelFormat.dwFlags=DDPF_FOURCC;//|DDPF_RGBTOYUV;
 		// Try to create an overlay surface using one of the pixel formats in our
 		// global list.
 
 			DWORD i=0;
-			char codename[]="xxxx";
 			do
 			{
-				(int&)codename=FourCCCodes[i];
-				std::cout<<codename<<"... ";
-                ddsd.ddpfPixelFormat.dwFourCC=FourCCCodes[i++];
+				std::cout<<FourCCCodes[i].name<<"... ";
+                ddsd.ddpfPixelFormat.dwFourCC=FourCCCodes[i++].code;
 				ddrval=CSurface::create(w,h,bc,caps);
 				if (ddrval!=DD_OK)
 				{
