@@ -1,148 +1,91 @@
-
 /*
-This file is part of DXShell
-(c) 2002 by Mathias Heyer
-
-DXShell is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-DXShell is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+(c) 2002-2006 by Mathias Heyer
 */
-// Timer.h: Schnittstelle für die Klasse CTimer.
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TIMER_H__4D600921_2475_11D4_BD8A_0000E85E86C1__INCLUDED_)
-#define AFX_TIMER_H__4D600921_2475_11D4_BD8A_0000E85E86C1__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#ifndef TIMER_H_INCLUDED
+#define TIMER_H_INCLUDED
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#include <windows.h>
 
-/** uses Win32 QueryPerformanceCounter to emulate some kind of stopwatch. 
+/** emulates a stopwatch. 
 use start() to start the counting, stop() to stop. Then get the seconds or tics that passed between
-Start() and Stop() via getSECPassed() or getTICPassed()
+Start() and Stop() via getElapsedSecs() or getElapsedTics()
 */
 class CTimer  
 {
 public:
 
-#if defined(_MSC_VER)
-	typedef __int64 TICKCOUNT;
-#elif defined(__linux)
-	typedef unsigned long long TICKCOUNT;
-#endif
-
 	CTimer();
 	~CTimer();
 
-
 	inline void CTimer::start()
 	{
-		// QueryPerformanceCounter(&start_tics);
-		start_tics=readTSC();
-		 tics_passed=0;
-		 paused=false;
+		 QueryPerformanceCounter(&m_start.qpc);
+		 m_tics_elapsed=0;
+		 m_paused=false;
 	}
 
 	inline void CTimer::stop()
 	{
-	  if (!paused)
+	  if (!m_paused)
 	  {
-		 // QueryPerformanceCounter(&stop_tics);
-		  stop_tics=readTSC();
-		  tics_passed+=stop_tics-start_tics;
-		  start_tics=stop_tics;
+		  QueryPerformanceCounter(&m_stop.qpc);
+		  m_tics_elapsed+=m_stop.tics-m_start.tics;
+		  m_start=m_stop;
 	  }
-	  secs_passed=(double)tics_passed*sec_tic_ratio;
-	  paused=false;
+	  m_secs_elapsed=((m_tics_elapsed<<14)/s_frequency) / 16384.0f;
+	  m_paused=false;
 	}
 
 	inline void CTimer::pause()
 	{
-		if (!paused)
+		if (!m_paused)
 		{
-			//QueryPerformanceCounter(&stop_tics);
-			stop_tics=readTSC();
-			tics_passed+=stop_tics-start_tics;
-			secs_passed=(double)tics_passed*sec_tic_ratio;
-			paused=true;
+			QueryPerformanceCounter(&m_stop.qpc);
+			m_tics_elapsed+=m_stop.tics-m_start.tics;
+			m_secs_elapsed=((m_tics_elapsed<<14)/s_frequency) / 16384.0f;
+			m_paused=true;
 		}
 	}
 
 	inline void CTimer::resume()
 	{
-		if (paused)
+		if (m_paused)
 		{
-			//QueryPerformanceCounter(&start_tics);	
-			start_tics=readTSC();
-			paused=false;
+			QueryPerformanceCounter(&m_start.qpc);
+			m_paused=false;
 		}
 	}
 
-	inline double CTimer::getSECPassed()
+	inline double getElapsedSecs() const
 	{
-	  return secs_passed;
+	  return m_secs_elapsed;
 	}
 
-	inline TICKCOUNT CTimer::getTICPassed()
+	inline unsigned __int64 getElapsedTics() const
 	{
-		return tics_passed;
-	}
-
-	inline TICKCOUNT CTimer::SECStoTICS(double secs)
-	{
-		return (TICKCOUNT)(sec_tic_ratio*secs);
-	}
-
-	inline double CTimer::TICStoSECS(TICKCOUNT tics)
-	{
-		return tic_sec_ratio*(double)tics;
+		return m_tics_elapsed;
 	}
 
 private:
 
-	TICKCOUNT start_tics,stop_tics;
-	TICKCOUNT tics_passed;
-	double		 secs_passed;
-	bool		paused;
-
-	static bool	  timing_calibrated;
-	static double sec_tic_ratio;
-	static double tic_sec_ratio;
-
-	inline TICKCOUNT readTSC( void ) const
-	{
-		TICKCOUNT volatile tsc;
-
-#	if defined(_MSC_VER)
-		_asm
-		{
-			xor eax, eax
-				xor edx, edx
-				///\todo do we need this
-				// cpuid
-				rdtsc				// returns the time stamp counter in edx:eax
-				mov dword ptr tsc, eax
-				mov dword ptr tsc+4, edx
-		}
-#	elif defined(__linux)
-		__asm__ volatile (".byte 0x0f, 0x31" : "=A" (tsc) );
-#	endif
-
-		return tsc;
-	}
-
+union Tics
+{
+	LARGE_INTEGER qpc;
+	unsigned __int64 tics;
 };
 
-#endif // !defined(AFX_TIMER_H__4D600921_2475_11D4_BD8A_0000E85E86C1__INCLUDED_)
+
+	Tics	 m_start, m_stop;
+	unsigned __int64	 m_tics_elapsed;
+	float	 m_secs_elapsed;
+	bool	 m_paused;
+
+	static bool				s_timing_calibrated;
+	static unsigned __int64 s_frequency;
+};
+
+#endif 
