@@ -221,10 +221,10 @@ static unsigned int latest=0;
 
 	Timer1.stop();				// g_Time From the Beginning of the Game
 	Timer2.stop();				// g_Time needed for the last Frame
-	g_Time=(float)Timer1.getSECPassed();			
+	g_Time=(float)Timer1.getElapsedSecs();			
 
 	latest=PREVINDEX(latest,NUM_FILTERFRAMES);
-	filter[latest]=(float)Timer2.getSECPassed();
+	filter[latest]=(float)Timer2.getElapsedSecs();
 
 	g_SecsPerFrame=0.0f;
 
@@ -238,7 +238,7 @@ static unsigned int latest=0;
 	{
 		float  fpstime;
 		Timer3.stop();
-		fpstime=(float)Timer3.getSECPassed();
+		fpstime=(float)Timer3.getElapsedSecs();
 		g_FPS=10.0f/(fpstime);
 		count=0;
 		Timer3.start();
@@ -267,7 +267,7 @@ void EndFrame()
 
 	Console->Render();
 
-	sprintf(text,"cull: %5.2f ms\nsort: %5.2f ms\ndraw: %5.2f ms",Timer4.getSECPassed()*1000.0f,Timer6.getSECPassed()*1000.0f,Timer5.getSECPassed()*1000.0f);
+	sprintf(text,"cull: %5.2f ms\nsort: %5.2f ms\ndraw: %5.2f ms",Timer4.getElapsedSecs()*1000.0f,Timer6.getElapsedSecs()*1000.0f,Timer5.getElapsedSecs()*1000.0f);
 	g_Text->PrintAt(text,0,0);
 
 	sprintf(text,"%5.2f ms %5.2f fps",g_SecsPerFrame*1000.0f,g_FPS);

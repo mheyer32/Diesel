@@ -136,7 +136,7 @@ void CGLConsole::Render()
 	}
 
 	timer.stop();
-	if (timer.getSECPassed()>1.0) 
+	if (timer.getElapsedSecs()>1.0) 
 	{
 		gltext2.Print("\n");
 		timer.start();
@@ -337,7 +337,7 @@ void CGLConsole::setConsoleDestrect()
 	if(show!=newshow)
 	{
 		animtimer.stop();
-		float time=(float)animtimer.getSECPassed();
+		float time=(float)animtimer.getElapsedSecs();
 		time*=(float)scr_conspeed;
 
 		if (time>1.0f)

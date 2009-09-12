@@ -121,7 +121,7 @@ void CShaderLoader::cacheFile(const CPath &filename)
 		Lexer lex;
 
 		lex.setText(filecontents, filesize);
-		lex.setCaseInsensitive();
+		lex.setCaseSensitive(false);
 
 		char temp[512];
 
@@ -185,7 +185,7 @@ CShader* CShaderLoader::loadShader(const std::string &shadername)
 	try
 	{
 		lex.setText(filecontents, filesize);
-		lex.setCaseInsensitive();
+		lex.setCaseSensitive(false);
 
 		lex.setPosition(entry.position);
 #ifdef _DEBUG

@@ -1,11 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXShellLib", "..\..\DXSHELL\DXSHELLLIB.VCPROJ", "{585AAF8E-1434-43F2-B910-92BF7B8832EB}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DieselEngine", "diesel.vcproj", "{E08359D3-E90C-419D-B5BF-5BADE2807028}"
 	ProjectSection(ProjectDependencies) = postProject
 		{585AAF8E-1434-43F2-B910-92BF7B8832EB} = {585AAF8E-1434-43F2-B910-92BF7B8832EB}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXShellLib", "..\..\DXSHELL\DXSHELLLIB.VCPROJ", "{585AAF8E-1434-43F2-B910-92BF7B8832EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Debug|Win32.ActiveCfg = Debug|Win32
-		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Debug|Win32.Build.0 = Debug|Win32
-		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Release|Win32.ActiveCfg = Release|Win32
-		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Release|Win32.Build.0 = Release|Win32
 		{585AAF8E-1434-43F2-B910-92BF7B8832EB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{585AAF8E-1434-43F2-B910-92BF7B8832EB}.Debug|Win32.Build.0 = Debug|Win32
 		{585AAF8E-1434-43F2-B910-92BF7B8832EB}.Release|Win32.ActiveCfg = Release|Win32
 		{585AAF8E-1434-43F2-B910-92BF7B8832EB}.Release|Win32.Build.0 = Release|Win32
+		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Debug|Win32.Build.0 = Debug|Win32
+		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Release|Win32.ActiveCfg = Release|Win32
+		{E08359D3-E90C-419D-B5BF-5BADE2807028}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

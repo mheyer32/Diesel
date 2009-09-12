@@ -82,7 +82,7 @@ void CKeyMap::Update()
 	const BYTE *keybuffer=keyboard->getBuffer();
 
 	timer.stop();
-	float time=timer.getSECPassed();
+	float time=timer.getElapsedSecs();
 
 	for (int k=0;k<256;k++)
 	{

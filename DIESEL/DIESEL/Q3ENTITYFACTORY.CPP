@@ -1158,7 +1158,10 @@ void Q3EntityFactory::readKeyValuePairs()
 		while(1)
 		{
 			char key[512],value[512];
-			m_lexer.readQuotedString(key);
+			int charcount=m_lexer.readQuotedString(key);
+			if (charcount==-1)
+				break;
+
 			m_lexer.readQuotedString(value);
 			m_keyvalues[key]=value;
 		}

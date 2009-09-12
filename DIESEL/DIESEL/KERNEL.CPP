@@ -55,7 +55,7 @@ CKernel::~CKernel()
 void CKernel::runTasks()
 {
 	timer.stop();
-	time=timer.getSECPassed();
+	time=timer.getElapsedSecs();
 	scaledtime=time*timescale;
 
 	//FIXME: what if a task removes itself while the list is traversed ?

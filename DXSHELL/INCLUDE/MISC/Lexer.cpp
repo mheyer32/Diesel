@@ -1,40 +1,81 @@
 /*
-This file is part of Diesel
-(c) 2002 by Mathias Heyer
-email: sonode@gmx.de
-
-Diesel is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-Diesel is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+(c) 2002-2009 by Mathias Heyer
 */
 
-#include "lexer.h"
+#include "misc/Lexer.h"
+#include "defs.h"
+
 #include <iostream>
-#include <algorithm>
+#include <cassert>
 
 using namespace std;
 
+Lexer::LexInput::LexInput(const char *buffer, bool casesensitive):
+m_buffer(buffer),
+m_casesensitive(casesensitive)
+{
+	locale loc;
+	for (int c=0; c<256; ++c)
+		m_tolower[c]=std::tolower(c, loc);
+};
+
+void Lexer::LexInput::setBuffer(const char *buffer) 
+{
+	m_buffer=buffer;
+}
+
+void Lexer::LexInput::setCaseSensitive(bool sensitive)
+{
+	m_casesensitive=sensitive;
+}
+
+inline char Lexer::LexInput::operator [] (const int pos) const
+{
+	return m_casesensitive ? m_buffer[pos] : m_tolower[m_buffer[pos]];
+}
+
+void Lexer::LexInput::copy(char *dest, int startpos, int length) const
+{
+	for (int c=0; c<length; ++c)
+	{
+		*dest++=this->operator [] (startpos+c);
+	}
+}
+
+const char* Lexer::LexInput::getBuffer() const  
+{
+	return m_buffer;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 Lexer::Lexer(void)
 {
+	locale loc;
+	for(int c=0; c<256; ++c)
+	{
+		m_isalpha[c]=std::isalpha(c, loc);
+		m_isalphanum[c]=std::isalnum(c, loc);
+		m_isdigit[c]=std::isdigit(c, loc);
+		m_isspace[c]=std::isspace(c, loc);
+	}
 }
 
 Lexer::~Lexer(void)
 {
 }
+
+void Lexer::setText(const std::string &text)
+{
+	setText(text.c_str(), text.size());
+}
+
 void Lexer::setText(const char* text, int textlength)
 {
 	// cleanup blockstack
-	while(!blockstack.empty()) blockstack.pop();
+	while(!m_blockstack.empty()) m_blockstack.pop();
 
 	if (textlength!=-1)
 	{
@@ -46,35 +87,49 @@ void Lexer::setText(const char* text, int textlength)
 	}
 
 	m_pos=0;
-	m_pos.setMax(m_text.size());
+	m_pos.setMax(static_cast<int>(m_text.size()));
 
-	skipWhiteSpace();
+	m_input.setBuffer(m_text.c_str());
 }
-void Lexer::setCaseInsensitive()
+void Lexer::setCaseSensitive(bool sensitive)
 {
-	std::transform(m_text.begin(), m_text.end(),m_text.begin(), ::tolower);
+	m_input.setCaseSensitive(sensitive);
 }
+
+inline bool Lexer::matchWhitespace()
+{
+	return m_isspace[m_input[m_pos]];
+}
+
+inline bool Lexer::matchWhitespaceAndSkip()
+{
+	bool rval=matchWhitespace();
+	if (rval)
+		++m_pos;
+	return rval;
+}
+
 void Lexer::skipWhiteSpace()
 {
 	while (true)
 	{
-		//FIXME: since m_text is an array of signed char, checking for >0x7F is somewhat useless
-		while ((m_text[m_pos]<0x21) || (m_text[m_pos]>0x7F)) ++m_pos;
-		
-		if (m_text[m_pos]=='/')// possible start of comment
+		//FIXME: since m_input is an array of signed char, checking for >0x7F is somewhat useless
+		while (matchWhitespace()) ++m_pos;
+
+		if (m_input[m_pos]=='/')// possible start of comment
 		{
-			if (m_text[m_pos+1]=='/')	// its a C++ comment!
+			if (m_input[m_pos+1]=='/')	// its a C++ comment!
 			{
 				m_pos+=2;
-				while (m_text[m_pos++]!='\n'); // skip to end of line
+				while (m_input[m_pos++]!='\n'); // skip to end of line
 				continue; //continue skipping whitespace
 			}
 			else
 			{
-				if (m_text[m_pos+1]=='*') // its a C-comment!
+				if (m_input[m_pos+1]=='*') // its a C-comment!
 				{
 					m_pos+=2;
-					while ((m_text[m_pos]!='*') || (m_text[m_pos+1]!='/')) // find end of C-comment 
+					while ((m_input[m_pos]!='*') || (m_input[m_pos+1]!='/')) // find end of C-comment 
 					{
 						++m_pos;
 					}
@@ -91,27 +146,27 @@ void Lexer::nextLine()
 {
 	while (true)
 	{
-		while ((m_text[m_pos]!='\n') && (m_text[m_pos]!='/')) ++m_pos;
-		if (m_text[m_pos]=='\n')
+		while ((m_input[m_pos]!='\n') && (m_input[m_pos]!='/')) ++m_pos;
+		if (m_input[m_pos]=='\n')
 		{
 			++m_pos;					
 			return;	// found end of line
 		}
-		else if (m_text[m_pos]=='/')	// may be some comment
+		else if (m_input[m_pos]=='/')	// may be some comment
 		{
-			if (m_text[m_pos+1]=='/')	// C++ comment
+			if (m_input[m_pos+1]=='/')	// C++ comment
 			{
 				m_pos+=2;
-				while (m_text[m_pos++]!='\n');
+				while (m_input[m_pos++]!='\n');
 				break; // found endof line
 			}
 			else
 			{
 				//FIXME: what about EOL in a c-comment ?
-				if (m_text[m_pos+1]=='*') // C-comment
+				if (m_input[m_pos+1]=='*') // C-comment
 				{
 					m_pos+=2;
-					while ((m_text[m_pos]!='*') || (m_text[m_pos+1]!='/'))
+					while ((m_input[m_pos]!='*') || (m_input[m_pos+1]!='/'))
 					{
 						++m_pos;
 					}
@@ -124,20 +179,15 @@ void Lexer::nextLine()
 	}
 }
 
-void Lexer::skipUntilWhiteSpace()
+inline void Lexer::skipUntilWhiteSpace()
 {
-	while ((m_text[m_pos]>=0x21) &&  (m_text[m_pos]<=0x80)) ++m_pos;
+	while (!matchWhitespace()) ++m_pos;
 }
 
-char Lexer::toLower(char c)
-{
-	if ((c<0x41) || (c> 0x5A)) return c;
-	else return c|0x20;
-}
 void Lexer::skipUntil(char c)
 {
 	skipWhiteSpace();
-	while (m_text[m_pos]!=c)
+	while (m_input[m_pos]!=c)
 	{
 		if (match('\"'))
 		{
@@ -149,20 +199,20 @@ void Lexer::skipUntil(char c)
 		skipWhiteSpace();
 	}
 }
-void Lexer::skipBeyondNext(char c)
+inline void Lexer::skipBeyondNext(char c)
 {	
 	skipUntil(c);
 	++m_pos;
 }
 
-bool Lexer::match(char c)
+inline bool Lexer::match(char c)
 {
-	return m_text[m_pos]==c;
+	return m_input[m_pos]==c;
 }
 
-bool Lexer::matchAndSkip(char c)
+inline bool Lexer::matchAndSkip(char c)
 {
-	if (m_text[m_pos]==c)
+	if (m_input[m_pos]==c)
 	{
 		++m_pos;
 		return true;
@@ -170,48 +220,86 @@ bool Lexer::matchAndSkip(char c)
 	return false;
 }
 
-bool Lexer::matchDigit()
+inline bool Lexer::matchDigit()
 {
-	return ((m_text[m_pos]>='0') && (m_text[m_pos]<='9')) ;
+	return m_isdigit[m_input[m_pos]];
 }
 
-bool Lexer::matchAlpha()
+inline bool Lexer::matchAlpha()
 {
-	return (
-			((m_text[m_pos]>='a') && (m_text[m_pos]<='z'))
-			||((m_text[m_pos]>='A') && (m_text[m_pos]<='Z'))
-			);
+	return m_isalpha[m_input[m_pos]];
 }
-bool Lexer::matchAlphaNum()
+
+inline bool Lexer::matchAlphaNum()
 {
-	return matchAlpha()||matchDigit();
+	return m_isalphanum[m_input[m_pos]];
 }
-bool Lexer::match(const char *text)
+
+bool Lexer::matchIdentifier(const char *identifier)
+{
+	maxint temp=m_pos;
+	bool rval=matchAndSkipIdentifier(identifier);
+	m_pos=temp;
+	return rval;
+}
+
+bool Lexer::matchAndSkipIdentifier(const char *identifier)
 {
 	maxint temp=m_pos;
 	try
 	{
-		while ((*text!=0)&&((*text)==(m_text[temp]))) //&&(*string2!=0) shouldn´t be needed
+		skipWhiteSpace();
+		while ((*identifier!=0)&&((*identifier)==(m_input[m_pos]))) 
 		{
-			++text;
-			++temp;
+			++identifier;
+			++m_pos;
 		};
 	}
 	catch (LexException &)
 	{
+		m_pos=temp;
+		return false;	// if matching would need reading beyond end of block
+	}
+	//comparism got through the whole identifier, now check if the parsed identifier is maybe just a prefix to another
+	if (*identifier || matchAlphaNum() || match('_'))
+	{
+		//the identifier in the text is longer than 'identifier'
+		m_pos=temp;
+		return false;
+	}
+
+	return true;
+}
+
+
+inline bool Lexer::match(const char *text)
+{
+	maxint temp=m_pos;
+	bool rval=matchAndSkip(text);
+	m_pos=temp;
+	return rval;
+}
+
+bool Lexer::matchAndSkip(const char *text)
+{
+	maxint temp=m_pos;
+	try
+	{
+		while ((*text!=0)&&((*text)==(m_input[m_pos]))) //&&(*string2!=0) shouldn´t be needed
+		{
+			++text;
+			++m_pos;
+		};
+	}
+	catch (LexException &)
+	{
+		m_pos=temp;
 		return false;	// if matching would need reading beyond end of block
 	}
 
 	if (!(*text)) return true;
-	return false;
-}
-bool Lexer::matchAndSkip(const char *text)
-{
-	if (match(text))
-	{
-		m_pos+=(int)strlen(text);
-		return true;
-	}
+
+	m_pos=temp;
 	return false;
 }
 
@@ -246,13 +334,16 @@ void Lexer::skipBeyondNext(const char* text)
 
 int Lexer::readQuotedString(char* dest)
 {
+	skipWhiteSpace();
 	int count=0;
+	*dest=0;
+	if (!match('\"')) return -1; //FIXME: better throw exception?
 	do
 	{
-		skipBeyondNext('"');
-		while (m_text[m_pos]!='"')
+		skipBeyondNext('\"');
+		while (m_input[m_pos]!='\"')
 		{
-			dest[count++]=m_text[m_pos++];
+			dest[count++]=m_input[m_pos++];
 		}
 
 		++m_pos; //skip trailing '"'
@@ -266,7 +357,7 @@ int Lexer::readQuotedString(char* dest)
 		};
 
 	} while(match('\\'));// support concatenated multi-line strings
-		
+
 	dest[count]=0; // 
 
 	return count;
@@ -277,9 +368,9 @@ int Lexer::readUnquotedString(char* dest)
 	int count=0;
 	try
 	{
-		while ((m_text[m_pos]>=0x21) &&  (m_text[m_pos]<0x7F))
+		while (!matchWhitespace())
 		{
-			dest[count++]=m_text[m_pos];
+			dest[count++]=m_input[m_pos];
 			++m_pos;
 		}
 	}
@@ -289,13 +380,26 @@ int Lexer::readUnquotedString(char* dest)
 	return count;
 }
 
+int	Lexer::readString(char *dest)
+{
+	skipWhiteSpace();
+	if (match('\"'))
+	{
+		return readQuotedString(dest);
+	}
+	else
+	{
+		return readUnquotedString(dest);
+	}
+}
+
 int  Lexer::readStringUntil(char c, char *dest)
 {
 	skipWhiteSpace();
 	int count=0;
-	while (m_text[m_pos]!=c)
+	while (m_input[m_pos]!=c)
 	{
-		dest[count++]=m_text[m_pos++];
+		dest[count++]=m_input[m_pos++];
 	}
 	dest[count]=0;
 	return count;
@@ -315,13 +419,13 @@ int	 Lexer::readIdentifier(char *dest)
 
 	try
 	{
-		if (match('_') || matchAlpha())
+		if (matchAlpha() || match('_') )	// identifier starts with _ or character
 		{
-			dest[count++]=m_text[m_pos];
+			dest[count++]=m_input[m_pos];
 			++m_pos;
-			while (match('_')||matchAlphaNum())
+			while (matchAlphaNum() || match('_')) //inside the identifier numbers are allowed
 			{
-				dest[count++]=m_text[m_pos];
+				dest[count++]=m_input[m_pos];
 				++m_pos;
 			}
 		}
@@ -331,27 +435,79 @@ int	 Lexer::readIdentifier(char *dest)
 	dest[count]=0;
 	return count;
 }
-double Lexer::readDouble()
+
+int  Lexer::readFilename(char *dest)
+{
+	skipWhiteSpace(); 
+	if (match('\"'))
+		return readQuotedString(dest);
+
+	int count=0;
+
+	try
+	{
+		while (matchAlphaNum() || match('_') || match ('\\') || match('/') || match('.'))
+		{
+			dest[count++]=m_input[m_pos];
+			++m_pos;
+		}
+	}
+	catch (LexException &) {}; // don´t read beyond end of block
+
+	BREAKIF(count>256);
+
+	dest[count]=0;
+	return count;
+}
+
+int	 Lexer::readNumber(char *dest)
 {
 	skipWhiteSpace();
 	int startpos=m_pos;
 	try
 	{
-		if (m_text[m_pos]=='-') ++m_pos;
-		if (m_text[m_pos]=='.') ++m_pos;
-		while ((m_text[m_pos]>='0') && (m_text[m_pos]<='9')) ++m_pos;
-		if (m_text[m_pos]=='.') 
+		matchAndSkip('-'); // sign
+		matchAndSkip('+'); // sign
+		while (matchDigit()) ++m_pos;			// read the numbers before point
+		if (matchAndSkip('.')) // 
+		{		
+			while (matchDigit()) ++m_pos; // numbers after point
+		}
+		if (matchAndSkip('e')||matchAndSkip('E'))	// exponent
 		{
-			++m_pos;
-			while ((m_text[m_pos]>='0') && (m_text[m_pos]<='9')) ++m_pos;
+			matchAndSkip('-'); // sign of exponent
+			matchAndSkip('+'); //
+			while (matchDigit()) ++m_pos; // digits of exponent
+		}
+		else if (matchAndSkip('f'))
+		{
+			// atof does not parse numbers like " 1.0f"
+		}
+		else if (matchAndSkip('#'))
+		{
+			//special numbers like #INF or #QNAN
+			while (matchAlpha()) ++m_pos;
 		}
 	}
 	catch (LexException &) {};	//if we read beyond the current end
 
-	char t=m_text[m_pos];
-    m_text[m_pos]=0; // speed up atof    
-	double value=atof(&m_text[startpos]);
-	m_text[m_pos]=t; // speed up atof 
+	int count=m_pos-startpos;
+	m_input.copy(dest, startpos, count);
+	dest[count]=0;
+
+	return count;
+}
+
+
+double Lexer::readDouble()
+{
+	char number[128];
+	int num_chars=readNumber(number);
+	assert(num_chars<128);
+	if (!num_chars)
+		throw CException("Lexer::readDouble() number has no characters");
+
+	double value=atof(number);
 	return value;
 }
 
@@ -361,15 +517,13 @@ int Lexer::readInteger()
 	int startpos=m_pos;
 	try
 	{
-		if (m_text[m_pos]=='-') ++m_pos;
-		while ((m_text[m_pos]>='0') && (m_text[m_pos]<='9')) ++m_pos;
+		matchAndSkip('-'); // sign
+		matchAndSkip('+'); // sign
+		while (matchDigit()) ++m_pos;
 	}
 	catch (LexException &) {}; // don´t read beyond end of block
 
-	char t=m_text[m_pos];
-    m_text[m_pos]=0; // speed up atof    
-	int value=atoi(&m_text[startpos]);
-	m_text[m_pos]=t; // speed up atof 
+	int value=atoi(m_input.getBuffer()+startpos);
 	return value;
 }
 
@@ -380,44 +534,49 @@ int  Lexer::readLine(char *dest)
 
 	try
 	{
-		while (m_text[m_pos]!=0x0D && m_text[m_pos]!='\n')
+		while (m_input[m_pos]!=0x0D && m_input[m_pos]!='\n')
 		{
 			try
 			{
-				if (m_text[m_pos]=='/')
+				if (m_input[m_pos]=='/')
 				{
-					if (m_text[m_pos+1]=='/')
+					if (m_input[m_pos+1]=='/')
 					{
 						break; // c++ style comment, end of line reached
 					}
-					else if (m_text[m_pos+1]=='*') // c-style comment, not thoroughly tested!
+					else if (m_input[m_pos+1]=='*') // c-style comment, not thoroughly tested!
 					{
 						m_pos+=2;	
-						LOOP:
-							if (m_text[m_pos]=='*' && m_text[m_pos+1]=='/')
-							{
-								m_pos+=2;
-								continue; // end of comment reached, continue with outer loop
-							}
-							else if (m_text[m_pos]!=0x0D && m_text[m_pos]!='\n')
-							{
-								std::cout<<"WARNING: Lexer::readLine() end of line inside c-comment"<<std::endl;
-								break;	// stop outer loop, end of line found
-							}
-							++m_pos;
+LOOP:
+						if (m_input[m_pos]=='*' && m_input[m_pos+1]=='/')
+						{
+							m_pos+=2;
+							continue; // end of comment reached, continue with outer loop
+						}
+						else if (m_input[m_pos]!=0x0D && m_input[m_pos]!='\n')
+						{
+							std::cout<<"WARNING: Lexer::readLine() end of line inside c-comment"<<std::endl;
+							break;	// stop outer loop, end of line found
+						}
+						++m_pos;
 						goto LOOP;
 					}
 				}
 			}
 			catch (LexException &) {}; // probing for comments beyond end of block should not harm parsing the line
 
-			dest[count++]=m_text[m_pos++];
+			dest[count++]=m_input[m_pos++];
 		}
 	}
 	catch (LexException &) {}; // don´t read beyond end of block
 
 	dest[count]=0;
 	return count;
+}
+
+char Lexer::readChar()
+{
+	return m_input[m_pos++];
 }
 
 void Lexer::nextToken()
@@ -433,30 +592,26 @@ int Lexer::getEndOfNextBlock(char open, char close)
 
 	try
 	{
-		skipBeyondNext(open);
+		skipUntil(open);
 		int num_pairs=1;
 		while (num_pairs>0)
 		{	
-			skipWhiteSpace();
-			if (matchAndSkip(open))
+			++m_pos;
+			if (match(open))
 			{
 				++num_pairs;
 			}
-			else if (matchAndSkip(close))
+			else if (match(close))
 			{
 				--num_pairs;
 			}
 			else if (matchAndSkip('\"'))
 			{
 				// don´t look for brackets inside strings
-				while (!matchAndSkip('\"'))
+				while (!match('\"'))
 				{
 					++m_pos;
 				}
-			}
-			else
-			{
-				++m_pos;
 			}
 		}
 	}
@@ -480,23 +635,25 @@ void Lexer::skipNextBlock(char open, char close)
 void Lexer::enterBlock(char open, char close)
 {
 	skipUntil(open);
-    int endofblock=getEndOfNextBlock(open,close);
-	
+	int endofblock=getEndOfNextBlock(open,close);
+
 	++m_pos;	// skip opening character
 
-	blockstack.push(maxint(endofblock+1,m_pos.getMax())); // automatically jump over the block when exiting it
+	m_blockstack.push(maxint(endofblock,m_pos.getMax()));
 
 	m_pos.setMax(endofblock-1); // end of block is one position before closing character
 }
 void Lexer::exitBlock()
 {
-	m_pos=blockstack.top();
-	blockstack.pop();
+	assert(!m_blockstack.empty());
+	m_pos=m_blockstack.top();
+	m_blockstack.pop();
+	++m_pos;
 }
 
 bool Lexer::tryFind(const char *text)
 {
-	blockstack.push(m_pos);
+	m_blockstack.push(m_pos);
 	bool rval=true;
 	try 
 	{
@@ -505,14 +662,14 @@ bool Lexer::tryFind(const char *text)
 	catch (LexException &)
 	{
 		rval=false;
-		m_pos=blockstack.top(); // reset back 
+		m_pos=m_blockstack.top(); // reset back 
 	}
-	blockstack.pop();
+	m_blockstack.pop();
 	return rval;
 }
 bool Lexer::tryFindAndSkip (const char* text)
 {
-	blockstack.push(m_pos);
+	m_blockstack.push(m_pos);
 	bool rval=true;
 	try 
 	{
@@ -521,18 +678,17 @@ bool Lexer::tryFindAndSkip (const char* text)
 	catch (LexException &)
 	{
 		rval=false;
-		m_pos=blockstack.top(); // reset back 
+		m_pos=m_blockstack.top(); // reset back 
 	}
-	blockstack.pop();
+	m_blockstack.pop();
 	return rval;
 }
 void Lexer::pushPosition()
 {
-	blockstack.push(m_pos);
+	m_blockstack.push(m_pos);
 }
 void Lexer::popPosition()
 {
-	m_pos=blockstack.top();
-	blockstack.pop();
+	m_pos=m_blockstack.top();
+	m_blockstack.pop();
 }
-

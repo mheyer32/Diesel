@@ -32,7 +32,7 @@ bool ASELoader::LoadASE(const CPath &Filename, CEntity::ENTITYLIST &EntityList)
 	filecontents[file->getSize()]=0;
 
     m_lexer.setText(filecontents);
-	m_lexer.setCaseInsensitive();
+	m_lexer.setCaseSensitive(false);
 
 	CPath directory;
 	CFileManager::Instance()->getCurrentDirectory(directory);

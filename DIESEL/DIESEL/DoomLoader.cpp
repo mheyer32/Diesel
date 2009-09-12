@@ -41,7 +41,7 @@ DoomScene* DoomLoader::LoadPROC(const CPath &filename)
 	DoomMap	*doommap=new DoomMap;
 
     lexer.setText(filecontents);
-	lexer.setCaseInsensitive();
+	lexer.setCaseSensitive(false);
 
 	try 
 	{
@@ -119,8 +119,7 @@ void DoomLoader::LoadMAP(const CPath &filename, DoomMap *doommap)
 	delete file;
 
     lexer.setText(filecontents);
-	lexer.setCaseInsensitive();
-
+	lexer.setCaseSensitive(false);
 
 	try // as long as entity definitions follow
 	{
