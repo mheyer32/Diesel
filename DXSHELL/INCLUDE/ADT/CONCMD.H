@@ -23,12 +23,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-#include <boost/noncopyable.hpp>
 
 #include <map>
 #include <string>
 
-class ConCmd  : boost::noncopyable
+class ConCmd  
 {
 //FIXME: vielleicht eine statische Funktion einbauen, die ConCmd Objekte erzeugt und
 // verhindert, dass mehrere Commandos gleichen Namens erzeugt werden
@@ -74,6 +73,10 @@ protected:
 	static void AliasCmd(ConCmd &Command,const std::string &Arg);
 	static void ExecCmd(ConCmd &Command,const std::string &Arg);
 	static void EchoCmd(ConCmd &Command,const std::string &Arg);
+private:
+
+	ConCmd(const ConCmd&);
+	ConCmd& operator = (const ConCmd&);
 };
 
 class CAliasCmd: public ConCmd
