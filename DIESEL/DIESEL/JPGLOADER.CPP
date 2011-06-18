@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define VC_EXTRALEAN
 #include <windows.h>
 #include <gl/gl.h>
+#include "gl/glext.h"
 
 #include <iostream>
 
@@ -122,7 +123,8 @@ struct jpeg_error_mgr jerr;;
 		return NULL;
 	}
 
-	Image* image=new Image(cinfo.output_width,cinfo.output_height,3,GL_RGB);
+	// FIXME: usually JPEG files are SRGB encoded, but in this case I'd need to make the framebuffer sRGB as well
+	Image* image=new Image(cinfo.output_width,cinfo.output_height, 3, /*GL_SRGB8_EXT*/ GL_RGB, GL_RGB, NULL);
 
 	unsigned char* c = image->getImageData();
 

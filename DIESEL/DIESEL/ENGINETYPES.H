@@ -41,7 +41,7 @@ Types
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef unsigned short INDEX;
-#define GL_INDEX GL_UNSIGNED_SHORT
+#define GL_INDEX_ENUM GL_UNSIGNED_SHORT
 #define MAX_INDEX 0xFFFF
 
 class	CVertexBuffer;

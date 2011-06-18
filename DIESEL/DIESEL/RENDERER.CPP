@@ -1717,7 +1717,7 @@ bool	mode;
 
 void Renderer::Render_DrawElements()
 {
-	glDrawElements(sourcebuffer->mode,src_arrays.num_indices,GL_INDEX,src_arrays.indices);
+	glDrawElements(sourcebuffer->mode,src_arrays.num_indices,GL_INDEX_ENUM,src_arrays.indices);
 	triangles+=src_arrays.num_indices/3; // fixme optimize this away
 	if ((int)r_finish) glFinish();
 	gl_apicalls++;
@@ -1725,7 +1725,7 @@ void Renderer::Render_DrawElements()
 
 void Renderer::Render_DrawRangeElements()
 {
-	glDrawRangeElementsEXT(sourcebuffer->mode,0,src_arrays.num_vertices-1,src_arrays.num_indices,GL_INDEX,src_arrays.indices);
+	glDrawRangeElementsEXT(sourcebuffer->mode,0,src_arrays.num_vertices-1,src_arrays.num_indices,GL_INDEX_ENUM,src_arrays.indices);
 	triangles+=src_arrays.num_indices/3;
 	gl_apicalls++;	
 	if ((int)r_finish) glFinish();
