@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(ProjectDir)\..\bin\$(PlatformToolset)</OutDir>
+    <OutDir>$(ProjectDir)\..\bin\$(PlatformToolset)\</OutDir>
   </PropertyGroup>
   <PropertyGroup>
     <IntDir>$(ProjectDir)\..\build\$(ProjectName)\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
