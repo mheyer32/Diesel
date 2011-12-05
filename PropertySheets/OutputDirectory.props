@@ -3,10 +3,10 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(SolutionDir)\..\lib\$(PlatformToolset)\</OutDir>
+    <OutDir>$(ProjectDir)\..\lib\$(PlatformToolset)\</OutDir>
   </PropertyGroup>
   <PropertyGroup>
-    <IntDir>$(SolutionDir)\..\build\$(PlatformToolset)\$(PlatformName)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)\..\build\$(ProjectName)$(PlatformToolset)\$(PlatformName)\$(Configuration)\</IntDir>
     <_PropertySheetDisplayName>LibraryOutputDirectory</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup />
