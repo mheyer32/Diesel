@@ -13,22 +13,22 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
 		<Link>
-			<AdditionalDependencies>libogg_static.lib %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libogg_static.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
-			<AdditionalDependencies>libogg_staticD %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libogg_staticD; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 

@@ -14,12 +14,12 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
 		<Link>
-			<AdditionalDependencies>libvorbisfile_static libvorbis_static %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libvorbisfile_static.lib; libvorbis_static.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
-			<AdditionalDependencies>libvorbisfile_staticD libvorbis_staticD %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libvorbisfile_staticD.lib; libvorbis_staticD.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">

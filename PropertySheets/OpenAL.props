@@ -13,7 +13,7 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup>
 		<Link>
-			<AdditionalDependencies>OpenAL32 %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>OpenAL32.lib %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
