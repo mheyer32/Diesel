@@ -13,12 +13,12 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
 		<Link>
-			<AdditionalDependencies>zlibm.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>zlibstatNoASM.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
-			<AdditionalDependencies>zlibmd.lib %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>zlibstatD.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
