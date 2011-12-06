@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <GPA_ROOT>$(LIBS_ROOT)/GPUPerfAPI-2.8.154.0\</GPA_ROOT>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(GPA_ROOT)\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
+		<Link>
+			  <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x86\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
+		<Link>
+			  <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+
+  <ItemGroup>
+    <BuildMacro Include="GPA_ROOT">
+      <Value>$(GPA_ROOT)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

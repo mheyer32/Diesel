@@ -3,38 +3,38 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <ZLIB_ROOT>$(LIBS_ROOT)\zlib-1.2.5\</ZLIB_ROOT>
+    <JPG_ROOT>$(LIBS_ROOT)\jpeg-6b\</JPG_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ZLIB_ROOT); %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JPG_ROOT); %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
 		<Link>
-			<AdditionalDependencies>zlibm %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>jpeg %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
-			<AdditionalDependencies>zlibmd %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>jpegd %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(ZLIB_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(JPG_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(ZLIB_ROOT)\lib\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(JPG_ROOT)\lib\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 
   <ItemGroup>
-    <BuildMacro Include="ZLIB_ROOT">
-      <Value>$(ZLIB_ROOT)</Value>
+    <BuildMacro Include="JPG_ROOT">
+      <Value>$(JPG_ROOT)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

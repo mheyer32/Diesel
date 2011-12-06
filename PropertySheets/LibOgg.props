@@ -3,38 +3,38 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <ZLIB_ROOT>$(LIBS_ROOT)\zlib-1.2.5\</ZLIB_ROOT>
+    <OGG_ROOT>$(LIBS_ROOT)\libogg-1.2.2\</OGG_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ZLIB_ROOT); %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OGG_ROOT)\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
 		<Link>
-			<AdditionalDependencies>zlibm %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libogg_static.lib %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
-			<AdditionalDependencies>zlibmd %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libogg_staticD %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(ZLIB_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(ZLIB_ROOT)\lib\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 
   <ItemGroup>
-    <BuildMacro Include="ZLIB_ROOT">
-      <Value>$(ZLIB_ROOT)</Value>
+    <BuildMacro Include="OGG_ROOT">
+      <Value>$(OGG_ROOT)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

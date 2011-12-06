@@ -6,9 +6,13 @@
     <OutDir>$(ProjectDir)\..\lib\$(PlatformToolset)\</OutDir>
   </PropertyGroup>
   <PropertyGroup>
-    <IntDir>$(ProjectDir)\..\build\$(ProjectName)$(PlatformToolset)\$(PlatformName)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)\..\build\$(ProjectName)\$(PlatformToolset)\$(PlatformName)\$(Configuration)\</IntDir>
     <_PropertySheetDisplayName>LibraryOutputDirectory</_PropertySheetDisplayName>
   </PropertyGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

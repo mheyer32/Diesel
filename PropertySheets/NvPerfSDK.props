@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <NVPERFSDK_ROOT>$(LIBS_ROOT)</NVPERFSDK_ROOT>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(NVPERFSDK_ROOT)\NVIDIA_PerfSDK_6.70\inc\; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
+		<Link>
+			  <AdditionalLibraryDirectories>$(NVPERFSDK_ROOT)\NVIDIA_PerfSDK_6.70\lib\winxp_x86\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
+		<Link>
+			  <AdditionalLibraryDirectories>$(NVPERFSDK_ROOT)\NVIDIA_PerfSDK_6.70_X64\lib\winxp_x86_64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+
+  <ItemGroup>
+    <BuildMacro Include="NVPERFSDK_ROOT">
+      <Value>$(NVPERFSDK_ROOT)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
