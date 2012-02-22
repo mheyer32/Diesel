@@ -3,25 +3,24 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <GPA_ROOT>$(LIBS_ROOT)/GPUPerfAPI-2.8.154.0\</GPA_ROOT>
+    <GPA_ROOT>$(LIBS_ROOT)/GPUPerfAPI-2.9.325.0\</GPA_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(GPA_ROOT)\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
-		<Link>
-			  <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x86\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-		</Link>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
-		<Link>
-			  <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-		</Link>
-	</ItemDefinitionGroup>
-
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
+    <Link>
+      <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x86\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
+    <Link>
+      <AdditionalLibraryDirectories>$(GPA_ROOT)\bin\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="GPA_ROOT">
       <Value>$(GPA_ROOT)</Value>
