@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <FMOD_ROOT>$(LIBS_ROOT)\fmodapi375win\api\</FMOD_ROOT>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(FMOD_ROOT)\inc; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+	<Link>
+		<AdditionalLibraryDirectories>$(FMOD_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
+    <Link>
+			<AdditionalDependencies>fmodvc.lib; %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
+    <Link>
+      <AdditionalDependencies>fmod64vc.lib; %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="FMOD_ROOT">
+      <Value>$(FMOD_ROOT)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
