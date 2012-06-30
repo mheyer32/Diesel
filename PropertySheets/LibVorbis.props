@@ -24,7 +24,7 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(VORBIS_ROOT)\libfiles; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(VORBIS_ROOT)\libfiles\win32; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">

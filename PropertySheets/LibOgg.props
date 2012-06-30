@@ -23,7 +23,7 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(OGG_ROOT)\lib\win32; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
