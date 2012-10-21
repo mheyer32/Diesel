@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <NVPMAPI_ROOT>$(LIBS_ROOT)PerfKit_2.2.0.12166</NVPMAPI_ROOT>
+    <NVPMAPI_ROOT>$(LIBS_ROOT)\PerfKit_2.2.0.12166</NVPMAPI_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
