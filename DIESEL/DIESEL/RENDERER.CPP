@@ -234,7 +234,7 @@ void Renderer::SetupShader()
 		{
 			glstate&=~GLSTATE_NOCULL;
 			glEnable(GL_CULL_FACE);
-         }
+		 }
 	}
 
 	if (diff_glstate&SHADER_CULLFRONT)
@@ -311,7 +311,7 @@ int v;
 					// the patch is now given as a grid of discrete vertices that build the curved surface in 3d-space
 					// xdim tells in how many vertices the patch was tesseletated in u direction (columns)
 					// ydim tells the many rows there are
-     
+	 
 					width/=(float)ydim; // calculate the "portion" of one bulge each vertex gets
 					int	elem=0;
 					VECTOR3 *vertices=src_arrays.vertices;
@@ -355,7 +355,7 @@ int v;
 			{
 				VECTOR3 *src_normals=src_arrays.normals;
 				VECTOR3 *src_vertices=src_arrays.vertices;
-                float t=g_Time*info.shader->deformv_param[d][1];
+				float t=g_Time*info.shader->deformv_param[d][1];
 				t-=floorf(t);
 				t*=TWOPI;
 				float lat,lng;
@@ -646,7 +646,7 @@ int rval;
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	tustate[0].flags&=~TEXUNIT_TCARRAY;
 
-    glLockArraysEXT(0,src_arrays.num_vertices);
+	glLockArraysEXT(0,src_arrays.num_vertices);
 
 	int last_passnum=passnum+num_passes;
 
@@ -757,7 +757,7 @@ PASS_RVAL	rval;
 
 	// glstate and texture unit-states are defined in a way that they both
 	// can be used together in one int (passflags in this case)
-    diff_tuflags=tustate[texunit].flags^pass.passflags;
+	diff_tuflags=tustate[texunit].flags^pass.passflags;
 	diff_glflags=glstate^pass.passflags;
 
 
@@ -769,7 +769,7 @@ PASS_RVAL	rval;
 	else
 		rval=SetupBlendingGenericMtex(pass); // use standard GL texture environments only
 
-    if (rval!=RVAL_OK) return rval;
+	if (rval!=RVAL_OK) return rval;
 
 	if (pass.passflags&PASS_ALPHAFUNC)
 	{
@@ -813,7 +813,7 @@ PASS_RVAL	rval;
 			if (texunit) { return RVAL_FIRSTUNIT;}
 			glstate|=GLSTATE_NODEPTHTEST;
 			glDisable(GL_DEPTH_TEST);
- 		}
+		}
 		else 
 		{
 			if (!texunit)
@@ -831,7 +831,7 @@ PASS_RVAL	rval;
 			glstate|=GLSTATE_DEPTHWRITE;
 			glDepthMask(GL_TRUE);
 		
- 		}
+		}
 		else 
 		{
 			if (!texunit)
@@ -1519,7 +1519,7 @@ void Renderer::ALPHAGEN_LightingSpecular()
 	{
 		diff=pos-(VECTOR3&)vertices[v];
 		Normalize(diff);
-        alpha=fabsf(diff*normals[v]);
+		alpha=fabsf(diff*normals[v]);
 
 		alpha*=alpha*alpha*alpha*alpha*255.0f;
 		Colors[v].alpha=(unsigned char)(alpha);
@@ -1604,7 +1604,7 @@ void Renderer::TCGEN_Fog(PLANE fogplane,float fogdistance)
 
 	float d1=PointDistance(g_Camera->getTransformation().getTranslation(),fogplane); 
 
-    // to transform the world-space fogplane into model-space 
+	// to transform the world-space fogplane into model-space 
 	//(X^T)^-1 is needed which is (X^-1)^T ==  (C*M)^T
 	MATRIX4 P=g_Camera->getTransformation().getMatrix()*M;	// strip off camera-matrix, P then contains transformation of model- into worldspace (M^-1)
 	Transpose4(P);		
@@ -1630,7 +1630,7 @@ void Renderer::TCGEN_Fog(PLANE fogplane,float fogdistance)
 			texcoords[v].x=dist*dist;  //squared radial distance with linear fog
 			*/
 			texcoords[v].y=-PointDistance(vertices[v],fogplane);
-         }
+		 }
 	}
 	else
 	{
@@ -2208,7 +2208,7 @@ static const int staxis[6][3]={{2,1,0},{~2,0,1},{~0,1,2},{~2,1,0},{~2,~0,1},{0,1
 
 	VECTOR3 absfacedir;
 	VECTOR3 facedir=*verts;
-    int side,skyside;
+	int side,skyside;
 
 	int v;
 	for (v=0;v<num_verts;++v) // only allow triangles
@@ -2280,7 +2280,7 @@ static const VECTOR3 clipplanes[]={VECTOR3(1,1,0),VECTOR3(1,-1,0),VECTOR3(0,-1,1
 
 	const VECTOR3 &plane=clipplanes[planenumber];
 	int v;
-    for (v=0;v<num_verts;++v)
+	for (v=0;v<num_verts;++v)
 	{
 		dists[v]=verts[v]*plane;
 		if (dists[v]>0.1f)
@@ -2459,7 +2459,7 @@ static ConVar r_showskycoords("r_showskycoords","0");
 		src_arrays.texcoords=skytexcoords;
 		src_arrays.colors=NULL;	
 		org_arrays=src_arrays;
-        SetupDynamicArrays();
+		SetupDynamicArrays();
 		SetupPass(farboxpass);
 		
 		// avoid bilerp seam
