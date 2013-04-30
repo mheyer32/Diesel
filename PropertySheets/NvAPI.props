@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <NVAPI_ROOT>$(LIBS_ROOT)\NVAPI_2012_09\</NVAPI_ROOT>
+    <NVAPI_ROOT>$(LIBS_ROOT)\NVAPI_2013_01\</NVAPI_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
