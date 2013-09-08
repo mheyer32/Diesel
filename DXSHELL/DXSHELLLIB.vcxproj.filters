@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DirectDraw">
+      <UniqueIdentifier>{a5149506-2698-4435-a725-0f93b7369a55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectInput">
+      <UniqueIdentifier>{ce72ab61-4e44-48e9-b168-d2bf44a00eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectSound">
+      <UniqueIdentifier>{453b71f4-1d12-42c8-89c9-15bfd5d3c454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File">
+      <UniqueIdentifier>{e4c5b6c9-4035-4826-8621-a0d3c8e7febf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{8e955c2f-6dde-4213-ae6e-5a1a2672290f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{53a239ee-47bc-4ee5-8d79-5b84f7e742fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{116a6893-9f47-4e29-94b0-f350ed714dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL\Extensions">
+      <UniqueIdentifier>{4437eace-930c-4491-9fe8-c5b6ce7d0ba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{e21bbe5a-b09a-4cd1-8baa-56b3edf5e734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ressourcen">
+      <UniqueIdentifier>{4e21db2e-5168-4f07-918b-5461310b94db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direct3D">
+      <UniqueIdentifier>{46344f64-26a8-4b5c-8db9-48b63124a86f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{1a3357ab-a3c3-498e-93f8-55b69c634389}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Messaging">
+      <UniqueIdentifier>{27789633-4f3b-4289-920f-bd25532510ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ADT">
+      <UniqueIdentifier>{41f06580-8dc3-48b2-8603-6624950df484}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Include\Ddraw\DDErr.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\DDrawException.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\DDUtil.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\DirectDraw.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\Overlay.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\Palette.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\Surface.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\Surface16.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\Surface8.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Ddraw\SurfaceMem.cpp">
+      <Filter>DirectDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\DIErr.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\DInputDevice.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\DInputException.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\DirectInput.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\Joystick.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\Keyboard.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dinput\Mouse.cpp">
+      <Filter>DirectInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dsound\DirectSound.cpp">
+      <Filter>DirectSound</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dsound\DSErr.cpp">
+      <Filter>DirectSound</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dsound\DSoundException.cpp">
+      <Filter>DirectSound</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Dsound\SoundBuffer.cpp">
+      <Filter>DirectSound</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\File\File.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\File\FileManager.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\File\Path.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\File\RamFile.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\File\ZipFile.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Geometry\AABB.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Misc\Exception.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Misc\Lexer.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Misc\ParseHelper.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Misc\streambuf_history.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Misc\Timer.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Opengl\OGLErrors.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Opengl\OpenGL.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Opengl\RenderTarget.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\AppWindow.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\Debug.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\DriverSelector.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\FileRequester.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\ScreenmodeRequester.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\Window.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\WinErr.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\WinException.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\WinMain.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Win\WndProc.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\D3d\Direct3D.cpp">
+      <Filter>Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Math\MathLib.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Math\Plane.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Messaging\MessagingObject.cpp">
+      <Filter>Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\ChainedObject.cpp">
+      <Filter>ADT</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\Color.cpp">
+      <Filter>ADT</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\ConCmd.cpp">
+      <Filter>ADT</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\ConVar.cpp">
+      <Filter>ADT</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\NamedObject.CPP">
+      <Filter>ADT</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Adt\RefCount.cpp">
+      <Filter>ADT</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Ddraw\DDErr.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\DDrawException.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\DDUtil.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\DirectDraw.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\Overlay.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\Palette.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\Surface.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\Surface16.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\Surface8.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Ddraw\SurfaceMem.h">
+      <Filter>DirectDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\DIErr.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\DInputDevice.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\DInputException.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\DirectInput.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\Joystick.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\Keyboard.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dinput\Mouse.h">
+      <Filter>DirectInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dsound\DirectSound.h">
+      <Filter>DirectSound</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dsound\DSErr.h">
+      <Filter>DirectSound</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dsound\DSoundException.h">
+      <Filter>DirectSound</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Dsound\SoundBuffer.h">
+      <Filter>DirectSound</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\DirTree.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\File.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\FileManager.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\Path.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\RamFile.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\File\ZipFile.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Geometry\AABB.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\Exception.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\History.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\Lexer.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\ParseHelper.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\QSort.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\STLHelp.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\streambuf_history.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\Timer.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Opengl\GLFuncs.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Opengl\OGLErrors.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Opengl\OpenGL.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Opengl\RenderTarget.h">
+      <Filter>OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gl\glATI.h">
+      <Filter>OpenGL\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gl\glext.h">
+      <Filter>OpenGL\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gl\NewExt.h">
+      <Filter>OpenGL\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gl\wglATI.h">
+      <Filter>OpenGL\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gl\wglext.h">
+      <Filter>OpenGL\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\AppWindow.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\Debug.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\DriverSelector.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\FileRequester.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\resource.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\ScreenmodeRequester.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\Window.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\WinErr.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\WinException.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\WinMain.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Win\WndProc.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\MathDefs.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\MathLib.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Matrix3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Matrix34.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Matrix4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Plane.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Messaging\Messages.h">
+      <Filter>Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Messaging\MessagingObject.h">
+      <Filter>Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Messaging\Param.h">
+      <Filter>Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\ChainedObject.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\Color.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\ConCmd.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\ConVar.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\NamedObject.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\RefCount.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\Singleton.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\SmartPointer.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Adt\StrideArray.h">
+      <Filter>ADT</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\defs.h" />
+    <ClInclude Include="Include\DXShell.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\File\DirTree.hh">
+      <Filter>File</Filter>
+    </None>
+    <None Include="Include\Misc\History.hh">
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\appicon.ico">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\Audio.ico">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\Device2.ico">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\DirectX.ico">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\Screenmode.ico">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="INCLUDE\WIN\SKULL_FACE.ICO">
+      <Filter>Ressourcen</Filter>
+    </None>
+    <None Include="Include\Math\Matrix3.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Math\Matrix34.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Math\Matrix4.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Math\Vector2.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Math\Vector3.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Math\Vector4.hh">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Include\Adt\Singleton.hh">
+      <Filter>ADT</Filter>
+    </None>
+    <None Include="VTune\DXShellLib.vpj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="INCLUDE\WIN\DXShellLib.rc">
+      <Filter>Ressourcen</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuildStep Include="Include\D3d\Direct3D.h">
+      <Filter>Direct3D</Filter>
+    </CustomBuildStep>
+  </ItemGroup>
+</Project>
