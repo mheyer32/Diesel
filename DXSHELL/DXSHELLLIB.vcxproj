@@ -32,13 +32,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PropertySheets\CompilerSettings.props" />
     <Import Project="..\PropertySheets\ZLib.props" />
-    <Import Project="..\PropertySheets\DirectX6.props" />
+    <Import Project="..\PropertySheets\DirectX.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PropertySheets\CompilerSettings.props" />
     <Import Project="..\PropertySheets\ZLib.props" />
-    <Import Project="..\PropertySheets\DirectX6.props" />
+    <Import Project="..\PropertySheets\DirectX.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
