@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <InitGuid.h>
+
 #ifdef DIRECTINPUT_VERSION
 #undef DIRECTINPUT_VERSION
 #endif
@@ -40,7 +42,6 @@ typedef LPDIRECTINPUT8			LPDINPUT;
 typedef LPDIRECTINPUTDEVICE8 	LPDINPUTDEVICE;
 
 #pragma comment( lib, "dinput8.lib" )
-#pragma comment( lib, "dxguid.lib" )
 
 #include <adt/Singleton.h>
 

@@ -28,13 +28,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
-#pragma comment( lib, "ddraw.lib" )
-#pragma comment( lib, "dxguid.lib" )
-
 #include <win/appwindow.h>
 #include <messaging/messagingobject.h>
 #include <adt/singleton.h>
 #include <vector>
+
+#include <InitGuid.h>
 
 #ifndef DIRECTDRAW_VERSION
 #define DIRECTDRAW_VERSION 0x700
@@ -42,6 +41,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <ddraw.h>
 #include <ddraw/dderr.h>
+
+#pragma comment( lib, "d2d1.lib" )
 
 typedef IDirectDraw7	DDRAW;
 typedef LPDIRECTDRAW7	LPDDRAW;

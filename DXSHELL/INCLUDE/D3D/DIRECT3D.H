@@ -27,8 +27,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <InitGuid.h>
+
 #pragma comment( lib, "d3d8.lib" )
-#pragma comment( lib, "dxguid.lib" )
 
 #define D3D_OVERLOADS
 

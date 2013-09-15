@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif // _MSC_VER > 1000
 
 #pragma comment( lib, "dsound.lib" )
-#pragma comment( lib, "dxguid.lib" ) 
+//#pragma comment( lib, "dxguid.lib" ) 
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
