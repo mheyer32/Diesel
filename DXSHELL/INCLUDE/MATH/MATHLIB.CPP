@@ -34,8 +34,7 @@ void MatrixMultiply4 (const float *m1,const float *m2,float *result)
         result[i] = ma0 * m1[0] + ma1 * m1[4] + ma2 * m1[8] + ma3 * m1[12];
         result[i+1] = ma0 * m1[1] + ma1 * m1[5] + ma2 * m1[9] + ma3 * m1[13];
         result[i+2] = ma0 * m1[2] + ma1 * m1[6] + ma2 * m1[10] + ma3 * m1[14];
-        result[i+3] = ma0 * m1[3] + ma1 * m1[7] + ma2 * m1[11] + ma3 * m1[15];
-	
+        result[i+3] = ma0 * m1[3] + ma1 * m1[7] + ma2 * m1[11] + ma3 * m1[15];	
     }
 }
 void MatrixMultiply3 (const float *m1,const float *m2,float *result)
@@ -109,15 +108,19 @@ void ConstructMatrix4X(const VECTOR3 &xaxis,MATRIX4 &M)
 	Normalize((VECTOR3&)M.a[1]);
 	(VECTOR3&)M.a[2]=(VECTOR3&)M.a[0]^(VECTOR3&)M.a[1];
 }
-void ConstructMatrix4Z(const VECTOR3 &zaxis,MATRIX4 &M)
+
+void ConstructMatrix4Z(const VECTOR3 &zaxis, MATRIX4 &M)
 {
 	(VECTOR3&)M.a[2]=zaxis;
 	Normalize((VECTOR3&)M.a[2]);
-	// force the normal upvector to be the upvector in the base to be built
-	(VECTOR3&)M.a[1]=VECTOR3(0,1,0)-(VECTOR3&)M.a[2]*((VECTOR3&)M.a[2]).y;
-	//(VECTOR3&)M.a[1]=PerpendicularVector((VECTOR3&)M.a[2]);
+
+	const VECTOR3 up = (zaxis!=VECTOR3(0,1,0)) ? VECTOR3(0,1,0) : VECTOR3(0,0,1);
+
+	(VECTOR3&)M.a[0]= up ^ zaxis;
+	Normalize((VECTOR3&)M.a[0]);
+
+	(VECTOR3&)M.a[1]=(VECTOR3&)M.a[2]^(VECTOR3&)M.a[0];
 	Normalize((VECTOR3&)M.a[1]);
-	(VECTOR3&)M.a[0]=(VECTOR3&)M.a[1]^(VECTOR3&)M.a[2];
 }
 
 // Full Matrix inverse from NVidia

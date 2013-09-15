@@ -174,32 +174,32 @@ void Q3Entity::RenderPortal(PORTALINFO &portalinfo)
 
 	Transformation &camtrafo=g_Camera->getTransformation();
 
-	PLANE p(face.vbuffer->vertices[0][face.vbuffer->indices[0]],
-			face.vbuffer->vertices[0][face.vbuffer->indices[1]],
-			face.vbuffer->vertices[0][face.vbuffer->indices[2]]);
+	PLANE portalClipPlane(face.vbuffer->vertices[0][face.vbuffer->indices[0]],
+					      face.vbuffer->vertices[0][face.vbuffer->indices[1]],
+						  face.vbuffer->vertices[0][face.vbuffer->indices[2]]);
 
 	
-	float d=PointDistance(camtrafo.getTranslation(),p);
+	float portalSurfDist=PointDistance(camtrafo.getTranslation(),portalClipPlane);
 	// dont draw if behind
-	if (d<=0.0f) return;  
+	if (portalSurfDist<=0.0f) return;  
 	
 	float testcos=cosf(RAD(90.0f-g_Camera->FOV*0.5f));
 	// dont draw if facing away
-	if ((p.n*camtrafo.getColumnVector(2))<-testcos) return;		
+	if ((portalClipPlane.n*camtrafo.getColumnVector(2))<-testcos) return;		
 
 	// save old culling state
 	int old_cull_front=cull_front;
 	int old_lockpvs=(int)Q3BSPMesh::r_lockpvs;
 
-	MATRIX4 M;
+	MATRIX4 portalCamMat;
 	if (!target)
 	{
 	
 		// mirror the current camera-system
-		(VECTOR3&)M.a[3]=mirrorPoint(p,camtrafo.getColumnVector(3));
-		(VECTOR3&)M.a[0]=mirrorDirection(p,camtrafo.getColumnVector(0));
-		(VECTOR3&)M.a[1]=mirrorDirection(p,camtrafo.getColumnVector(1));
-		(VECTOR3&)M.a[2]=mirrorDirection(p,camtrafo.getColumnVector(2));
+		(VECTOR3&)portalCamMat.a[3]=mirrorPoint(portalClipPlane,camtrafo.getColumnVector(3));
+		(VECTOR3&)portalCamMat.a[0]=mirrorDirection(portalClipPlane,camtrafo.getColumnVector(0));
+		(VECTOR3&)portalCamMat.a[1]=mirrorDirection(portalClipPlane,camtrafo.getColumnVector(1));
+		(VECTOR3&)portalCamMat.a[2]=mirrorDirection(portalClipPlane,camtrafo.getColumnVector(2));
 
 		// imagine two mirrors that can see each other, the first one mirrors the camera-matrix, front-face culling is needed
 		// the second mirror mirrors the mirrored camera again, backface culling is needed
@@ -213,24 +213,23 @@ void Q3Entity::RenderPortal(PORTALINFO &portalinfo)
 	else
 	{
 		// target is the point where the camera is placed should be a misc_portal_camera, can also be a func_train
-		if (d>256.0f) return; // Portals with cameras usually have an alphagen portal that makes them oqaque at distance
+		if (portalSurfDist>256.0f) return; // Portals with cameras usually have an alphagen portal that makes them oqaque at distance
 
+		const MATRIX4 &currentCamMat=camtrafo.getMatrix();
 
+		MATRIX4 portalSurface;
+		ConstructMatrix4Z(portalClipPlane.n,portalSurface);
+		(VECTOR3&) portalSurface.a[3]=ProjectPointOnPlane(this->origin,portalClipPlane);
+		SimpleInverse4(portalSurface);
 
-		MATRIX4 C=camtrafo.getMatrix();
-
-		MATRIX4 R2;
-		ConstructMatrix4Z(p.n,R2);
-		(VECTOR3&) R2.a[3]=ProjectPointOnPlane(this->origin,p);
-		SimpleInverse4(R2);
-
-		R2=R2*C; // R2 now expresses the difference transformation between the portal surface-system and the camera-system
+		portalSurface=portalSurface*currentCamMat; // portalSurface now expresses the difference transformation between the portal surface-system and the camera-system
 		
-		// func_trains will interpolate their position, so use the trafo instead of the origin
+		// func_trains will interpolate their position, so use the xform instead of the origin
+		MATRIX4 portalCampos;
 		const VECTOR3 &targetcampos=target->m_transform.getTranslation();
-		MATRIX4 T;
-		TranslationMatrix4(T,targetcampos);
-		MATRIX4 R;
+		TranslationMatrix4(portalCampos, targetcampos);
+
+		MATRIX4 portalCamLookat;
 
 		if (!target->target)
 		{
@@ -240,30 +239,30 @@ void Q3Entity::RenderPortal(PORTALINFO &portalinfo)
 			Rotate4X(R,RAD(target->angles[0]));
 			Rotate4Z(R,RAD(target->angles[2]));*/
 
-			YawPitchRollMatrix4(VECTOR3(RAD(target->angles[0]),RAD(target->angles[1]),RAD(target->angles[2])),R);
+			YawPitchRollMatrix4(VECTOR3(RAD(target->angles[0]),RAD(target->angles[1]),RAD(target->angles[2])),portalCamLookat);
 
-			p=PLANE(-(VECTOR3&)R.a[2],targetcampos);
+			portalClipPlane=PLANE(-(VECTOR3&)portalCamLookat.a[2],targetcampos);
 		}
 		else if (model) // rocket arena encodes moving look-at-targets this way (a portal-entity with associated model)
 		{
 			VECTOR3 dir=model->getTransformation().getTranslation()-targetcampos ;
-			p=PLANE(dir,targetcampos);
-			ConstructMatrix4Z(-dir,R); // zaxis points out of screen
+			portalClipPlane=PLANE(dir,targetcampos);
+			ConstructMatrix4Z(-dir,portalCamLookat); // zaxis points out of screen
 	
 		}
 		else 
 		{
 			// the camera is supposed to look at target->target
 			VECTOR3 dir=target->target->m_transform.getTranslation()-targetcampos;
-			p=PLANE(dir,targetcampos);
-			ConstructMatrix4Z(-dir,R); // zaxis points out of screen
+			portalClipPlane=PLANE(dir,targetcampos);
+			ConstructMatrix4Z(-dir,portalCamLookat); // zaxis points out of screen
 		}
 
 		float t=g_Time*target->speed/360.0f; // speed is roll in deg/s
 		t=t-floorf(t);
-		Rotate4Z(R,RAD(15)*sinf(t*2*PI));
+		Rotate4Z(portalCamLookat,RAD(15)*sinf(t*2*PI));
 
-		M=T*(R*R2);
+		portalCamMat=portalCampos*portalCamLookat*portalSurface;
 
 		cull_front=0;
 		
@@ -275,14 +274,14 @@ void Q3Entity::RenderPortal(PORTALINFO &portalinfo)
 	}
 
 	portalinfo.cullfront=cull_front;
-	portalinfo.portalplane=p;
+	portalinfo.portalplane=portalClipPlane;
 
 	g_Camera->projectBBox(getBoundingBox(),portalinfo.portalrect);
 
 	// setup new camera
-	g_Camera->getTransformation().setMatrix(M);
+	g_Camera->getTransformation().setMatrix(portalCamMat);
 	g_Camera->setupCamera();
-	g_Camera->getClipPlane(CLIP_NEAR)=p;
+	g_Camera->getClipPlane(CLIP_NEAR)=portalClipPlane;
 
 	g_TNLStack->setCamera(*g_Camera);
 
