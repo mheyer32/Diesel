@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <GPA_ROOT>$(LIBS_ROOT)/GPUPerfAPI-2.9.325.0\</GPA_ROOT>
+    <GPA_ROOT>$(LIBS_ROOT)/GPUPerfAPI-2.11.739.0\</GPA_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
