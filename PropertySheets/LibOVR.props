@@ -36,7 +36,7 @@
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Debug'">
 		<Link>
 			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\x64\VS2013; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalDependencies>libovr64.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>libovr64d.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 
