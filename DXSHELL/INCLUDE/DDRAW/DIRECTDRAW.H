@@ -35,12 +35,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <InitGuid.h>
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#include <Windows.h>
+
 #ifndef DIRECTDRAW_VERSION
 #define DIRECTDRAW_VERSION 0x700
 #endif
-
 #include <ddraw.h>
-#include <ddraw/dderr.h>
+#include "ddraw/dderr.h"
 
 #pragma comment( lib, "d2d1.lib" )
 

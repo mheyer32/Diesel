@@ -37,9 +37,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define D3D				DDSCAPS_3DDEVICE
 #define	TEXTURE			DDSCAPS_TEXTURE
 
-#include <ddraw/DirectDraw.h>
-#include <ddraw/ddutil.h>
-#include <messaging/messagingobject.h>
+#include "ddraw/DirectDraw.h"
+#include "ddraw/ddutil.h"
+#include "messaging/messagingobject.h"
 
 #include <string>
 
