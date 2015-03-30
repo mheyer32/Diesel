@@ -3,12 +3,12 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <NVPMAPI_ROOT>$(LIBS_ROOT)\PerfKit_4.1.0.14260</NVPMAPI_ROOT>
+    <NVPMAPI_ROOT>$(LIBS_ROOT)\PerfKit_4.4.0</NVPMAPI_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(NVPMAPI_ROOT)\inc\; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(NVPMAPI_ROOT)\include\; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
 	</ItemDefinitionGroup>
   <ItemGroup>
