@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<OVR_ROOT>$(LIBS_ROOT)\OculusSDK_6_0_1\OculusSDK\LibOVR</OVR_ROOT>
+		<OVR_ROOT>$(LIBS_ROOT)\OculusSDK_7_0_0\LibOVR</OVR_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
