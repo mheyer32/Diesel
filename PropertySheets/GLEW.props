@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<GLEW_ROOT>$(LIBS_ROOT)\glew-1.10.0\</GLEW_ROOT>
+		<GLEW_ROOT>$(LIBS_ROOT)\glew-1.13.0\</GLEW_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
