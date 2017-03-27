@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <VULKAN_ROOT>$(LIBS_ROOT)\Vulkan\1.0.5.0</VULKAN_ROOT>
+    <VULKAN_ROOT>$(LIBS_ROOT)\Vulkan\1.0.42.1</VULKAN_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
@@ -13,13 +13,13 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(VULKAN_ROOT)\Bin32\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(VULKAN_ROOT)\Lib32\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			  <AdditionalDependencies>vulkan-1.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(VULKAN_ROOT)\Bin\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(VULKAN_ROOT)\Lib\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			  <AdditionalDependencies>vulkan-1.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
