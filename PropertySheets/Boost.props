@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <BOOST_ROOT>$(LIBS_ROOT)\boost_1_63_0\</BOOST_ROOT>
+    <BOOST_ROOT>$(LIBS_ROOT)\boost_1_64_0\</BOOST_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
