@@ -14,13 +14,13 @@
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
 			  <AdditionalLibraryDirectories>$(CLPERFMARKER_ROOT)\lib\x86\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			  <AdditionalDependencies>CLPerfMarker-x64.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			  <AdditionalDependencies>CLPerfMarker.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
 			  <AdditionalLibraryDirectories>$(CLPERFMARKER_ROOT)\lib\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			  <AdditionalDependencies>CLPerfMarker-x86.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			  <AdditionalDependencies>CLPerfMarker-x64.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 
