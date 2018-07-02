@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<OVR_ROOT>$(LIBS_ROOT)\OculusSDK_1_5_0\LibOVR</OVR_ROOT>
+		<OVR_ROOT>$(LIBS_ROOT)\OculusSDK_1_26_0\LibOVR</OVR_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
@@ -14,28 +14,28 @@
 	
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Release'">
 		<Link>
-			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\Win32\Release\VS2013; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\Win32\ReleaseSingleProcess\VS2017; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<AdditionalDependencies>libovr.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\Win32\Release\VS2013; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\Win32\ReleaseSingleProcess\VS2017; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<AdditionalDependencies>libovr.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Release'">
 		<Link>
-			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\x64\Release\VS2013; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\x64\ReleaseSingleProcess\VS2017; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<AdditionalDependencies>libovr.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\x64\Release\VS2013; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(OVR_ROOT)\lib\windows\x64\ReleaseSingleProcess\VS2017; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<AdditionalDependencies>libovr.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
