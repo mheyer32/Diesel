@@ -96,12 +96,12 @@ void Lexer::setCaseSensitive(bool sensitive)
 	m_input.setCaseSensitive(sensitive);
 }
 
-inline bool Lexer::matchWhitespace()
+bool Lexer::matchWhitespace()
 {
 	return m_isspace[m_input[m_pos]];
 }
 
-inline bool Lexer::matchWhitespaceAndSkip()
+bool Lexer::matchWhitespaceAndSkip()
 {
 	bool rval=matchWhitespace();
 	if (rval)
@@ -179,7 +179,7 @@ void Lexer::nextLine()
 	}
 }
 
-inline void Lexer::skipUntilWhiteSpace()
+void Lexer::skipUntilWhiteSpace()
 {
 	while (!matchWhitespace()) ++m_pos;
 }
@@ -199,18 +199,18 @@ void Lexer::skipUntil(char c)
 		skipWhiteSpace();
 	}
 }
-inline void Lexer::skipBeyondNext(char c)
+void Lexer::skipBeyondNext(char c)
 {	
 	skipUntil(c);
 	++m_pos;
 }
 
-inline bool Lexer::match(char c)
+bool Lexer::match(char c)
 {
 	return m_input[m_pos]==c;
 }
 
-inline bool Lexer::matchAndSkip(char c)
+bool Lexer::matchAndSkip(char c)
 {
 	if (m_input[m_pos]==c)
 	{
@@ -220,17 +220,17 @@ inline bool Lexer::matchAndSkip(char c)
 	return false;
 }
 
-inline bool Lexer::matchDigit()
+bool Lexer::matchDigit()
 {
 	return m_isdigit[m_input[m_pos]];
 }
 
-inline bool Lexer::matchAlpha()
+bool Lexer::matchAlpha()
 {
 	return m_isalpha[m_input[m_pos]];
 }
 
-inline bool Lexer::matchAlphaNum()
+bool Lexer::matchAlphaNum()
 {
 	return m_isalphanum[m_input[m_pos]];
 }
@@ -272,7 +272,7 @@ bool Lexer::matchAndSkipIdentifier(const char *identifier)
 }
 
 
-inline bool Lexer::match(const char *text)
+bool Lexer::match(const char *text)
 {
 	maxint temp=m_pos;
 	bool rval=matchAndSkip(text);

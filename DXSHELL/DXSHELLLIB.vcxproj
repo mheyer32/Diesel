@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,50 +11,46 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectName>DXShellLib</ProjectName>
     <ProjectGuid>{585AAF8E-1434-43F2-B910-92BF7B8832EB}</ProjectGuid>
     <RootNamespace>DXShellLib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\PropertySheets\CompilerSettings.props" />
     <Import Project="..\PropertySheets\ZLib.props" />
-    <Import Project="..\PropertySheets\DirectX.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\PropertySheets\CompilerSettings.props" />
     <Import Project="..\PropertySheets\ZLib.props" />
-    <Import Project="..\PropertySheets\DirectX.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\build\$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\build\$(Platform)\$(Configuration)\</IntDir>
+    <_ProjectFileVersion>15.0.28127.55</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)D</TargetName>
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>$(ProjectName)</TargetName>
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -62,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>.\include ; $(ZLIB_INCDIR); $(JPG_INCDIR); ;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions> _CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -79,7 +75,7 @@
       <ResourceOutputFileName>.\lib\DXShellLib.res</ResourceOutputFileName>
     </ResourceCompile>
     <Lib>
-      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)$(ProjectName)D.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Lib>
@@ -92,7 +88,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <AdditionalIncludeDirectories>.\include ; $(ZLIB_INCDIR); $(JPG_INCDIR); ;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions> _CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -113,43 +109,32 @@
       <ResourceOutputFileName>.\lib\DXShelllib.res</ResourceOutputFileName>
     </ResourceCompile>
     <Lib>
-      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Include\Ddraw\DDErr.cpp">
+    <ClCompile Include="Include\Adt\ChainedObject.cpp" />
+    <ClCompile Include="Include\Adt\Color.cpp" />
+    <ClCompile Include="Include\Adt\ConCmd.cpp" />
+    <ClCompile Include="Include\Adt\ConVar.cpp" />
+    <ClCompile Include="Include\Adt\NamedObject.CPP" />
+    <ClCompile Include="Include\Adt\RefCount.cpp" />
+    <ClCompile Include="Include\D3d\Direct3D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Include\Ddraw\DDrawException.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\DDUtil.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\DirectDraw.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\Overlay.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\Palette.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\Surface.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\Surface16.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\Surface8.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Ddraw\SurfaceMem.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Include\Ddraw\DDErr.cpp" />
+    <ClCompile Include="Include\Ddraw\DDrawException.cpp" />
+    <ClCompile Include="Include\Ddraw\DDUtil.cpp" />
+    <ClCompile Include="Include\Ddraw\DirectDraw.cpp" />
+    <ClCompile Include="Include\Ddraw\Overlay.cpp" />
+    <ClCompile Include="Include\Ddraw\Palette.cpp" />
+    <ClCompile Include="Include\Ddraw\Surface.cpp" />
+    <ClCompile Include="Include\Ddraw\Surface16.cpp" />
+    <ClCompile Include="Include\Ddraw\Surface8.cpp" />
+    <ClCompile Include="Include\Ddraw\SurfaceMem.cpp" />
     <ClCompile Include="Include\Dinput\DIErr.cpp" />
     <ClCompile Include="Include\Dinput\DInputDevice.cpp" />
     <ClCompile Include="Include\Dinput\DInputException.cpp" />
@@ -167,6 +152,9 @@
     <ClCompile Include="Include\File\RamFile.cpp" />
     <ClCompile Include="Include\File\ZipFile.cpp" />
     <ClCompile Include="Include\Geometry\AABB.cpp" />
+    <ClCompile Include="Include\Math\MathLib.cpp" />
+    <ClCompile Include="Include\Math\Plane.cpp" />
+    <ClCompile Include="Include\Messaging\MessagingObject.cpp" />
     <ClCompile Include="Include\Misc\Exception.cpp" />
     <ClCompile Include="Include\Misc\Lexer.cpp" />
     <ClCompile Include="Include\Misc\ParseHelper.cpp" />
@@ -185,51 +173,33 @@
     <ClCompile Include="Include\Win\WinException.cpp" />
     <ClCompile Include="Include\Win\WinMain.cpp" />
     <ClCompile Include="Include\Win\WndProc.cpp" />
-    <ClCompile Include="Include\D3d\Direct3D.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Include\Math\MathLib.cpp" />
-    <ClCompile Include="Include\Math\Plane.cpp" />
-    <ClCompile Include="Include\Messaging\MessagingObject.cpp" />
-    <ClCompile Include="Include\Adt\ChainedObject.cpp" />
-    <ClCompile Include="Include\Adt\Color.cpp" />
-    <ClCompile Include="Include\Adt\ConCmd.cpp" />
-    <ClCompile Include="Include\Adt\ConVar.cpp" />
-    <ClCompile Include="Include\Adt\NamedObject.CPP" />
-    <ClCompile Include="Include\Adt\RefCount.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Ddraw\DDErr.h">
+    <ClInclude Include="Include\Adt\ChainedObject.h" />
+    <ClInclude Include="Include\Adt\Color.h" />
+    <ClInclude Include="Include\Adt\ConCmd.h" />
+    <ClInclude Include="Include\Adt\ConVar.h" />
+    <ClInclude Include="Include\Adt\NamedObject.h" />
+    <ClInclude Include="Include\Adt\RefCount.h" />
+    <ClInclude Include="Include\Adt\Singleton.h" />
+    <ClInclude Include="Include\Adt\Singleton.hh" />
+    <ClInclude Include="Include\Adt\SmartPointer.h" />
+    <ClInclude Include="Include\Adt\StrideArray.h" />
+    <CustomBuild Include="Include\D3d\Direct3D.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\DDrawException.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\DDUtil.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\DirectDraw.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\Overlay.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\Palette.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\Surface.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\Surface16.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\Surface8.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Ddraw\SurfaceMem.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    </CustomBuild>
+    <ClInclude Include="Include\Ddraw\DDErr.h" />
+    <ClInclude Include="Include\Ddraw\DDrawException.h" />
+    <ClInclude Include="Include\Ddraw\DDUtil.h" />
+    <ClInclude Include="Include\Ddraw\DirectDraw.h" />
+    <ClInclude Include="Include\Ddraw\Overlay.h" />
+    <ClInclude Include="Include\Ddraw\Palette.h" />
+    <ClInclude Include="Include\Ddraw\Surface.h" />
+    <ClInclude Include="Include\Ddraw\Surface16.h" />
+    <ClInclude Include="Include\Ddraw\Surface8.h" />
+    <ClInclude Include="Include\Ddraw\SurfaceMem.h" />
+    <ClInclude Include="Include\defs.h" />
     <ClInclude Include="Include\Dinput\DIErr.h" />
     <ClInclude Include="Include\Dinput\DInputDevice.h" />
     <ClInclude Include="Include\Dinput\DInputException.h" />
@@ -241,15 +211,41 @@
     <ClInclude Include="Include\Dsound\DSErr.h" />
     <ClInclude Include="Include\Dsound\DSoundException.h" />
     <ClInclude Include="Include\Dsound\SoundBuffer.h" />
+    <ClInclude Include="Include\DXShell.h" />
     <ClInclude Include="Include\File\DirTree.h" />
+    <ClInclude Include="Include\File\DirTree.hh" />
     <ClInclude Include="Include\File\File.h" />
     <ClInclude Include="Include\File\FileManager.h" />
     <ClInclude Include="Include\File\Path.h" />
     <ClInclude Include="Include\File\RamFile.h" />
     <ClInclude Include="Include\File\ZipFile.h" />
     <ClInclude Include="Include\Geometry\AABB.h" />
+    <ClInclude Include="Include\Gl\glATI.h" />
+    <ClInclude Include="Include\Gl\glext.h" />
+    <ClInclude Include="Include\Gl\NewExt.h" />
+    <ClInclude Include="Include\Gl\wglATI.h" />
+    <ClInclude Include="Include\Gl\wglext.h" />
+    <ClInclude Include="Include\Math\MathDefs.h" />
+    <ClInclude Include="Include\Math\MathLib.h" />
+    <ClInclude Include="Include\Math\Matrix3.h" />
+    <ClInclude Include="Include\Math\Matrix3.hh" />
+    <ClInclude Include="Include\Math\Matrix34.h" />
+    <ClInclude Include="Include\Math\Matrix34.hh" />
+    <ClInclude Include="Include\Math\Matrix4.h" />
+    <ClInclude Include="Include\Math\Matrix4.hh" />
+    <ClInclude Include="Include\Math\Plane.h" />
+    <ClInclude Include="Include\Math\Vector2.h" />
+    <ClInclude Include="Include\Math\Vector2.hh" />
+    <ClInclude Include="Include\Math\Vector3.h" />
+    <ClInclude Include="Include\Math\Vector3.hh" />
+    <ClInclude Include="Include\Math\Vector4.h" />
+    <ClInclude Include="Include\Math\Vector4.hh" />
+    <ClInclude Include="Include\Messaging\Messages.h" />
+    <ClInclude Include="Include\Messaging\MessagingObject.h" />
+    <ClInclude Include="Include\Messaging\Param.h" />
     <ClInclude Include="Include\Misc\Exception.h" />
     <ClInclude Include="Include\Misc\History.h" />
+    <ClInclude Include="Include\Misc\History.hh" />
     <ClInclude Include="Include\Misc\Lexer.h" />
     <ClInclude Include="Include\Misc\ParseHelper.h" />
     <ClInclude Include="Include\Misc\QSort.h" />
@@ -260,11 +256,6 @@
     <ClInclude Include="Include\Opengl\OGLErrors.h" />
     <ClInclude Include="Include\Opengl\OpenGL.h" />
     <ClInclude Include="Include\Opengl\RenderTarget.h" />
-    <ClInclude Include="Include\Gl\glATI.h" />
-    <ClInclude Include="Include\Gl\glext.h" />
-    <ClInclude Include="Include\Gl\NewExt.h" />
-    <ClInclude Include="Include\Gl\wglATI.h" />
-    <ClInclude Include="Include\Gl\wglext.h" />
     <ClInclude Include="Include\Win\AppWindow.h" />
     <ClInclude Include="Include\Win\Debug.h" />
     <ClInclude Include="Include\Win\DriverSelector.h" />
@@ -276,54 +267,20 @@
     <ClInclude Include="Include\Win\WinException.h" />
     <ClInclude Include="Include\Win\WinMain.h" />
     <ClInclude Include="Include\Win\WndProc.h" />
-    <CustomBuildStep Include="Include\D3d\Direct3D.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </CustomBuildStep>
-    <ClInclude Include="Include\Math\MathDefs.h" />
-    <ClInclude Include="Include\Math\MathLib.h" />
-    <ClInclude Include="Include\Math\Matrix3.h" />
-    <ClInclude Include="Include\Math\Matrix34.h" />
-    <ClInclude Include="Include\Math\Matrix4.h" />
-    <ClInclude Include="Include\Math\Plane.h" />
-    <ClInclude Include="Include\Math\Vector2.h" />
-    <ClInclude Include="Include\Math\Vector3.h" />
-    <ClInclude Include="Include\Math\Vector4.h" />
-    <ClInclude Include="Include\Messaging\Messages.h" />
-    <ClInclude Include="Include\Messaging\MessagingObject.h" />
-    <ClInclude Include="Include\Messaging\Param.h" />
-    <ClInclude Include="Include\Adt\ChainedObject.h" />
-    <ClInclude Include="Include\Adt\Color.h" />
-    <ClInclude Include="Include\Adt\ConCmd.h" />
-    <ClInclude Include="Include\Adt\ConVar.h" />
-    <ClInclude Include="Include\Adt\NamedObject.h" />
-    <ClInclude Include="Include\Adt\RefCount.h" />
-    <ClInclude Include="Include\Adt\Singleton.h" />
-    <ClInclude Include="Include\Adt\SmartPointer.h" />
-    <ClInclude Include="Include\Adt\StrideArray.h" />
-    <ClInclude Include="Include\defs.h" />
-    <ClInclude Include="Include\DXShell.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Include\File\DirTree.hh" />
-    <None Include="Include\Misc\History.hh" />
-    <None Include="INCLUDE\WIN\appicon.ico" />
-    <None Include="INCLUDE\WIN\Audio.ico" />
-    <None Include="INCLUDE\WIN\Device2.ico" />
-    <None Include="INCLUDE\WIN\DirectX.ico" />
-    <None Include="INCLUDE\WIN\Screenmode.ico" />
-    <None Include="INCLUDE\WIN\SKULL_FACE.ICO" />
-    <None Include="Include\Math\Matrix3.hh" />
-    <None Include="Include\Math\Matrix34.hh" />
-    <None Include="Include\Math\Matrix4.hh" />
-    <None Include="Include\Math\Vector2.hh" />
-    <None Include="Include\Math\Vector3.hh" />
-    <None Include="Include\Math\Vector4.hh" />
-    <None Include="Include\Adt\Singleton.hh" />
-    <None Include="VTune\DXShellLib.vpj" />
+    <Image Include="INCLUDE\WIN\appicon.ico" />
+    <Image Include="INCLUDE\WIN\Audio.ico" />
+    <Image Include="INCLUDE\WIN\Device2.ico" />
+    <Image Include="INCLUDE\WIN\DirectX.ico" />
+    <Image Include="INCLUDE\WIN\Screenmode.ico" />
+    <Image Include="INCLUDE\WIN\SKULL_FACE.ICO" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="INCLUDE\WIN\DXShellLib.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VTune\DXShellLib.vpj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

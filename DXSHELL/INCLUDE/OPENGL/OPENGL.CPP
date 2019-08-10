@@ -31,6 +31,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <win/resource.h>
 #include <win/AppWindow.H>
 
+#undef min
+#undef max
+
 #include <cmath>
 #include <iostream>
 #include <cassert>

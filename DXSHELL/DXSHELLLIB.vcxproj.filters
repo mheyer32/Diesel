@@ -2,46 +2,46 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="DirectDraw">
-      <UniqueIdentifier>{a5149506-2698-4435-a725-0f93b7369a55}</UniqueIdentifier>
+      <UniqueIdentifier>{02ebf093-23bc-44f9-a2e5-bc1024956455}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectInput">
-      <UniqueIdentifier>{ce72ab61-4e44-48e9-b168-d2bf44a00eff}</UniqueIdentifier>
+      <UniqueIdentifier>{81d2e84d-eaae-439c-ac57-b737b442e7df}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectSound">
-      <UniqueIdentifier>{453b71f4-1d12-42c8-89c9-15bfd5d3c454}</UniqueIdentifier>
+      <UniqueIdentifier>{d356f5fb-5654-4c85-b033-206f2b87695b}</UniqueIdentifier>
     </Filter>
     <Filter Include="File">
-      <UniqueIdentifier>{e4c5b6c9-4035-4826-8621-a0d3c8e7febf}</UniqueIdentifier>
+      <UniqueIdentifier>{619bf64a-d4ad-4dc3-9554-76e1927086cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Geometry">
-      <UniqueIdentifier>{8e955c2f-6dde-4213-ae6e-5a1a2672290f}</UniqueIdentifier>
+      <UniqueIdentifier>{dcf0ff34-ab97-44e7-bdb8-77a864f5a42d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc">
-      <UniqueIdentifier>{53a239ee-47bc-4ee5-8d79-5b84f7e742fc}</UniqueIdentifier>
+      <UniqueIdentifier>{2cdfc96f-63d5-4f09-b886-261cd75e8d08}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenGL">
-      <UniqueIdentifier>{116a6893-9f47-4e29-94b0-f350ed714dc7}</UniqueIdentifier>
+      <UniqueIdentifier>{6066588a-9efc-4f13-bb0e-c871389bfc72}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenGL\Extensions">
-      <UniqueIdentifier>{4437eace-930c-4491-9fe8-c5b6ce7d0ba6}</UniqueIdentifier>
+      <UniqueIdentifier>{e01d378c-3020-4c74-82d5-4f15d51a2cd9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows">
-      <UniqueIdentifier>{e21bbe5a-b09a-4cd1-8baa-56b3edf5e734}</UniqueIdentifier>
+      <UniqueIdentifier>{9165e330-899d-486e-a266-42f5d0ebb477}</UniqueIdentifier>
     </Filter>
     <Filter Include="Ressourcen">
-      <UniqueIdentifier>{4e21db2e-5168-4f07-918b-5461310b94db}</UniqueIdentifier>
+      <UniqueIdentifier>{068667eb-a605-453d-8ce9-40d1d2a8d435}</UniqueIdentifier>
     </Filter>
     <Filter Include="Direct3D">
-      <UniqueIdentifier>{46344f64-26a8-4b5c-8db9-48b63124a86f}</UniqueIdentifier>
+      <UniqueIdentifier>{e0ef34a1-7a70-460c-9150-2f2504e66539}</UniqueIdentifier>
     </Filter>
     <Filter Include="Math">
-      <UniqueIdentifier>{1a3357ab-a3c3-498e-93f8-55b69c634389}</UniqueIdentifier>
+      <UniqueIdentifier>{68a27a14-5778-4d3a-a957-18bbf5ce0f99}</UniqueIdentifier>
     </Filter>
     <Filter Include="Messaging">
-      <UniqueIdentifier>{27789633-4f3b-4289-920f-bd25532510ed}</UniqueIdentifier>
+      <UniqueIdentifier>{1a00d2af-629a-4d3a-8a22-0c65e374cac0}</UniqueIdentifier>
     </Filter>
     <Filter Include="ADT">
-      <UniqueIdentifier>{41f06580-8dc3-48b2-8603-6624950df484}</UniqueIdentifier>
+      <UniqueIdentifier>{8fb1b0cf-139e-4702-9b41-7ba90d222295}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +278,9 @@
     <ClInclude Include="Include\File\DirTree.h">
       <Filter>File</Filter>
     </ClInclude>
+    <ClInclude Include="Include\File\DirTree.hh">
+      <Filter>File</Filter>
+    </ClInclude>
     <ClInclude Include="Include\File\File.h">
       <Filter>File</Filter>
     </ClInclude>
@@ -300,6 +303,9 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Include\Misc\History.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Misc\History.hh">
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Include\Misc\Lexer.h">
@@ -389,10 +395,19 @@
     <ClInclude Include="Include\Math\Matrix3.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\Matrix3.hh">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Math\Matrix34.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\Matrix34.hh">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Math\Matrix4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Matrix4.hh">
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Include\Math\Plane.h">
@@ -401,10 +416,19 @@
     <ClInclude Include="Include\Math\Vector2.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\Vector2.hh">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Math\Vector3.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Math\Vector3.hh">
+      <Filter>Math</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Math\Vector4.hh">
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Include\Messaging\Messages.h">
@@ -437,6 +461,9 @@
     <ClInclude Include="Include\Adt\Singleton.h">
       <Filter>ADT</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Adt\Singleton.hh">
+      <Filter>ADT</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Adt\SmartPointer.h">
       <Filter>ADT</Filter>
     </ClInclude>
@@ -447,52 +474,24 @@
     <ClInclude Include="Include\DXShell.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Include\File\DirTree.hh">
-      <Filter>File</Filter>
-    </None>
-    <None Include="Include\Misc\History.hh">
-      <Filter>Misc</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\appicon.ico">
+    <Image Include="INCLUDE\WIN\appicon.ico">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\Audio.ico">
+    </Image>
+    <Image Include="INCLUDE\WIN\Audio.ico">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\Device2.ico">
+    </Image>
+    <Image Include="INCLUDE\WIN\Device2.ico">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\DirectX.ico">
+    </Image>
+    <Image Include="INCLUDE\WIN\DirectX.ico">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\Screenmode.ico">
+    </Image>
+    <Image Include="INCLUDE\WIN\Screenmode.ico">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="INCLUDE\WIN\SKULL_FACE.ICO">
+    </Image>
+    <Image Include="INCLUDE\WIN\SKULL_FACE.ICO">
       <Filter>Ressourcen</Filter>
-    </None>
-    <None Include="Include\Math\Matrix3.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Math\Matrix34.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Math\Matrix4.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Math\Vector2.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Math\Vector3.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Math\Vector4.hh">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Include\Adt\Singleton.hh">
-      <Filter>ADT</Filter>
-    </None>
-    <None Include="VTune\DXShellLib.vpj" />
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="INCLUDE\WIN\DXShellLib.rc">
@@ -500,8 +499,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuildStep Include="Include\D3d\Direct3D.h">
+    <None Include="VTune\DXShellLib.vpj" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Include\D3d\Direct3D.h">
       <Filter>Direct3D</Filter>
-    </CustomBuildStep>
+    </CustomBuild>
   </ItemGroup>
 </Project>
