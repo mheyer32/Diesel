@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<GLEW_ROOT>$(LIBS_ROOT)\glew-1.13.0\</GLEW_ROOT>
+		<GLEW_ROOT>$(LIBS_ROOT)\glew-2.2.0\</GLEW_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
@@ -27,8 +27,8 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalLibraryDirectories>$(GLEW_ROOT)\lib\Debug\Win32; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalDependencies>glew32sd.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalLibraryDirectories>$(GLEW_ROOT)\lib\Release\Win32; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalDependencies>glew32s.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	
@@ -41,8 +41,8 @@
 
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalLibraryDirectories>$(GLEW_ROOT)\lib\Debug\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalDependencies>glew32sd.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalLibraryDirectories>$(GLEW_ROOT)\lib\Release\x64; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalDependencies>glew32s.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 

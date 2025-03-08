@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <BOOST_ROOT>$(LIBS_ROOT)\boost_1_69_0\</BOOST_ROOT>
+    <BOOST_ROOT>$(LIBS_ROOT)\boost_1_86_0\</BOOST_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
@@ -11,7 +11,7 @@
       <AdditionalIncludeDirectories>$(BOOST_ROOT); %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_ROOT)\stage\$(PlatformToolset)\$(Platform)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\stage\$(Platform)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

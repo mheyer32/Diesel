@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<PNG_ROOT>$(LIBS_ROOT)\lpng1619\</PNG_ROOT>
+		<PNG_ROOT>$(LIBS_ROOT)\libpng\</PNG_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
@@ -21,12 +21,12 @@
 	
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Release'">
 		<Link>
-			<AdditionalLibraryDirectories>$(PNG_ROOT)\projects\vstudio\Release Library\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(PNG_ROOT)\projects\vstudio\Release\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalLibraryDirectories>$(PNG_ROOT)\projects\vstudio\Debug Library\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			<AdditionalLibraryDirectories>$(PNG_ROOT)\projects\vstudio\Debug\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	

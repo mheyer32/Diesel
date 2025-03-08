@@ -3,7 +3,7 @@
 	<Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
-		<BULLET_ROOT>$(LIBS_ROOT)\bullet-2.81-rev2613\</BULLET_ROOT>
+		<BULLET_ROOT>$(LIBS_ROOT)\bullet3</BULLET_ROOT>
 	</PropertyGroup>
 	
 	<ItemDefinitionGroup>
@@ -12,32 +12,26 @@
 		</ClCompile>
 	</ItemDefinitionGroup>
 	
-	<ItemDefinitionGroup>		
+	<ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">		
 		<Link>
-			  <AdditionalLibraryDirectories>$(BULLET_ROOT)\lib\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(BULLET_ROOT)\_build\lib\Release; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">		
+		<Link>
+			  <AdditionalLibraryDirectories>$(BULLET_ROOT)\_build\lib\Debug; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Release'">
-		<Link>
-			<AdditionalDependencies>BulletDynamics_vs2010.lib; BulletCollision_vs2010.lib; LinearMath_vs2010.lib; %(AdditionalDependencies)</AdditionalDependencies>
-		</Link>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' And '$(Configuration)'=='Debug'">
-		<Link>
-			<AdditionalDependencies>BulletDynamics_vs2010_debug.lib; BulletCollision_vs2010_debug.lib; LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-		</Link>
-	</ItemDefinitionGroup>
-	
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Release'">
 		<Link>
-			<AdditionalDependencies>BulletDynamics_vs2010_x64_release.lib; BulletCollision_vs2010_x64_release.lib;  LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>BulletDynamics.lib; BulletCollision.lib;LinearMath.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' And '$(Configuration)'=='Debug'">
 		<Link>
-			<AdditionalDependencies>BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;  LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>BulletDynamics_debug.lib;BulletCollision_debug.lib;LinearMath_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 

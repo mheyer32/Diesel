@@ -3,27 +3,15 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <NVTT_ROOT>$(LIBS_ROOT)\NvToolsExt</NVTT_ROOT>
+    <NVTT_ROOT>$(LIBS_ROOT)\NVTX\c\</NVTT_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(NVTT_ROOT)\include\; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(NVTT_ROOT)\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
 	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
-		<Link>
-			  <AdditionalLibraryDirectories>$(NVTT_ROOT)\lib\win32\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			  <AdditionalDependencies>nvToolsExt32_1.lib; %(AdditionalDependencies)</AdditionalDependencies>
-		</Link>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
-		<Link>
-			  <AdditionalLibraryDirectories>$(NVTT_ROOT)\lib\x64\; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			  <AdditionalDependencies>nvToolsExt64_1.lib; %(AdditionalDependencies)</AdditionalDependencies>
-		</Link>
-	</ItemDefinitionGroup>
-
+	
   <ItemGroup>
     <BuildMacro Include="NVTT_ROOT">
       <Value>$(NVTT_ROOT)</Value>

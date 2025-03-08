@@ -21,7 +21,7 @@
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Debug' ">
 		<Link>
 			<AdditionalLibraryDirectories>$(SHADERC_ROOT)\cmake_build\libshaderc\Debug; $(SHADERC_ROOT)\libshaderc_util\Debug; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalDependencies>shaderc_combined.lib; %(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalDependencies>shaderc_combinedd.lib; %(AdditionalDependencies)</AdditionalDependencies>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemGroup>

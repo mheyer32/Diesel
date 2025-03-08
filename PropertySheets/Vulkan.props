@@ -3,7 +3,7 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <VULKAN_ROOT>$(LIBS_ROOT)\Vulkan\1.1.97.0</VULKAN_ROOT>
+    <VULKAN_ROOT>$(LIBS_ROOT)\Vulkan\1.4.304.1</VULKAN_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
