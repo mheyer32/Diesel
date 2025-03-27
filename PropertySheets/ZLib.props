@@ -31,7 +31,11 @@
 			  <AdditionalLibraryDirectories>$(ZLIB_ROOT)\contrib\vstudio\vc17\x64\ZlibStatRelease; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
-
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="ZLIB_ROOT">
       <Value>$(ZLIB_ROOT)</Value>

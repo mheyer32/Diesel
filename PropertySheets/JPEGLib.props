@@ -3,12 +3,12 @@
   <Import Project="LibraryRoot.props" Condition="'$(LIBS_ROOT)'==''" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <JPG_ROOT>$(LIBS_ROOT)\libjpeg-turbo64</JPG_ROOT>
+    <JPG_ROOT>$(LIBS_ROOT)\libjpeg</JPG_ROOT>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(JPG_ROOT)\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JPG_ROOT)\_install\win32\include; %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Configuration)'=='Release' ">
@@ -23,12 +23,12 @@
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='win32' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(JPG_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(JPG_ROOT)\_install\win32\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 	<ItemDefinitionGroup Condition=" '$(Platform)'=='x64' ">
 		<Link>
-			  <AdditionalLibraryDirectories>$(JPG_ROOT)\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+			  <AdditionalLibraryDirectories>$(JPG_ROOT)\_install\x64\lib; %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 		</Link>
 	</ItemDefinitionGroup>
 

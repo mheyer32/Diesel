@@ -63,7 +63,7 @@ jpg_skip_input_data(j_decompress_ptr cinfo, long num_bytes)
 }
 
 static void
-jpeg_mem_src(j_decompress_ptr cinfo, unsigned char *mem, int len)
+jpeg_mem_src(j_decompress_ptr cinfo, const unsigned char* mem, unsigned long len)
 {
     cinfo->src = (struct jpeg_source_mgr *)
 	(*cinfo->mem->alloc_small)((j_common_ptr) cinfo,

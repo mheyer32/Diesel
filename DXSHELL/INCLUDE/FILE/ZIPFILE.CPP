@@ -164,3 +164,10 @@ void CZipFile::getFileList(PATHLIST &filelist, const CPath &directory,const std:
 		}
 	}
 }
+
+//extern "C"
+//{
+#define ASMV
+#define ASMINF
+#include "contrib/minizip/unzip.c"
+//};

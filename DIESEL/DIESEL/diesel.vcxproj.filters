@@ -2,48 +2,48 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source">
-      <UniqueIdentifier>{99032ed0-eef4-4961-9e54-a5767a4e4037}</UniqueIdentifier>
+      <UniqueIdentifier>{3681c432-e4fc-40ee-8448-b288904308a5}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header">
-      <UniqueIdentifier>{2d6d81c0-3677-4010-96d6-21577ae76f6f}</UniqueIdentifier>
+      <UniqueIdentifier>{8acff206-61e3-4fdc-bf2a-151559df6f77}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Loader">
-      <UniqueIdentifier>{40f9dffb-2a4d-4c17-8503-ec655c88b210}</UniqueIdentifier>
+      <UniqueIdentifier>{89dcd70b-3531-455b-973d-5a60fcaf77d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="MISC">
-      <UniqueIdentifier>{3e1d4385-7be4-4482-aa67-29ad845436b6}</UniqueIdentifier>
+      <UniqueIdentifier>{72043962-f322-4b6a-ba8b-342983a93fde}</UniqueIdentifier>
     </Filter>
     <Filter Include="Quake3">
-      <UniqueIdentifier>{520e89bd-1117-4a06-b8bc-293f067fbe4e}</UniqueIdentifier>
+      <UniqueIdentifier>{b136616e-5bcf-45b3-b388-23db7862dfc9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Console">
-      <UniqueIdentifier>{278a8706-393c-4801-aba0-d008154809c0}</UniqueIdentifier>
+      <UniqueIdentifier>{b0386342-994d-44f3-8f5c-823544bc1def}</UniqueIdentifier>
     </Filter>
     <Filter Include="MemoryManager">
-      <UniqueIdentifier>{91953576-34e7-40fd-b998-94a50d8bbd48}</UniqueIdentifier>
+      <UniqueIdentifier>{4babd700-1332-48b4-bafe-7772e7b56556}</UniqueIdentifier>
     </Filter>
     <Filter Include="SceneGraph">
-      <UniqueIdentifier>{5ef52eac-eff0-47bf-8f66-996245123519}</UniqueIdentifier>
+      <UniqueIdentifier>{759f1a6b-2950-485e-9234-60875193efce}</UniqueIdentifier>
     </Filter>
     <Filter Include="Renderer">
-      <UniqueIdentifier>{82edf5d6-cfd1-4e20-b3ce-7a5563a81687}</UniqueIdentifier>
+      <UniqueIdentifier>{4e0ba2bd-aa15-4f7e-964e-c7dcf72b4f40}</UniqueIdentifier>
     </Filter>
     <Filter Include="ROQPlayer">
-      <UniqueIdentifier>{fe19b3cb-7d9b-46dc-b7a5-5e7790a17f8a}</UniqueIdentifier>
+      <UniqueIdentifier>{33de88e4-3dbf-4910-9935-bcbaa3cfd3f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Image">
-      <UniqueIdentifier>{bd0c5fef-91fe-4644-a092-ed962555c35c}</UniqueIdentifier>
+      <UniqueIdentifier>{802744b4-6038-4d91-bc3a-39d541ef4c34}</UniqueIdentifier>
     </Filter>
     <Filter Include="Texture">
-      <UniqueIdentifier>{31fe0407-5108-47c7-be13-d70268d30c41}</UniqueIdentifier>
+      <UniqueIdentifier>{c811f915-ed04-4d45-896f-49c09963cca4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine">
-      <UniqueIdentifier>{54ae4cae-7162-42ea-8eca-174ef0ac12fe}</UniqueIdentifier>
+      <UniqueIdentifier>{909a2c5d-d863-412d-a1a1-f13ecbd1a576}</UniqueIdentifier>
     </Filter>
     <Filter Include="Doom">
-      <UniqueIdentifier>{f19aca62-2598-4be2-92cc-57b9fb084492}</UniqueIdentifier>
+      <UniqueIdentifier>{4232b9cd-d284-41a5-9fa1-1483414d4007}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="Task.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="3DSLoader.cpp">
+      <Filter>Loader</Filter>
     </ClCompile>
     <ClCompile Include="ASELoader.cpp">
       <Filter>Loader</Filter>
@@ -248,9 +251,6 @@
     <ClCompile Include="DoomScene.cpp">
       <Filter>Doom</Filter>
     </ClCompile>
-    <ClCompile Include="3DSLoader.cpp">
-      <Filter>Loader</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -276,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="Task.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="3DSLoader.h">
+      <Filter>Loader</Filter>
     </ClInclude>
     <ClInclude Include="ASELoader.h">
       <Filter>Loader</Filter>
@@ -478,15 +481,12 @@
     <ClInclude Include="DoomScene.h">
       <Filter>Doom</Filter>
     </ClInclude>
-    <ClInclude Include="3DSLoader.h">
-      <Filter>Loader</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ROQPlayer\idroq.txt">
+    <Text Include="ROQPlayer\idroq.txt">
       <Filter>ROQPlayer</Filter>
-    </None>
-    <None Include="Ideas.txt" />
-    <None Include="..\README.TXT" />
+    </Text>
+    <Text Include="Ideas.txt" />
+    <Text Include="..\README.TXT" />
   </ItemGroup>
 </Project>

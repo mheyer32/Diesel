@@ -2,46 +2,46 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="DirectDraw">
-      <UniqueIdentifier>{02ebf093-23bc-44f9-a2e5-bc1024956455}</UniqueIdentifier>
+      <UniqueIdentifier>{c0a84796-f38d-4d15-9866-2959b74151d1}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectInput">
-      <UniqueIdentifier>{81d2e84d-eaae-439c-ac57-b737b442e7df}</UniqueIdentifier>
+      <UniqueIdentifier>{c119c96f-9693-4fdd-8ded-33ce451f01ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="DirectSound">
-      <UniqueIdentifier>{d356f5fb-5654-4c85-b033-206f2b87695b}</UniqueIdentifier>
+      <UniqueIdentifier>{e4e7e5b4-fc9e-4375-bb01-4f5b7c9bd1ef}</UniqueIdentifier>
     </Filter>
     <Filter Include="File">
-      <UniqueIdentifier>{619bf64a-d4ad-4dc3-9554-76e1927086cb}</UniqueIdentifier>
+      <UniqueIdentifier>{be875a4a-37a2-4cdb-bc96-7232065f73ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Geometry">
-      <UniqueIdentifier>{dcf0ff34-ab97-44e7-bdb8-77a864f5a42d}</UniqueIdentifier>
+      <UniqueIdentifier>{efc7c0db-17de-411d-a97a-4b730da92717}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc">
-      <UniqueIdentifier>{2cdfc96f-63d5-4f09-b886-261cd75e8d08}</UniqueIdentifier>
+      <UniqueIdentifier>{627a370f-4f40-4a89-a2fc-62c625f0bd9f}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenGL">
-      <UniqueIdentifier>{6066588a-9efc-4f13-bb0e-c871389bfc72}</UniqueIdentifier>
+      <UniqueIdentifier>{980ba012-5a80-4edf-9bd7-4b1bfabc5a26}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenGL\Extensions">
-      <UniqueIdentifier>{e01d378c-3020-4c74-82d5-4f15d51a2cd9}</UniqueIdentifier>
+      <UniqueIdentifier>{2acb0207-e660-4b03-92b8-9c9545cda954}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows">
-      <UniqueIdentifier>{9165e330-899d-486e-a266-42f5d0ebb477}</UniqueIdentifier>
+      <UniqueIdentifier>{86cd47eb-a953-459c-a5a7-21d099bcf3cf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Ressourcen">
-      <UniqueIdentifier>{068667eb-a605-453d-8ce9-40d1d2a8d435}</UniqueIdentifier>
+      <UniqueIdentifier>{ba385294-82dc-480b-858c-1cc478deb20b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Direct3D">
-      <UniqueIdentifier>{e0ef34a1-7a70-460c-9150-2f2504e66539}</UniqueIdentifier>
+      <UniqueIdentifier>{7760efca-addc-472e-b4df-477a7d5a814b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Math">
-      <UniqueIdentifier>{68a27a14-5778-4d3a-a957-18bbf5ce0f99}</UniqueIdentifier>
+      <UniqueIdentifier>{93662fa8-bf47-4f6e-8d64-1121db04e3ea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Messaging">
-      <UniqueIdentifier>{1a00d2af-629a-4d3a-8a22-0c65e374cac0}</UniqueIdentifier>
+      <UniqueIdentifier>{c3b31950-5d2d-45b2-9dd7-12514531b2ef}</UniqueIdentifier>
     </Filter>
     <Filter Include="ADT">
-      <UniqueIdentifier>{8fb1b0cf-139e-4702-9b41-7ba90d222295}</UniqueIdentifier>
+      <UniqueIdentifier>{c81df1bd-eb42-4889-802c-b28a23a67e6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

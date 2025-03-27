@@ -6,9 +6,8 @@ Frustum::Frustum(int size) : m_planes(size)
 	else m_planes.resize(size);
 }
 
-Frustum::Frustum(PLANE *plns, int num_plns):m_planes(num_plns)
+Frustum::Frustum(PLANE *plns, int num_plns) : m_planes(plns, plns + num_plns)
 {
-	for (int p=0; p<num_plns; ++p) m_planes[p];
 }
 
  bool Frustum::BoxInFrustum(const BBOX &bbox) const
