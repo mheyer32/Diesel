@@ -21,65 +21,61 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Surface8.h"
-#include <cassert>
 #include <defs.h>
+#include <cassert>
+#include "Surface8.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
-
 
 CSurface8::CSurface8()
 {
 }
 
-
 CSurface8::~CSurface8()
 {
-
 }
 
-
-CSurface8::CSurface8(DWORD w, DWORD h,DWORD bc,DWORD caps)
+CSurface8::CSurface8(DWORD w, DWORD h, DWORD bc, DWORD caps)
 {
-	if (!create(w,h,bc,caps)) throw CException("CSurface8::CSurface8() could not create surface");
+    if (!create(w, h, bc, caps))
+        throw CException("CSurface8::CSurface8() could not create surface");
 }
-
 
 CSurface8::CSurface8(LPDDSURFACE Srfc)
 {
- 	Surface=Srfc;
-	storeSurfaceData();
-	Palette.setFromSurface(Surface);
+    Surface = Srfc;
+    storeSurfaceData();
+    Palette.setFromSurface(Surface);
 }
-
 
 CSurface8::CSurface8(LPCSTR file)
 {
-	createFromFile(file);
-	Palette.setFromSurface(Surface);
+    createFromFile(file);
+    Palette.setFromSurface(Surface);
 }
 
-HRESULT CSurface8::create(DWORD w, DWORD h,DWORD bc,DWORD caps)
+HRESULT CSurface8::create(DWORD w, DWORD h, DWORD bc, DWORD caps)
 {
-	DDPIXELFORMAT ddpf;
-	DXINITSTRUCT(ddpf);
-	ddpf.dwFlags=DDPF_RGB|DDPF_PALETTEINDEXED8;
-	ddpf.dwRGBBitCount=8;
-	HRESULT ddrval=CSurface::create(w,h,bc,caps,&ddpf);
-	if (ddrval!=DD_OK) return ddrval;
-	assert(Surface); // pointer should be set now
-	Palette.setFromSurface(Surface);
-	return DD_OK;
+    DDPIXELFORMAT ddpf;
+    DXINITSTRUCT(ddpf);
+    ddpf.dwFlags       = DDPF_RGB | DDPF_PALETTEINDEXED8;
+    ddpf.dwRGBBitCount = 8;
+    HRESULT ddrval     = CSurface::create(w, h, bc, caps, &ddpf);
+    if (ddrval != DD_OK)
+        return ddrval;
+    assert(Surface);  // pointer should be set now
+    Palette.setFromSurface(Surface);
+    return DD_OK;
 }
-void CSurface8::loadBitmap(const std::string &File)
+void CSurface8::loadBitmap(const std::string& File)
 {
-	CSurface::loadBitmap(File);
-	Palette.setFromSurface(Surface);
+    CSurface::loadBitmap(File);
+    Palette.setFromSurface(Surface);
 }
 
-void CSurface8::setPalette(const CPalette &newPalette)
+void CSurface8::setPalette(const CPalette& newPalette)
 {
-	Palette.setFrom(newPalette.getLPDDP());
-	Surface->SetPalette(Palette.getLPDDP());
+    Palette.setFrom(newPalette.getLPDDP());
+    Surface->SetPalette(Palette.getLPDDP());
 }

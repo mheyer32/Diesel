@@ -21,9 +21,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Path.h"
 #include <algorithm>
 #include <cassert>
+#include "Path.h"
 
 #include <misc/exception.h>
 
@@ -34,28 +34,26 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //////////////////////////////////////////////////////////////////////
 #define MAX_PATH 1024
 
-
 CPath::CPath()
 {
-	m_has_extension=false;
-	m_type=PT_RELATIVE;
+    m_has_extension = false;
+    m_type          = PT_RELATIVE;
 }
 
 CPath::~CPath()
 {
-
 }
 
-CPath::CPath(const std::string &newpath)
+CPath::CPath(const std::string& newpath)
 {
-	m_pathname=newpath;
-	preparePath();
+    m_pathname = newpath;
+    preparePath();
 }
 
 CPath::CPath(const char* newpath)
 {
-	m_pathname=newpath;
-	preparePath();
+    m_pathname = newpath;
+    preparePath();
 }
 
 // purify m_pathname to a valid string
@@ -66,198 +64,180 @@ CPath::CPath(const char* newpath)
 // determine m_type of path
 void CPath::preparePath()
 {
-	m_has_extension=false;
-	m_type=PT_RELATIVE;
-	m_startextension=std::string::npos;
+    m_has_extension  = false;
+    m_type           = PT_RELATIVE;
+    m_startextension = std::string::npos;
 
-	if (m_pathname.empty())
-	{
-		return;
-	}
+    if (m_pathname.empty()) {
+        return;
+    }
 
-//	std::cout<<"CPath::preparePath() from: '"<<m_pathname<<"' to: '";
-	
-	// remove spaces in front of and at the end of the path
-	std::string::size_type start=m_pathname.find_first_not_of(" \n\0x0A\t");
-	std::string::size_type end=m_pathname.find_last_not_of(" \n\0x0A\t");
+    //	std::cout<<"CPath::preparePath() from: '"<<m_pathname<<"' to: '";
 
-	if (start==std::string::npos || end==std::string::npos)
-	{
-		m_pathname.clear();
-		return;
-	}
+    // remove spaces in front of and at the end of the path
+    std::string::size_type start = m_pathname.find_first_not_of(" \n\0x0A\t");
+    std::string::size_type end   = m_pathname.find_last_not_of(" \n\0x0A\t");
 
-	m_pathname.assign(m_pathname,start,end-start+1);
+    if (start == std::string::npos || end == std::string::npos) {
+        m_pathname.clear();
+        return;
+    }
 
-	// replace "/" with "\"
-	std::replace(m_pathname.begin(), m_pathname.end(), '/', '\\');
+    m_pathname.assign(m_pathname, start, end - start + 1);
 
-	if (m_pathname.size()>1)
-	{
-		// determine m_type of given path/filename
-		if (m_pathname[1]==':')
-		{
-			m_type=PT_ABSOLUTE;
-		}
-		else if (m_pathname[0]=='\\' && m_pathname[1]=='\\')
-		{
-			m_type=PT_NETWORK;
-		}
-		else
-		{
-			m_type=PT_RELATIVE;
-		}
+    // replace "/" with "\"
+    std::replace(m_pathname.begin(), m_pathname.end(), '/', '\\');
 
-		//remove leading delimiter
-		if (m_type==PT_RELATIVE && m_pathname[0]=='\\')
-		{
-			m_pathname.erase(m_pathname.begin());
-		}
+    if (m_pathname.size() > 1) {
+        // determine m_type of given path/filename
+        if (m_pathname[1] == ':') {
+            m_type = PT_ABSOLUTE;
+        } else if (m_pathname[0] == '\\' && m_pathname[1] == '\\') {
+            m_type = PT_NETWORK;
+        } else {
+            m_type = PT_RELATIVE;
+        }
 
-		//remove trailing delimiter
-		while(*(m_pathname.end()-1)=='\\')
-		{
-			m_pathname.erase(m_pathname.end()-1);
-		}
+        // remove leading delimiter
+        if (m_type == PT_RELATIVE && m_pathname[0] == '\\') {
+            m_pathname.erase(m_pathname.begin());
+        }
 
-		// look for a valid extension
+        // remove trailing delimiter
+        while (*(m_pathname.end() - 1) == '\\') {
+            m_pathname.erase(m_pathname.end() - 1);
+        }
 
-		std::string::size_type pos=m_pathname.find_last_of("\\.");
-		if (pos!=std::string::npos && m_pathname[pos]=='.')
-		{
-			m_has_extension=true;
-			m_startextension=pos+1;
-		}
+        // look for a valid extension
 
-		// finally lower all letters
-		std::transform(m_pathname.begin(), m_pathname.end(),m_pathname.begin(), ::tolower);
-	}
-	
-//	std::cout<<m_pathname<<'\''<<std::endl;
+        std::string::size_type pos = m_pathname.find_last_of("\\.");
+        if (pos != std::string::npos && m_pathname[pos] == '.') {
+            m_has_extension  = true;
+            m_startextension = pos + 1;
+        }
+
+        // finally lower all letters
+        std::transform(m_pathname.begin(), m_pathname.end(), m_pathname.begin(), ::tolower);
+    }
+
+    //	std::cout<<m_pathname<<'\''<<std::endl;
 }
 
-
-//FIXME maybe returning a CPath would be better
+// FIXME maybe returning a CPath would be better
 std::string CPath::getPath() const
 {
-	if (!m_has_extension) return m_pathname;
+    if (!m_has_extension)
+        return m_pathname;
 
-	std::string::size_type pos=m_pathname.find_last_of('\\');
-	if (pos==std::string::npos)
-	{	
-		return "";
-	}
-	return m_pathname.substr(0,pos);
+    std::string::size_type pos = m_pathname.find_last_of('\\');
+    if (pos == std::string::npos) {
+        return "";
+    }
+    return m_pathname.substr(0, pos);
 }
 
 std::string CPath::getFilename() const
 {
-	std::string::size_type pos=m_pathname.find_last_of('\\');
-	if (pos==std::string::npos)
-	{	
-		return m_pathname;
-	}
-	return m_pathname.substr(pos+1);
+    std::string::size_type pos = m_pathname.find_last_of('\\');
+    if (pos == std::string::npos) {
+        return m_pathname;
+    }
+    return m_pathname.substr(pos + 1);
 }
 
 std::string CPath::getExtension() const
 {
-	if (!m_has_extension) return "";
+    if (!m_has_extension)
+        return "";
 
-	return m_pathname.substr(m_startextension);
+    return m_pathname.substr(m_startextension);
 }
 
-
-void CPath::setExtension(const std::string &newext)
+void CPath::setExtension(const std::string& newext)
 {
-	if (!m_has_extension)
-	{
-		m_pathname.push_back('.');
-		m_pathname.append(newext);	
-	}
-	else
-	{
-		m_pathname.resize(m_startextension+newext.size());
-		m_pathname.replace(m_startextension,newext.size(),newext);
-	}
-	preparePath(); // sanity check
+    if (!m_has_extension) {
+        m_pathname.push_back('.');
+        m_pathname.append(newext);
+    } else {
+        m_pathname.resize(m_startextension + newext.size());
+        m_pathname.replace(m_startextension, newext.size(), newext);
+    }
+    preparePath();  // sanity check
 }
 
 void CPath::stripExtension()
 {
-	if (!m_has_extension) return;
+    if (!m_has_extension)
+        return;
 
-	m_pathname.resize(m_startextension-1);
-	preparePath(); // sanity check
+    m_pathname.resize(m_startextension - 1);
+    preparePath();  // sanity check
 }
 
-CPath& CPath::operator = (const std::string &newpathname)
+CPath& CPath::operator=(const std::string& newpathname)
 {
-	m_pathname=newpathname;
-	preparePath();
-	return *this;
+    m_pathname = newpathname;
+    preparePath();
+    return *this;
 }
-CPath& CPath::operator = (const char *newpathname)
+CPath& CPath::operator=(const char* newpathname)
 {
-	m_pathname=newpathname;
-	preparePath();
-	return *this;
+    m_pathname = newpathname;
+    preparePath();
+    return *this;
 }
-CPath& CPath::operator /= (const CPath &path2)
+CPath& CPath::operator/=(const CPath& path2)
 {
-	if (m_pathname.empty()) 
-	{
-		*this=path2;
-		return *this;
-	}
-	if (path2.m_pathname.empty()) return *this;
-	if (m_has_extension || path2.m_type!=PT_RELATIVE)
-	{
-		throw CException(std::string("CPath::operator +() impossible to combine: '")+m_pathname+std::string("' and: '")+path2.m_pathname+std::string("'")); 
-		//std::cout<<"CPath::operator +() impossible to combine: '"<<m_pathname<<"' and: '"<<path2.m_pathname<<"'"<<std::endl;
-	}
+    if (m_pathname.empty()) {
+        *this = path2;
+        return *this;
+    }
+    if (path2.m_pathname.empty())
+        return *this;
+    if (m_has_extension || path2.m_type != PT_RELATIVE) {
+        throw CException(std::string("CPath::operator +() impossible to combine: '") + m_pathname +
+                         std::string("' and: '") + path2.m_pathname + std::string("'"));
+        // std::cout<<"CPath::operator +() impossible to combine: '"<<m_pathname<<"' and:
+        // '"<<path2.m_pathname<<"'"<<std::endl;
+    }
 
-	if (path2.m_has_extension)
-	{
-		m_startextension=m_pathname.size()+path2.m_startextension+1; 
-	}
-	m_has_extension=path2.m_has_extension;
+    if (path2.m_has_extension) {
+        m_startextension = m_pathname.size() + path2.m_startextension + 1;
+    }
+    m_has_extension = path2.m_has_extension;
 
-	m_pathname.push_back('\\');
-	m_pathname.append(path2.m_pathname); 
+    m_pathname.push_back('\\');
+    m_pathname.append(path2.m_pathname);
 
-	return *this;
-}
-
-CPath  CPath::operator / (const CPath &path2) const
-{
-	CPath tpath(*this);
-	tpath/=path2;
-	return tpath;
+    return *this;
 }
 
-
-bool CPath::operator == (const CPath &path2) const
+CPath CPath::operator/(const CPath& path2) const
 {
-	return m_pathname==path2.m_pathname;
-}
-bool CPath::operator != (const CPath &path2) const
-{
-	return m_pathname!=path2.m_pathname;
-}
-bool CPath::operator < (const CPath &path2) const
-{
-	return m_pathname<path2.m_pathname;
+    CPath tpath(*this);
+    tpath /= path2;
+    return tpath;
 }
 
-std::ostream& operator << (std::ostream &stream,const CPath &path)
+bool CPath::operator==(const CPath& path2) const
 {
-	return stream<<path.getString();
+    return m_pathname == path2.m_pathname;
+}
+bool CPath::operator!=(const CPath& path2) const
+{
+    return m_pathname != path2.m_pathname;
+}
+bool CPath::operator<(const CPath& path2) const
+{
+    return m_pathname < path2.m_pathname;
+}
+
+std::ostream& operator<<(std::ostream& stream, const CPath& path)
+{
+    return stream << path.getString();
 };
 
-std::string operator + (const std::string &str1, const CPath &path)
+std::string operator+(const std::string& str1, const CPath& path)
 {
-	return str1+path.getString();
+    return str1 + path.getString();
 }
-
-

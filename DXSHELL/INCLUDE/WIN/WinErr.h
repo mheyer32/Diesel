@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef _WINERR_H
 #define _WINERR_H
 
-extern const char * WinErrorToString();
-extern const char * WinErrorToString(int errornum);
+extern const char* WinErrorToString();
+extern const char* WinErrorToString(int errornum);
 
 #endif

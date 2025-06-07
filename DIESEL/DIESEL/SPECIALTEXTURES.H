@@ -24,9 +24,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace SpecialTextures
 {
-	extern	CTexture* createDLightTexture();
-	extern  CTexture* createWhitemap();
-	extern  CTexture* createFogTexture();
-}
+extern CTexture* createDLightTexture();
+extern CTexture* createWhitemap();
+extern CTexture* createFogTexture();
+}  // namespace SpecialTextures
 
 #endif

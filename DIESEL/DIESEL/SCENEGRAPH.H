@@ -26,31 +26,29 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "BaseScene.h"
 
 class CEntity;
 
-class CSceneGraph : public CBaseScene  
+class CSceneGraph : public CBaseScene
 {
 public:
+    CSceneGraph();
+    virtual ~CSceneGraph();
 
-	CSceneGraph();
-	virtual ~CSceneGraph();
+    // fulfill CBaseScene´s abstract interface
+    virtual void cullScene();
+    virtual void renderScene();
+    virtual void addEntity(CEntity* newEntity);
+    virtual void addEntities(CEntity::ENTITYLIST& list);
+    virtual bool initialize();
 
-	// fulfill CBaseScene´s abstract interface
-	virtual void cullScene();
-	virtual void renderScene();
-	virtual void addEntity(CEntity *newEntity);
-	virtual void addEntities(CEntity::ENTITYLIST &list);
-	virtual bool initialize();
-
-	CEntity* getSceneRoot() const {return sceneroot;};
+    CEntity* getSceneRoot() const { return sceneroot; };
 
 protected:
-
-	CEntity	*sceneroot;
+    CEntity* sceneroot;
 };
 
-#endif // !defined(AFX_SCENEGRAPH_H__D9FC738E_CACF_4FD8_96D1_9E58EB45F8E0__INCLUDED_)
+#endif  // !defined(AFX_SCENEGRAPH_H__D9FC738E_CACF_4FD8_96D1_9E58EB45F8E0__INCLUDED_)

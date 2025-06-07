@@ -26,30 +26,30 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "Surface.h"
 #include "Palette.h"
+#include "Surface.h"
 
-class CSurface8 :public CSurface
+class CSurface8 : public CSurface
 {
 
 public:
-		CSurface8();
-		CSurface8(DWORD w,DWORD h,DWORD bc=0,DWORD caps=0);
-		CSurface8(LPDDSURFACE Srfc);
-		CSurface8(LPCSTR file);
-		virtual ~CSurface8();
+    CSurface8();
+    CSurface8(DWORD w, DWORD h, DWORD bc = 0, DWORD caps = 0);
+    CSurface8(LPDDSURFACE Srfc);
+    CSurface8(LPCSTR file);
+    virtual ~CSurface8();
 
-		virtual HRESULT create(DWORD width, DWORD height,DWORD backbuffer_count,DWORD caps);
+    virtual HRESULT create(DWORD width, DWORD height, DWORD backbuffer_count, DWORD caps);
 
-		virtual void loadBitmap(const std::string &File);
+    virtual void loadBitmap(const std::string& File);
 
-		void setPalette(const CPalette &newPalette);
-		CPalette* getPalette() {return &Palette;};
+    void      setPalette(const CPalette& newPalette);
+    CPalette* getPalette() { return &Palette; };
 
 protected:
-		CPalette		Palette;
+    CPalette Palette;
 };
 
-#endif // !defined(AFX_SURFACE8_H__8F0B6427_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_SURFACE8_H__8F0B6427_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)

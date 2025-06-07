@@ -26,67 +26,64 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include <string>
-#include <ostream>
 #include <list>
+#include <ostream>
+#include <string>
 
-class CPath  
+class CPath
 {
 public:
+    enum PATHTYPE
+    {
+        PT_ABSOLUTE,
+        PT_RELATIVE,
+        PT_NETWORK
+    };
 
-enum PATHTYPE
-{
-	PT_ABSOLUTE,
-	PT_RELATIVE,
-	PT_NETWORK
-};
+    CPath();
+    CPath(const std::string& newpath);
+    CPath(const char* newpath);
+    virtual ~CPath();
 
-	CPath();
-	CPath(const std::string &newpath);
-	CPath(const char* newpath);
-	virtual ~CPath();
+    PATHTYPE getType() const { return m_type; };
 
-	PATHTYPE getType() const {return m_type;};
+    std::string getPath() const;
+    std::string getFilename() const;
+    std::string getExtension() const;
+    void        setExtension(const std::string& newext);
+    bool        hasExtension() const { return m_has_extension; };
+    void        stripExtension();
 
-	std::string getPath() const;
-	std::string getFilename() const;
-	std::string getExtension() const;
-	void setExtension(const std::string &newext);
-	bool hasExtension() const {return m_has_extension;};
-	void stripExtension();
+    const std::string& getString() const { return m_pathname; };
+    operator const std::string&() const { return m_pathname; };
 
-	const std::string& getString() const { return m_pathname;};
-	operator const std::string& () const { return m_pathname;};
+    CPath& operator=(const std::string& newpath);
+    CPath& operator=(const char* newpath);
 
+    CPath  operator/(const CPath& path2) const;
+    CPath& operator/=(const CPath& path2);
 
-	CPath& operator = (const std::string &newpath);
-	CPath& operator = (const char *newpath);
-
-	CPath  operator / (const CPath &path2) const;
-	CPath& operator /= (const CPath &path2);
-
-	// lexicographical order on complete pathstring
-	bool operator == (const CPath &path2) const;
-	bool operator != (const CPath &path2) const;
-	bool operator < (const CPath &path2) const;
+    // lexicographical order on complete pathstring
+    bool operator==(const CPath& path2) const;
+    bool operator!=(const CPath& path2) const;
+    bool operator<(const CPath& path2) const;
 
 protected:
+    void setType();
+    void preparePath();
 
-	void setType();
-	void preparePath();
-
-	std::string				m_pathname;
-	PATHTYPE				m_type;
-	std::string::size_type	m_startextension;
-	bool					m_has_extension;
+    std::string            m_pathname;
+    PATHTYPE               m_type;
+    std::string::size_type m_startextension;
+    bool                   m_has_extension;
 };
 
-typedef std::list<CPath> PATHLIST;
+typedef std::list<CPath>   PATHLIST;
 typedef PATHLIST::iterator PATHITERATOR;
 
-extern std::ostream& operator << (std::ostream &stream,const CPath &path);
-extern std::string operator + (const std::string &str1, const CPath &path);
+extern std::ostream& operator<<(std::ostream& stream, const CPath& path);
+extern std::string   operator+(const std::string& str1, const CPath& path);
 
-#endif // !defined(AFX_PATH_H__E3EF821F_0F3C_44B9_83F4_A7FCD9EC127A__INCLUDED_)
+#endif  // !defined(AFX_PATH_H__E3EF821F_0F3C_44B9_83F4_A7FCD9EC127A__INCLUDED_)

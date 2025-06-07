@@ -26,40 +26,39 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#pragma comment( lib, "dsound.lib" )
-//#pragma comment( lib, "dxguid.lib" ) 
+#pragma comment(lib, "dsound.lib")
+// #pragma comment( lib, "dxguid.lib" )
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <mmsystem.h> // wird benötigt für einige structs/typedefs ind dsound.h
+
+#include <mmsystem.h>  // wird benötigt für einige structs/typedefs ind dsound.h
+
 #include <dsound.h>
 
 #include <adt/singleton.h>
 
 class CDirectSound : public Singleton<CDirectSound>
 {
-DECLARE_SINGLETON(CDirectSound)
+    DECLARE_SINGLETON(CDirectSound)
 
 public:
+    bool InitDirectSound(DWORD cooplevel = DSSCL_NORMAL, GUID* lpGuid = NULL);
+    void ShutDownDirectSound();
 
-	bool InitDirectSound(DWORD cooplevel=DSSCL_NORMAL,GUID * lpGuid=NULL);
-	void ShutDownDirectSound();
+    bool chooseDevice(GUID& Guid);
 
-	bool chooseDevice(GUID &Guid);
-
-	LPDIRECTSOUND getLPDS() const {return lpDS;};
-
+    LPDIRECTSOUND getLPDS() const { return lpDS; };
 
 protected:
+    CDirectSound();
+    virtual ~CDirectSound();
 
-	CDirectSound();
-	virtual ~CDirectSound();
+    static BOOL CALLBACK EnumDevicesCallback(GUID* lpGuid, LPCSTR Description, LPCSTR Module, LPVOID lpContext);
 
-	static BOOL CALLBACK EnumDevicesCallback(GUID * lpGuid, LPCSTR Description, LPCSTR Module,LPVOID lpContext);
-
-	LPDIRECTSOUND lpDS;
+    LPDIRECTSOUND lpDS;
 };
 
-#endif // !defined(AFX_DIRECTSOUND_H__030D0BA0_7379_11D3_9743_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_DIRECTSOUND_H__030D0BA0_7379_11D3_9743_0000E85E86C1__INCLUDED_)

@@ -26,22 +26,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "Entity.h"
 
-class CBaseScene  
+class CBaseScene
 {
 public:
-	CBaseScene();
-	virtual ~CBaseScene();
+    CBaseScene();
+    virtual ~CBaseScene();
 
-	virtual void cullScene()=0;
-	virtual void renderScene()=0;
-	virtual bool initialize()=0;
-	virtual void addEntity(CEntity *newEntity)=0;
-	virtual void addEntities(CEntity::ENTITYLIST &list)=0;
-
+    virtual void cullScene()                            = 0;
+    virtual void renderScene()                          = 0;
+    virtual bool initialize()                           = 0;
+    virtual void addEntity(CEntity* newEntity)          = 0;
+    virtual void addEntities(CEntity::ENTITYLIST& list) = 0;
 };
 
-#endif // !defined(AFX_BASESCENE_H__B13DE18D_2755_4896_BD0A_FCF0CC38B5C6__INCLUDED_)
+#endif  // !defined(AFX_BASESCENE_H__B13DE18D_2755_4896_BD0A_FCF0CC38B5C6__INCLUDED_)

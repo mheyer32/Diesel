@@ -1,7 +1,7 @@
 #ifndef MESSAGES_FORWARD_DECLARATIONS
 #define MESSAGES_FORWARD_DECLARATIONS
 
-#endif // MESSAGES_FORWARD_DECLARATIONS
+#endif  // MESSAGES_FORWARD_DECLARATIONS
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -13,4 +13,3 @@ MSG1(RESTORE_SURFACES, MSG)
 MSG1(TESTCOOPLEVEL, MSG)
 
 MSG1(AUTOACQUIRE, MSG)
-

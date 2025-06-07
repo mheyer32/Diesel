@@ -24,38 +24,43 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class CLineEdit
 {
 public:
+    enum MODE
+    {
+        REPLACE,
+        INSERT
+    };
 
-enum MODE
-{
-	REPLACE,
-	INSERT
-};
+    CLineEdit(void);
+    virtual ~CLineEdit(void);
 
-	CLineEdit(void);
-	virtual ~CLineEdit(void);
+    void               clear();
+    void               setText(const std::string& newText);
+    const std::string& getText() const { return text; };
+    void               insertCharacter(char character);
+    void               deleteCharacter();
+    int                getSize() const { return text.size(); };
 
-	void clear();
-	void setText(const std::string &newText);
-	const std::string& getText() const {return text;};
-	void insertCharacter(char character);
-	void deleteCharacter();
-	int getSize() const {return text.size();};
+    void setMode(MODE newMode);
 
-	void setMode(MODE newMode);
+    int  getCursorPos() const;
+    void setCursorPos(unsigned int newPos);
+    void cursorLeft();
+    void cursorRight();
 
-	int	getCursorPos() const;
-	void setCursorPos(unsigned int newPos);
-	void cursorLeft();
-	void cursorRight();
-
-    operator const std::string& () {return text;};
-	CLineEdit& operator = (const std::string &newText) {setText(newText);return *this;};
-	CLineEdit& operator = (const char *newText) {setText(std::string(newText));return *this;};
+    operator const std::string&() { return text; };
+    CLineEdit& operator=(const std::string& newText)
+    {
+        setText(newText);
+        return *this;
+    };
+    CLineEdit& operator=(const char* newText)
+    {
+        setText(std::string(newText));
+        return *this;
+    };
 
 protected:
-
-	MODE mode;
-	std::string text;
-	int textpos;
-
+    MODE        mode;
+    std::string text;
+    int         textpos;
 };

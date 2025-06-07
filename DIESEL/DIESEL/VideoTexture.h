@@ -20,14 +20,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma once
 #include "texture.h"
 
-class CVideoTexture : public  CTexture
+class CVideoTexture : public CTexture
 {
 public:
-	CVideoTexture(void);
-	virtual ~CVideoTexture(void);
+    CVideoTexture(void);
+    virtual ~CVideoTexture(void);
 
-	virtual bool open (const std::string &videofile)=0;
-	virtual void close()=0;
-	virtual void play()=0;
-	virtual void stop()=0;
+    virtual bool open(const std::string& videofile) = 0;
+    virtual void close()                            = 0;
+    virtual void play()                             = 0;
+    virtual void stop()                             = 0;
 };

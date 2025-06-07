@@ -19,29 +19,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "winerr.h"
 
 #define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN 
+#define VC_EXTRALEAN
 #include <windows.h>
 
-const char * WinErrorToString()
+const char* WinErrorToString()
 {
-	return WinErrorToString(GetLastError());
+    return WinErrorToString(GetLastError());
 }
 
-const char * WinErrorToString(int errornum)
+const char* WinErrorToString(int errornum)
 {
-	static char errortext[1024];
+    static char errortext[1024];
 
-	char *textptr;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,NULL,errornum,0,(char*)&textptr,0,0);
-	if (textptr)
-	{
-		strcpy (errortext,textptr);
-		LocalFree(textptr); // so we don´t get leaks
-	}
-	else
-	{
-		strcpy(errortext, "no error text: WinErrorToString(): FormatMessage() returned NULL");
-	}
+    char* textptr;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL,
+                  errornum, 0, (char*)&textptr, 0, 0);
+    if (textptr) {
+        strcpy(errortext, textptr);
+        LocalFree(textptr);  // so we don´t get leaks
+    } else {
+        strcpy(errortext, "no error text: WinErrorToString(): FormatMessage() returned NULL");
+    }
 
-	return errortext;
+    return errortext;
 }

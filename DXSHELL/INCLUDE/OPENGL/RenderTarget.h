@@ -7,26 +7,25 @@
 class RenderTarget
 {
 public:
-	RenderTarget(void);
-	virtual ~RenderTarget(void);
+    RenderTarget(void);
+    virtual ~RenderTarget(void);
 
-	bool makeCurrent(RenderTarget *read_target=0);
+    bool makeCurrent(RenderTarget* read_target = 0);
 
-	bool isCurrent();
-	bool isCurrentRead();
+    bool isCurrent();
+    bool isCurrentRead();
 
-	void getViewport(RECT &rect);
-	void setViewport(const RECT &rect);
+    void getViewport(RECT& rect);
+    void setViewport(const RECT& rect);
 
-	bool createRenderContext(HDC devicecontext);
-	void destroyRenderContext();
+    bool createRenderContext(HDC devicecontext);
+    void destroyRenderContext();
 
-	HDC		getDeviceContext() const {return m_hDC;}
-	HGLRC	getRenderContext() const {return m_hRC;}
+    HDC   getDeviceContext() const { return m_hDC; }
+    HGLRC getRenderContext() const { return m_hRC; }
 
 private:
-
-	HGLRC	m_hRC;
-	HDC		m_hDC;
-	bool	m_borrowedRC;
+    HGLRC m_hRC;
+    HDC   m_hDC;
+    bool  m_borrowedRC;
 };

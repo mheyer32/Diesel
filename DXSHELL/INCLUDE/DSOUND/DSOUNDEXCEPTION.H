@@ -18,18 +18,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #pragma once
-#include <misc/exception.h>
 #include <dsound.h>
+#include <misc/exception.h>
 
 class CDSoundException : public CException
 {
 public:
-	CDSoundException(const std::string &text,HRESULT dsrval);
-	~CDSoundException(void);
+    CDSoundException(const std::string& text, HRESULT dsrval);
+    ~CDSoundException(void);
 
-	HRESULT getErrorCode() const {return errorcode;};
-	const char * getErrorText() const;
+    HRESULT     getErrorCode() const { return errorcode; };
+    const char* getErrorText() const;
 
 protected:
-	HRESULT errorcode;
+    HRESULT errorcode;
 };

@@ -26,314 +26,309 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <adt/ConVar.h>
+#include <misc/exception.h>
 #include "EngineTypes.h"
+#include "Features.h"
 #include "Light.h"
 #include "Mesh.h"
 #include "Q3Entity.h"
-#include "Features.h"
-#include <misc/exception.h>
 
 #include "surfaceflags.h"
 
-class Q3BSPMesh 
+class Q3BSPMesh
 {
-// FIXME: reduce friendships!
-friend class Q3BSPLoader;
-friend class Q3EntityFactory;
-friend class Q3Scene;
-friend class Q3Entity;
+    // FIXME: reduce friendships!
+    friend class Q3BSPLoader;
+    friend class Q3EntityFactory;
+    friend class Q3Scene;
+    friend class Q3Entity;
 
 public:
+    struct TRACE
+    {
+        VECTOR3 hitpoint;
+        float   fraction;
+        int     brushside;
+        int     allsolid;
+        int     startsolid;
+        int     contents;
+        float   bevel;
+        TRACE()
+        : contents(0)
+        , bevel(0.0f)
+        , allsolid(0)
+        , startsolid(0) {};
+    };
 
+    // FIXME is it worth to reduce the size to 32 Bytes ?
+    struct BSPNODE  // wird letztlich von BSPMesh zum Rendern benutzt
+    {
+        int  marknode;
+        int  plane;  // index der planes im plane-array
+        int  last_earlyout;
+        int  front, back;  // darunterliegende Teilbäume als Indizes im Nodes-Array;
+        BBOX bbox;         // BBox für Boundingbox
 
-struct TRACE
-{
-	VECTOR3 hitpoint;
-	float fraction;
-	int	  brushside;
-	int	  allsolid;
-	int	  startsolid;
-	int	  contents;
-	float bevel;
-	TRACE():contents(0),bevel(0.0f),allsolid(0),startsolid(0){};
+        BSPNODE() { front = back = last_earlyout = marknode = 0; }
+    };
 
-};
+    struct BSPLEAF
+    {
+        int  marknode;
+        int  cluster;
+        BBOX bbox;
+        int  last_earlyout;
+        int  startface;
+        int  num_faces;
+        int  startleafbrush;
+        int  num_leafbrushes;
 
-//FIXME is it worth to reduce the size to 32 Bytes ?
-struct	BSPNODE // wird letztlich von BSPMesh zum Rendern benutzt
-{
-	int				marknode;
-	int				plane; //index der planes im plane-array
-	int				last_earlyout;
-	int				front,back; // darunterliegende Teilbäume als Indizes im Nodes-Array;
-	BBOX			bbox; // BBox für Boundingbox
+        Q3Entity::Q3ENTITYLIST entities;
 
-	BSPNODE()
-	{
-		front=back=last_earlyout=marknode=0;
-	}
+        BSPLEAF()
+        {
+            startface = num_faces = 0;
+            startleafbrush = num_leafbrushes = last_earlyout = 0;
+            cluster                                          = -1;
+        }
+    };
 
-};
+    struct BSPFACE
+    {
+        int                     type;
+        int                     fognum;
+        int                     markface;
+        CVertexBuffer::SMARTPTR vbuffer;  // beherbergt shader und lightmap
 
-struct BSPLEAF
-{
-	int	marknode;	
-	int cluster;
-	BBOX bbox;
-	int	last_earlyout;
-	int startface;
-	int num_faces;
-	int startleafbrush;
-	int num_leafbrushes;
-	
-	Q3Entity::Q3ENTITYLIST entities;
+        VECTOR3 tang_t;  // tangentsystem of the face
+        VECTOR3 tang_s;
+        VECTOR3 normal;
+        VECTOR3 origin;
 
-	BSPLEAF()
-	{
-		startface=num_faces=0;
-		startleafbrush=num_leafbrushes=last_earlyout=0;
-		cluster=-1;
-	}
-};
+        int patchdim[2];
+        BSPFACE()
+        {
+            type        = 0;
+            fognum      = -1;
+            markface    = 0;
+            tang_t      = NullVector3;
+            tang_s      = NullVector3;
+            normal      = NullVector3;
+            origin      = NullVector3;
+            patchdim[0] = patchdim[1] = 0;
+        }
+    };
 
-struct BSPFACE
-{
-	int		type;
-	int		fognum;
-	int		markface;
-	CVertexBuffer::SMARTPTR	vbuffer;	// beherbergt shader und lightmap
+    struct LIGHTVOL  // comfortable 8 bytes
+    {
+        COLOR3 ambient;
+        COLOR3 directional;
+        BYTE   latlng[2];
+    };
 
-	VECTOR3	tang_t;				// tangentsystem of the face
-	VECTOR3 tang_s;
-	VECTOR3	normal;
-	VECTOR3 origin;
+    struct BRUSH
+    {
+        int startbrushside;
+        int num_brushsides;
+        int surfaceinfo;
+        int checkcount;
+    };
 
-	int patchdim[2];
-	BSPFACE () 
-	{
-		type=0;
-		fognum=-1;
-		markface=0;
-		tang_t=NullVector3;
-		tang_s=NullVector3;
-		normal=NullVector3;
-		origin=NullVector3;
-		patchdim[0]=patchdim[1]=0;
-	}
-};
+    struct BRUSHSIDE
+    {
+        int plane;
+        int surfaceinfo;
+    };
 
-struct LIGHTVOL // comfortable 8 bytes
-{
-	COLOR3	ambient;
-	COLOR3	directional;
-	BYTE	latlng[2];
-};
+    struct SURFACEINFO
+    {
+        CShader::SMARTPTR shader;
+        int               contents;
+        int               surfflags;
+    };
 
-struct BRUSH
-{
-	int startbrushside;
-	int num_brushsides;
-	int surfaceinfo;
-	int checkcount;
-};
+    typedef std::list<int>      INDEXLIST;
+    typedef INDEXLIST::iterator INDEXITERATOR;
 
-struct BRUSHSIDE
-{
-	int plane;
-	int surfaceinfo;
-};
+    Q3BSPMesh();
+    virtual ~Q3BSPMesh();
 
-struct SURFACEINFO
-{
-	CShader::SMARTPTR	shader;
-	int			contents;
-	int			surfflags;
-};
+    /** render the bsp from g_Camera´s position, render all subentities*/
+    void Render();
 
-typedef std::list<int>		INDEXLIST;
-typedef INDEXLIST::iterator INDEXITERATOR;
+    /** get the leaf index for the given position */
+    int getLeafNum(const VECTOR3& pos, int node = 0) const;
 
-	Q3BSPMesh();
-	virtual ~Q3BSPMesh();
+    /** get the cluster index for the given position */
+    int getCluster(const VECTOR3& pos, int startnode = 0) const;
 
-	/** render the bsp from g_Camera´s position, render all subentities*/
-	void Render();
+    /** can fromCluster and toCluster possibly see each other ? */
+    int ClusterVisible(const unsigned int fromCluster, const unsigned int toCluster) const;
 
-	/** get the leaf index for the given position */
-	int getLeafNum(const VECTOR3 &pos, int node=0) const;
+    /** returns the contents for a given position
+        the content-flags are inside "surfaceflags.h"
+    */
+    int PointContents(const VECTOR3& Pos, int startnode = 0, int filter_contents = -1);
 
-	/** get the cluster index for the given position */
-	int getCluster(const VECTOR3 &pos, int startnode=0) const;
+    /** Adds an entity to the bsp tree.
+    The bounding box of the entitiy is pushed down the tree. All leafs that touch the box
+    get a reference to the entity.
+    */
+    bool linkEntity(Q3Entity* Entity);
+    void unlinkEntity(Q3Entity* Entity);
 
-	/** can fromCluster and toCluster possibly see each other ? */
-	int ClusterVisible(const unsigned int fromCluster,const unsigned int toCluster) const;	
+    /** get static lighting info for the given position */
+    bool getLightVol(VECTOR3 pos, LIGHT& light);
 
-	/** returns the contents for a given position
-		the content-flags are inside "surfaceflags.h"
-	*/
-	int PointContents(const VECTOR3 &Pos,int startnode=0,int filter_contents=-1);
+    /** returns if the given point is inside (FRONTSIDE) or outside (BACKSIDE) of the map */
+    DWORD PointOnMeshSide(const VECTOR3& P);
 
-	/** Adds an entity to the bsp tree.
-	The bounding box of the entitiy is pushed down the tree. All leafs that touch the box
-	get a reference to the entity.
-	*/
-	bool linkEntity(Q3Entity *Entity);
-	void unlinkEntity(Q3Entity *Entity);
+    /** tests if the given ray hits a brush that has at least one of the contents-flag given
+    as contents inside the trace-structure
+    if the rays hits something, it returns false and the trace structure is properly filled
+    */
+    bool RayTest(const VECTOR3& p1, const VECTOR3& p2, TRACE& trace);
 
-	/** get static lighting info for the given position */
-	bool getLightVol(VECTOR3 pos,LIGHT &light);
+    /** returns the leafstructure for leaf  "leafnum" */
+    inline BSPLEAF& getLeaf(int leafnum) const
+    {
+        // if (leafnum>=num_leafs) throw CException("Q3BSPMesh::getLeaf(): invalid leafnum requested");
+        return leafs[leafnum];
+    }
 
-	/** returns if the given point is inside (FRONTSIDE) or outside (BACKSIDE) of the map */
-	DWORD PointOnMeshSide(const VECTOR3& P);
+    /** return face-index
+    leafface is  n´th face of the leaf
+    */
+    inline int getFaceNum(unsigned int leafnum, unsigned int leafface) const
+    {
+        return leaffaces[leafs[leafnum].startface + leafface];
+    }
 
-	/** tests if the given ray hits a brush that has at least one of the contents-flag given
-	as contents inside the trace-structure
-	if the rays hits something, it returns false and the trace structure is properly filled
-	*/
-	bool RayTest(const VECTOR3& p1, const VECTOR3& p2,TRACE &trace);
+    /** return face-structure for given faceindex
 
-	/** returns the leafstructure for leaf  "leafnum" */
-	inline BSPLEAF& getLeaf(int leafnum) const
-	{
-		//if (leafnum>=num_leafs) throw CException("Q3BSPMesh::getLeaf(): invalid leafnum requested");
-		return leafs[leafnum];
-	}
+    */
+    inline BSPFACE& getFace(int facenum) const
+    {
+        if (facenum >= num_faces)
+            throw CException("Q3BSPMesh::getFace(): invalid facenum requested");
+        return faces[facenum];
+    }
 
-	/** return face-index
-	leafface is  n´th face of the leaf
-	*/
-	inline int getFaceNum(unsigned int leafnum, unsigned int leafface) const
-	{
-		return leaffaces[leafs[leafnum].startface+leafface];
-	}
+    inline const BRUSHSIDE& getBrushside(int brushside) const
+    {
+        assert(brushsides);
+        assert(brushside < num_brushsides);
+        return brushsides[brushside];
+    }
+    inline const SURFACEINFO& getSurfaceInfo(int surfaceinfo) const
+    {
+        assert(surfaceinfos);
+        assert(surfaceinfo < num_surfaceinfos);
+        return surfaceinfos[surfaceinfo];
+    }
+    inline const PLANE& getPlane(int planenum) const
+    {
+        assert(planenum < num_planes);
+        return planes[planenum];
+    }
 
-	/** return face-structure for given faceindex
-		
-	*/
-	inline BSPFACE& getFace(int facenum) const
-	{
-		if (facenum>=num_faces) throw CException("Q3BSPMesh::getFace(): invalid facenum requested");
-		return faces[facenum];
-	}
+    inline const FOGFEATURE& getFog(int fognum) const
+    {
+        assert(fognum < num_fogs);
+        return fogfeatures[fognum];
+    }
 
-	inline const BRUSHSIDE& getBrushside(int brushside) const
-	{
-		assert(brushsides);
-		assert(brushside<num_brushsides);
-		return brushsides[brushside];
-	}
-	inline const SURFACEINFO& getSurfaceInfo(int surfaceinfo) const
-	{
-		assert(surfaceinfos);
-		assert(surfaceinfo<num_surfaceinfos);
-		return surfaceinfos[surfaceinfo];
-	}
-	inline const PLANE& getPlane(int planenum) const
-	{
-		assert(planenum<num_planes);
-		return planes[planenum];
-	}
+    /** return a list of leafnums that are touched by the given bbox */
+    void getTouchedLeafs(const BBOX& box, INDEXLIST& leafnum_list, int node = 0);
 
-	inline const FOGFEATURE& getFog(int fognum) const
-	{
-		assert(fognum<num_fogs);
-		return fogfeatures[fognum];
-	}
+    /** FIXME: untested */
+    void getTouchedBrushes(const BBOX& box, const INDEXLIST& leafnum_list, INDEXLIST& boxnum_list);
+    void getTouchedBrushes(const BBOX& box, INDEXLIST& boxnum_list);
 
-	/** return a list of leafnums that are touched by the given bbox */
-	void getTouchedLeafs(const BBOX &box, INDEXLIST &leafnum_list,int node=0);
+    bool BBoxTest(const BBOX& box, TRACE& trace);
 
-	/** FIXME: untested */
-	void getTouchedBrushes(const BBOX& box, const INDEXLIST &leafnum_list, INDEXLIST &boxnum_list);
-	void getTouchedBrushes(const BBOX &box, INDEXLIST &boxnum_list);
+    // FIXME public for testing purposes
+    LIGHT DLight;
 
-	bool BBoxTest(const BBOX &box, TRACE &trace);
+    int           eyecluster;
+    unsigned int* visdata;
+    unsigned int* visdata_eye;  // pointer to pvs-vector of eyecluster
 
-
-
-	
-	//FIXME public for testing purposes
-	LIGHT	DLight;
-
-	int eyecluster;
-	unsigned int *visdata;
-	unsigned int *visdata_eye; // pointer to pvs-vector of eyecluster
-
-
-	static ConVar	r_lockpvs;
-	static ConVar	r_usepvs;
-	static ConVar	r_usebsp;
-	static ConVar	r_flares;
-	static ConVar	r_facePlaneCull;
+    static ConVar r_lockpvs;
+    static ConVar r_usepvs;
+    static ConVar r_usebsp;
+    static ConVar r_flares;
+    static ConVar r_facePlaneCull;
 
 protected:
+    bool LeafBBoxTest(int leafnum, const BBOX& box, TRACE& trace);
+    bool BrushBBoxTest(int brushnum, const BBOX& box, TRACE& trace);
+    bool BrushRayTest(int brushnum, const VECTOR3& p1, const VECTOR3& p2, TRACE& trace);
+    void genLatLongTable();
 
-	bool LeafBBoxTest(int leafnum,const BBOX &box,TRACE &trace);
-	bool BrushBBoxTest(int brushnum, const BBOX &box,TRACE &trace);
-	bool BrushRayTest(int brushnum,const VECTOR3 &p1, const VECTOR3 &p2, TRACE &trace);
-	void genLatLongTable();
+    bool LeafRayTest(int leafnum, const VECTOR3& p1, const VECTOR3& p2, TRACE& trace);
+    bool RecursiveRayTest(int nodenum, const VECTOR3& p1, const VECTOR3& p2, const VECTOR3& start, const VECTOR3& end,
+                          TRACE& trace);
+    bool RecursiveRayTestNoBevel(int nodenum, const VECTOR3& p1, const VECTOR3& p2, const VECTOR3& start,
+                                 const VECTOR3& end, TRACE& trace);
 
-	bool LeafRayTest(int leafnum,const VECTOR3 &p1,const VECTOR3 &p2, TRACE &trace);
-	bool RecursiveRayTest(int nodenum,const VECTOR3 &p1,const VECTOR3 &p2, const VECTOR3 &start,const VECTOR3 &end, TRACE &trace);
-	bool RecursiveRayTestNoBevel(int nodenum,const VECTOR3 &p1,const VECTOR3 &p2, const VECTOR3 &start,const VECTOR3 &end, TRACE &trace);
+    bool PointInsideBrush(int brushnum, const VECTOR3& P);
 
-	bool PointInsideBrush(int brushnum, const VECTOR3 &P);
+    // return true, if any leaf is visible from a certain node
+    inline bool RenderNode(int node, int planemask);
+    inline bool RenderNodeNoFrustumCulling(int node);
+    inline bool RenderLeaf(int leaf, int planemask);
 
-	// return true, if any leaf is visible from a certain node
-	inline bool RenderNode(int node,int planemask);
-	inline bool RenderNodeNoFrustumCulling(int node);
-	inline bool RenderLeaf(int leaf,int planemask); 
+    void       markLeaves();
+    inline int ClusterVisibleToEye(const unsigned int toCluster) const;
 
-	void markLeaves();
-	inline int ClusterVisibleToEye(const unsigned int toCluster) const;
+    void drawBrush(int brushnum, float bevel = 0.0f);
 
-	void drawBrush(int brushnum,float bevel=0.0f);
+    float testcos;
+    int   checkcount;
 
-	float testcos;
-	int	  checkcount; 
+    BSPNODE*     nodes;
+    BSPLEAF*     leafs;
+    BSPFACE*     faces;
+    int*         leaffaces;
+    int*         leafbrushes;
+    BRUSH*       brushes;
+    BRUSHSIDE*   brushsides;
+    LIGHTVOL*    lightvols;
+    SURFACEINFO* surfaceinfos;
+    FOGFEATURE*  fogfeatures;
+    PLANE*       planes;
+    VECTOR3      gridsize;
 
-	BSPNODE			*nodes;
-	BSPLEAF			*leafs;
-	BSPFACE			*faces;
-	int				*leaffaces;
-	int				*leafbrushes;
-	BRUSH			*brushes;
-	BRUSHSIDE		*brushsides;
-	LIGHTVOL		*lightvols;
-	SURFACEINFO		*surfaceinfos;
-	FOGFEATURE		*fogfeatures;
-	PLANE			*planes;
-	VECTOR3			gridsize;
+    int num_lightvols_x;
+    int num_lightvols_y;
+    int num_lightvols_z;
+    int num_lightvols;
 
-	int	num_lightvols_x;
-	int	num_lightvols_y;
-	int	num_lightvols_z;
-	int	num_lightvols;
+    int num_nodes;
+    int num_leafs;
+    int num_faces;
+    int num_leaffaces;
+    int num_leafbrushes;
+    int num_brushes;
+    int num_brushsides;
+    int num_surfaceinfos;
+    int num_planes;
+    int num_clusters;
+    int ints_per_cluster;
+    int num_fogs;
 
-	int	num_nodes;
-	int	num_leafs;
-	int	num_faces;
-	int	num_leaffaces;
-	int	num_leafbrushes;
-	int	num_brushes;
-	int	num_brushsides;
-	int	num_surfaceinfos;
-	int	num_planes;
-	int	num_clusters;
-	int	ints_per_cluster;
-	int	num_fogs;
+    BBOX bbox;
 
-	BBOX	bbox;
+    int farleaf;
 
-	int farleaf;
+    //	static VECTOR3  *latlng2vec;
+};
 
-	//	static VECTOR3  *latlng2vec;
-};	
-
-#endif // !defined(AFX_BSPMESH_H__FA8E89A0_F11C_11D3_BD8A_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_BSPMESH_H__FA8E89A0_F11C_11D3_BD8A_0000E85E86C1__INCLUDED_)

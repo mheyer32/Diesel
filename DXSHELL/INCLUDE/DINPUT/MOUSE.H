@@ -26,31 +26,30 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "DInputDevice.h"
 #include <adt/singleton.h>
+#include "DInputDevice.h"
 
 #define MBUTTON1 CMouse::MouseState.rgbButtons[0]
 #define MBUTTON2 CMouse::MouseState.rgbButtons[1]
 #define MBUTTON3 CMouse::MouseState.rgbButtons[2]
 #define MBUTTON4 CMouse::MouseState.rgbButtons[3]
-#define MOUSEDX	 CMouse::MouseState.lX
-#define MOUSEDY	 CMouse::MouseState.lY
-#define MOUSEDZ	 CMouse::MouseState.lZ
+#define MOUSEDX CMouse::MouseState.lX
+#define MOUSEDY CMouse::MouseState.lY
+#define MOUSEDZ CMouse::MouseState.lZ
 
-class CMouse : public CDInputDevice , public Singleton<CMouse>
+class CMouse : public CDInputDevice, public Singleton<CMouse>
 {
-	DECLARE_SINGLETON(CMouse)
+    DECLARE_SINGLETON(CMouse)
 public:
+    bool initialize(DWORD cooplevel = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
-	bool	initialize(DWORD cooplevel=DISCL_NONEXCLUSIVE|DISCL_FOREGROUND);
+    DIMOUSESTATE MouseState;
 
-	DIMOUSESTATE MouseState;
-
-protected:	
-	virtual ~CMouse();
-	CMouse();
+protected:
+    virtual ~CMouse();
+    CMouse();
 };
 
-#endif // !defined(AFX_MOUSE_H__26F61E60_9F45_11D3_AF5D_0080AD17B2BB__INCLUDED_)
+#endif  // !defined(AFX_MOUSE_H__26F61E60_9F45_11D3_AF5D_0080AD17B2BB__INCLUDED_)

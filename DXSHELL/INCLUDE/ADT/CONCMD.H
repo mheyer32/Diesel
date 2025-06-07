@@ -22,78 +22,73 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <map>
 #include <string>
 
-class ConCmd  
+class ConCmd
 {
-//FIXME: vielleicht eine statische Funktion einbauen, die ConCmd Objekte erzeugt und
-// verhindert, dass mehrere Commandos gleichen Namens erzeugt werden
-// + Konstruktor verstecken
+    // FIXME: vielleicht eine statische Funktion einbauen, die ConCmd Objekte erzeugt und
+    //  verhindert, dass mehrere Commandos gleichen Namens erzeugt werden
+    //  + Konstruktor verstecken
 public:
+    struct myless
+    {
+        bool operator()(const std::string& s1, const std::string& s2) const;
+    };
 
-struct myless
-{
-	bool operator () (const std::string &s1, const std::string &s2) const;
-};
+    typedef std::map<std::string, ConCmd*, myless> COMMANDMAP;
+    typedef COMMANDMAP::iterator                   COMMANDITERATOR;
 
-typedef std::map<std::string,ConCmd*, myless> COMMANDMAP;
-typedef COMMANDMAP::iterator COMMANDITERATOR;
+    typedef void (*CMDCALLBACKFUNC)(ConCmd& Command, const std::string& Arg);
 
-	typedef void (*CMDCALLBACKFUNC)(ConCmd &Command,const std::string &Arg);
+    ConCmd(const std::string& Command = "", CMDCALLBACKFUNC CallbackFunc = NULL);
+    virtual ~ConCmd();
 
-	ConCmd(const std::string &Command="",CMDCALLBACKFUNC CallbackFunc=NULL);
-	virtual ~ConCmd();
+    void        setCommand(const std::string& Command, CMDCALLBACKFUNC CallbackFunc);
+    void        execute(const std::string& Arg = "");
+    std::string getCommandName() const;
 
-	void setCommand(const std::string &Command,CMDCALLBACKFUNC CallbackFunc);
-	void execute(const std::string &Arg="");
-	std::string getCommandName() const;
+    static ConCmd* findCommand(const std::string& Command);
+    static void    execute(const std::string& Command, const std::string& Arg);
+    static void    executeCommandLine(const std::string& CommandLine);
 
-	static ConCmd* findCommand(const std::string &Command);
-	static void execute(const std::string &Command,const std::string &Arg);
-	static void executeCommandLine(const std::string &CommandLine);
-	
-	static const COMMANDMAP& getCommandList();
+    static const COMMANDMAP& getCommandList();
 
 protected:
+    std::string     command;
+    CMDCALLBACKFUNC callback;
 
-	std::string		command;
-	CMDCALLBACKFUNC	callback;
+    static COMMANDMAP* CommandList;
 
-	static COMMANDMAP *CommandList;
-	
-	static ConCmd listcmd;
-	static ConCmd aliascmd;
-	static ConCmd echocmd;
-	static ConCmd saycmd;
+    static ConCmd listcmd;
+    static ConCmd aliascmd;
+    static ConCmd echocmd;
+    static ConCmd saycmd;
 
-	static void ListCmd(ConCmd &Command,const std::string &Arg);
-	static void AliasCmd(ConCmd &Command,const std::string &Arg);
-	static void ExecCmd(ConCmd &Command,const std::string &Arg);
-	static void EchoCmd(ConCmd &Command,const std::string &Arg);
+    static void ListCmd(ConCmd& Command, const std::string& Arg);
+    static void AliasCmd(ConCmd& Command, const std::string& Arg);
+    static void ExecCmd(ConCmd& Command, const std::string& Arg);
+    static void EchoCmd(ConCmd& Command, const std::string& Arg);
+
 private:
-
-	ConCmd(const ConCmd&);
-	ConCmd& operator = (const ConCmd&);
+    ConCmd(const ConCmd&);
+    ConCmd& operator=(const ConCmd&);
 };
 
-class CAliasCmd: public ConCmd
+class CAliasCmd : public ConCmd
 {
 
 public:
+    CAliasCmd(const std::string& Alias, const std::string& Commandline);
+    virtual ~CAliasCmd();
 
-	CAliasCmd(const std::string& Alias,const std::string &Commandline);
-	virtual ~CAliasCmd();
-
-	void setCommandLine(const std::string &Commandline);
-	std::string getCommandline() const;
+    void        setCommandLine(const std::string& Commandline);
+    std::string getCommandline() const;
 
 protected:
+    std::string commandline;
 
-	std::string commandline;
-
-	static void AliasCallback(ConCmd &Command,const std::string &Arg);
+    static void AliasCallback(ConCmd& Command, const std::string& Arg);
 };
-

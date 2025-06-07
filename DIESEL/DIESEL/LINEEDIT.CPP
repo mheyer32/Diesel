@@ -23,8 +23,8 @@ using namespace std;
 
 CLineEdit::CLineEdit(void)
 {
-	mode=INSERT;
-	clear();
+    mode = INSERT;
+    clear();
 }
 
 CLineEdit::~CLineEdit(void)
@@ -33,58 +33,58 @@ CLineEdit::~CLineEdit(void)
 
 void CLineEdit::clear()
 {
-	text.clear();
-	textpos=0;
+    text.clear();
+    textpos = 0;
 }
-void CLineEdit::setText(const std::string &newText)
+void CLineEdit::setText(const std::string& newText)
 {
-	text=newText;
-	setCursorPos(textpos);
+    text = newText;
+    setCursorPos(textpos);
 }
 
 void CLineEdit::insertCharacter(char character)
 {
-	if (textpos==text.size())
-	{
-		text.push_back(character);
-		++textpos;
-		return;
-	}
-	switch (mode)
-	{
-	case REPLACE:
-		text[textpos]=character;
-		break;
-	case INSERT:
-		text.insert(textpos,1,character);
-		break;
-	}
-	++textpos;
+    if (textpos == text.size()) {
+        text.push_back(character);
+        ++textpos;
+        return;
+    }
+    switch (mode) {
+    case REPLACE:
+        text[textpos] = character;
+        break;
+    case INSERT:
+        text.insert(textpos, 1, character);
+        break;
+    }
+    ++textpos;
 }
 
 void CLineEdit::deleteCharacter()
 {
-	text.erase(textpos,1);
-	if (textpos>text.size()) textpos=text.size();
+    text.erase(textpos, 1);
+    if (textpos > text.size())
+        textpos = text.size();
 }
-int	CLineEdit::getCursorPos() const
+int CLineEdit::getCursorPos() const
 {
-	return textpos;
+    return textpos;
 }
 void CLineEdit::setCursorPos(unsigned int newPos)
 {
-	if (newPos>=text.size())
-	{
-		textpos=text.size();
-		return;
-	}
-	textpos=newPos;
+    if (newPos >= text.size()) {
+        textpos = text.size();
+        return;
+    }
+    textpos = newPos;
 }
 void CLineEdit::cursorLeft()
 {
-	if (textpos) --textpos;
+    if (textpos)
+        --textpos;
 }
 void CLineEdit::cursorRight()
 {
-	if (textpos<text.size()) ++textpos;
+    if (textpos < text.size())
+        ++textpos;
 }

@@ -18,22 +18,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include "debug.h"
 
-void debug(LPCSTR pszMsg, ... )
+void debug(LPCSTR pszMsg, ...)
 {
-	char ach[1024 * 10];
+    char ach[1024 * 10];
 
-	wvsprintf(ach, pszMsg, ((char *)&pszMsg + sizeof(char *)));
+    wvsprintf(ach, pszMsg, ((char*)&pszMsg + sizeof(char*)));
 
-	OutputDebugString(ach);
+    OutputDebugString(ach);
 }
 
-void debug(FILE *file, LPCSTR pszMsg, ... )
+void debug(FILE* file, LPCSTR pszMsg, ...)
 {
-	char ach[1024 * 10];
+    char ach[1024 * 10];
 
-	wvsprintf(ach, pszMsg, ((char *)&pszMsg + sizeof(char *)));
+    wvsprintf(ach, pszMsg, ((char*)&pszMsg + sizeof(char*)));
 
-	OutputDebugString(ach);
+    OutputDebugString(ach);
 
-	fprintf(file, ach);
+    fprintf(file, ach);
 }

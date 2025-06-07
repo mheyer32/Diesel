@@ -21,8 +21,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <OPENGL/OpenGL.h>  // for GL_BGRA_EXT
 #include "BMPLoader.h"
-#include <OPENGL/OpenGL.h> // for GL_BGRA_EXT
 
 #include <iostream>
 
@@ -31,95 +31,85 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-#define BI_RGB        0L
-#define BI_RLE8       1L
-#define BI_RLE4       2L
-#define BI_BITFIELDS  3L
-
+#define BI_RGB 0L
+#define BI_RLE8 1L
+#define BI_RLE4 2L
+#define BI_BITFIELDS 3L
 
 BMPLoader::BMPLoader()
 {
-	
 }
 
 BMPLoader::~BMPLoader()
 {
 }
 
-Image* BMPLoader::load(CFile &file)
+Image* BMPLoader::load(CFile& file)
 {
-	BITMAPFILEHEADER  bmfh;
+    BITMAPFILEHEADER bmfh;
 
-	file.readVOID(&bmfh,sizeof(bmfh));
+    file.readVOID(&bmfh, sizeof(bmfh));
 
-	if (bmfh.bfType!=(('M'<<8)|'B'))
-	{
-		std::cout<<"BMPLoader::LoadBMP() file is not a BMP"<<std::endl;
-	}
+    if (bmfh.bfType != (('M' << 8) | 'B')) {
+        std::cout << "BMPLoader::LoadBMP() file is not a BMP" << std::endl;
+    }
 
-	BITMAPINFOHEADER bmih;
-	BITMAPCOREHEADER bmic;
+    BITMAPINFOHEADER bmih;
+    BITMAPCOREHEADER bmic;
 
-	int startheader=file.getPosition();
+    int startheader = file.getPosition();
 
-	int headersize=file.readDWORD();
+    int headersize = file.readDWORD();
 
-	int width;
-	int height;
-	int bpp;	// bitsperpixel
-	if (headersize==sizeof(bmih))
-	{
-		file.setPosition(startheader);
-		file.readVOID(&bmih,sizeof(bmih));
-		width=bmih.biWidth;
-		height=bmih.biHeight;
-		bpp=bmih.biBitCount;
-	}
-	else if (headersize==sizeof(bmic))
-	{
-		file.setPosition(startheader);
-		file.readVOID(&bmic,sizeof(bmic));
-		width=bmic.bcWidth;
-		height=bmic.bcHeight;
-		bpp=bmic.bcBitCount;
-	}
-	else
-	{
-		std::cout<<"BMPLoader::LoadBMP() unknown header format"<<std::endl;
-	}
+    int width;
+    int height;
+    int bpp;  // bitsperpixel
+    if (headersize == sizeof(bmih)) {
+        file.setPosition(startheader);
+        file.readVOID(&bmih, sizeof(bmih));
+        width  = bmih.biWidth;
+        height = bmih.biHeight;
+        bpp    = bmih.biBitCount;
+    } else if (headersize == sizeof(bmic)) {
+        file.setPosition(startheader);
+        file.readVOID(&bmic, sizeof(bmic));
+        width  = bmic.bcWidth;
+        height = bmic.bcHeight;
+        bpp    = bmic.bcBitCount;
+    } else {
+        std::cout << "BMPLoader::LoadBMP() unknown header format" << std::endl;
+    }
 
-	int memformat;
-	int dstformat;
-	int bytesperpixel;
+    int memformat;
+    int dstformat;
+    int bytesperpixel;
 
-	switch (bpp)
-	{
-	case 24:
-		memformat=GL_BGR_EXT;
-		dstformat=GL_RGB;
-		bytesperpixel=3;
-		break;
-	case 32:
-		memformat=GL_BGRA_EXT;
-		dstformat=GL_RGBA;
-		bytesperpixel=4;
-		break;
-	default:
-		std::cout<<"BMPLoader::LoadBMP() bmp bitcount other than 24 or 32 not supported"<<std::endl;
-		return NULL;
-		break;
-	}
+    switch (bpp) {
+    case 24:
+        memformat     = GL_BGR_EXT;
+        dstformat     = GL_RGB;
+        bytesperpixel = 3;
+        break;
+    case 32:
+        memformat     = GL_BGRA_EXT;
+        dstformat     = GL_RGBA;
+        bytesperpixel = 4;
+        break;
+    default:
+        std::cout << "BMPLoader::LoadBMP() bmp bitcount other than 24 or 32 not supported" << std::endl;
+        return NULL;
+        break;
+    }
 
-	if (bmih.biCompression!=BI_RGB)
-	{
-		std::cout<<"BMPLoader::LoadBMP() compressed image data not supported"<<std::endl;
-		return false;
-	}
-	
-	Image *image=new Image(width,height,bytesperpixel,dstformat,memformat);
+    if (bmih.biCompression != BI_RGB) {
+        std::cout << "BMPLoader::LoadBMP() compressed image data not supported" << std::endl;
+        return false;
+    }
 
-	file.setPosition(startheader+headersize);
-	file.readVOID(image->getImageData(),image->getSize());
+    Image* image = new Image(width, height, bytesperpixel, dstformat, memformat);
 
-	return image;
+    file.setPosition(startheader + headersize);
+    file.readVOID(image->getImageData(), image->getSize());
+
+    return image;
 }

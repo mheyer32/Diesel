@@ -26,41 +26,39 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "Kernel.h"
 
-class CTask  
+class CTask
 {
 public:
+    CTask(int Priority = CKernel::PRERENDER);
+    virtual ~CTask();
 
-	CTask(int Priority=CKernel::PRERENDER);
-	virtual ~CTask();
+    /** implement in derived classes */
+    virtual void runTask() = 0;
 
-	/** implement in derived classes */
-	virtual void runTask()=0;
+    /** set priority of task, see Kernel.h for some coarse values */
+    void       setPriority(int Priority);
+    inline int getPriority() const  // make inline so Kernel can sort as fast as possible
+    {
+        return priority;
+    }
 
-	/** set priority of task, see Kernel.h for some coarse values */
-	void setPriority(int Priority);
-	inline int getPriority() const // make inline so Kernel can sort as fast as possible
-	{
-		return priority;
-	}
+    /** whenever runTask() gets called by the kernel, you are obliged to set a new point in time
+        you expect to be called again. otherwise runTask() won´t be called again. A negative value will
+        also prevent another call to runTask() until a new valid time is given*/
+    void setNextThink(float time);
 
-	/** whenever runTask() gets called by the kernel, you are obliged to set a new point in time
-		you expect to be called again. otherwise runTask() won´t be called again. A negative value will 
-		also prevent another call to runTask() until a new valid time is given*/
-	void setNextThink(float time);
-
-	/** when will the task be run again, time is an absolute point in time */
-	float getNextThink() const;
+    /** when will the task be run again, time is an absolute point in time */
+    float getNextThink() const;
 
 private:
-	
-	CTask& operator = (const CTask &task2); // copying a task is not defined
+    CTask& operator=(const CTask& task2);  // copying a task is not defined
 
-	int priority;
-	float nextthink;
+    int   priority;
+    float nextthink;
 };
 
-#endif // !defined(AFX_TASK_H__90FC34D6_F346_4F94_AC25_7A960A6F9875__INCLUDED_)
+#endif  // !defined(AFX_TASK_H__90FC34D6_F346_4F94_AC25_7A960A6F9875__INCLUDED_)

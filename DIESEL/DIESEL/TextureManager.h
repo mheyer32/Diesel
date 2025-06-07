@@ -28,51 +28,47 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "texture.h"
 #include "videotexture.h"
 
-class CTextureManager :public Singleton<CTextureManager>
+class CTextureManager : public Singleton<CTextureManager>
 {
-DECLARE_SINGLETON(CTextureManager)
+    DECLARE_SINGLETON(CTextureManager)
 
-friend class CTexture;
+    friend class CTexture;
 
 public:
+    typedef std::list<CTexture*>  TEXTURELIST;
+    typedef TEXTURELIST::iterator TEXTUREITERATOR;
 
-typedef std::list<CTexture*> TEXTURELIST;
-typedef TEXTURELIST::iterator TEXTUREITERATOR;
+    /** try to find a texture with the specified name among the registered ones */
+    CTexture* findTexture(const std::string& name);
 
+    /** either find or load the texture. if the texture needs to be loaded, the given options will be used */
+    CTexture* findOrLoadTexture(const std::string& name, int options = 0);
 
-	/** try to find a texture with the specified name among the registered ones */
-	CTexture *findTexture(const std::string &name);
+    /** try to load the texture, use options (see CTexture: TEX_xxx defines) */
+    CTexture* loadTexture(const std::string& filename, int options = 0);
 
-	/** either find or load the texture. if the texture needs to be loaded, the given options will be used */
-    CTexture *findOrLoadTexture(const std::string &name, int options=0);
+    /** load given imagefile into given texture */
+    bool loadTexture(CTexture* texture, const CPath& filename, int options = 0);
 
-	/** try to load the texture, use options (see CTexture: TEX_xxx defines) */
-	CTexture *loadTexture(const std::string &filename, int options=0);
+    /** either find or load the given Videotexture */
+    CVideoTexture* findOrLoadVideoTexture(const std::string& name);
 
-	/** load given imagefile into given texture */
-	bool loadTexture(CTexture *texture, const CPath &filename, int options=0);
+    /** try to load/upload all registered textures */
+    void restoreAllTextures();
 
-	/** either find or load the given Videotexture */
-	CVideoTexture* findOrLoadVideoTexture(const std::string &name);
+    const TEXTURELIST& getRegisteredTextures();
 
-	/** try to load/upload all registered textures */
-	void restoreAllTextures();
+protected:
+    void registerTexture(CTexture* texture);
+    void unregisterTexture(CTexture* texture);
 
-	const TEXTURELIST& getRegisteredTextures();
+    static ConCmd cmd_texturelist;
 
-protected:	
-
-	void registerTexture(CTexture *texture);
-	void unregisterTexture(CTexture *texture);
-
-	static ConCmd	cmd_texturelist;
-
-	static void cb_texturelist(ConCmd &command, const std::string &args);
+    static void cb_texturelist(ConCmd& command, const std::string& args);
 
 private:
+    CTextureManager(void);
+    virtual ~CTextureManager(void);
 
-	CTextureManager(void);
-	virtual ~CTextureManager(void);
-
-	TEXTURELIST registeredtextures;
+    TEXTURELIST registeredtextures;
 };

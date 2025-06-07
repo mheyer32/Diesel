@@ -26,42 +26,39 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "File.h"
 #include <cassert>
+#include "File.h"
 
-class CRamFile : public CFile  
+class CRamFile : public CFile
 {
 public:
+    CRamFile();
+    virtual ~CRamFile();
 
-	CRamFile();
-	virtual ~CRamFile();
+    virtual void close();
+    virtual bool open(const CPath& File, MODE Mode = READ);
 
+    virtual unsigned char  readBYTE();
+    virtual void           readSTRING(char* s);
+    virtual double         readDOUBLE();
+    virtual float          readFLOAT();
+    virtual unsigned int   readDWORD();
+    virtual unsigned short readWORD();
+    virtual void           readVOID(void* ptr, int length);
 
-	virtual void close();
-	virtual bool open(const CPath &File, MODE Mode=READ);
+    virtual bool         setPosition(unsigned int nPos = 0);
+    virtual unsigned int getPosition();
 
-	virtual unsigned char readBYTE();
-	virtual void readSTRING(char *s);
-	virtual double readDOUBLE();
-	virtual float readFLOAT();
-	virtual unsigned int readDWORD();
-	virtual unsigned short readWORD();
-	virtual void readVOID(void *ptr,int length);
-
-	virtual bool setPosition(unsigned int nPos=0);
-	virtual unsigned int getPosition();
-
-	void* takeBuffer();
+    void* takeBuffer();
 
 protected:
+    void allocBuffer(unsigned int num_bytes);
+    void checkPosition();
 
-	void allocBuffer(unsigned int num_bytes);
-	void checkPosition();
-
-	unsigned int position;
-	unsigned char *buffer;
+    unsigned int   position;
+    unsigned char* buffer;
 };
 
-#endif // !defined(AFX_RAMFILE_H__F7067F5E_88D8_4D5A_80DB_1CB36F323BE7__INCLUDED_)
+#endif  // !defined(AFX_RAMFILE_H__F7067F5E_88D8_4D5A_80DB_1CB36F323BE7__INCLUDED_)

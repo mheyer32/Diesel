@@ -27,27 +27,28 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-CTask::CTask(int Priority):priority(Priority)
+CTask::CTask(int Priority)
+: priority(Priority)
 {
-	setNextThink(0.0f);
+    setNextThink(0.0f);
 }
 
 CTask::~CTask()
 {
-	CKernel::Instance()->removeTask(this);
+    CKernel::Instance()->removeTask(this);
 }
 
 void CTask::setPriority(int Priority)
 {
-	priority=Priority;
-	CKernel::Instance()->sortTasks();
+    priority = Priority;
+    CKernel::Instance()->sortTasks();
 }
 
 void CTask::setNextThink(float time)
 {
-	nextthink=time;
+    nextthink = time;
 }
 float CTask::getNextThink() const
 {
-	return nextthink;
+    return nextthink;
 }

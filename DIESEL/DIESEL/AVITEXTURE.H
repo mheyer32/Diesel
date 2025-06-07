@@ -26,54 +26,53 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #define VC_EXTRA_LEAN
-#include <windows.h>
 #include <vfw.h>
-#include "VideoTexture.h"
+#include <windows.h>
 #include <string>
+#include "VideoTexture.h"
 
-#pragma comment( lib, "vfw32.lib" )								// Search For VFW32.lib While Linking
+#pragma comment(lib, "vfw32.lib")  // Search For VFW32.lib While Linking
 
-class CAVITexture : public CVideoTexture  
+class CAVITexture : public CVideoTexture
 {
 public:
-	CAVITexture();
-	virtual ~CAVITexture();
+    CAVITexture();
+    virtual ~CAVITexture();
 
-	virtual void bindTexture();
+    virtual void bindTexture();
 
-	virtual void play();
-	virtual void stop(); //fixme rewind, fforward etc missing
+    virtual void play();
+    virtual void stop();  // fixme rewind, fforward etc missing
 
-	virtual bool open(const std::string &file);
-	virtual void close();
+    virtual bool open(const std::string& file);
+    virtual void close();
 
 protected:
-	
-	void grabAVIFrame(int frame);
+    void grabAVIFrame(int frame);
 
-	int		frame;											// Frame Counter
+    int frame;  // Frame Counter
 
-	AVISTREAMINFO		psi;										// Pointer To A Structure Containing Stream Info
-	PAVISTREAM			pavi;										// Handle To An Open Stream
-	PGETFRAME			pgf;										// Pointer To A GetFrame Object
-	BITMAPINFOHEADER	bmih;										// Header Information For DrawDibDraw Decoding
-	long				num_frames;									// Last Frame Of The Stream
-	int					aviwidth;										// Video Width
-	int					aviheight;										// Video Height
-	float				fps;										
-	HDRAWDIB hdd;													// Handle For Our Dib
-	HBITMAP hBitmap;												// Handle To A Device Dependant Bitmap
-	HDC hdc	;
+    AVISTREAMINFO    psi;         // Pointer To A Structure Containing Stream Info
+    PAVISTREAM       pavi;        // Handle To An Open Stream
+    PGETFRAME        pgf;         // Pointer To A GetFrame Object
+    BITMAPINFOHEADER bmih;        // Header Information For DrawDibDraw Decoding
+    long             num_frames;  // Last Frame Of The Stream
+    int              aviwidth;    // Video Width
+    int              aviheight;   // Video Height
+    float            fps;
+    HDRAWDIB         hdd;      // Handle For Our Dib
+    HBITMAP          hBitmap;  // Handle To A Device Dependant Bitmap
+    HDC              hdc;
 
-	float				starttime;
-	bool				playing;
-	bool				colorswap_needed;
-	unsigned char		*pdata;
+    float          starttime;
+    bool           playing;
+    bool           colorswap_needed;
+    unsigned char* pdata;
 
-	static ConVar		r_maxVideoSize;
+    static ConVar r_maxVideoSize;
 };
 
-#endif // !defined(AFX_AVITEXTURE_H__EE82D77B_DBE6_47AF_BBD2_D4A2C217BEEF__INCLUDED_)
+#endif  // !defined(AFX_AVITEXTURE_H__EE82D77B_DBE6_47AF_BBD2_D4A2C217BEEF__INCLUDED_)

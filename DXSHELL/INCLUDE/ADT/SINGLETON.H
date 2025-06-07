@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <memory>
 
@@ -36,35 +36,35 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
    Thats why derived classes need to do the friend-declaration for Singleton::Instance()
 */
 
-#define DECLARE_SINGLETON(classname)	friend classname * Singleton< classname >::Instance();\
-										friend std::auto_ptr< classname >;
+#define DECLARE_SINGLETON(classname)                                                                                   \
+    friend classname* Singleton<classname>::Instance();                                                                \
+    friend std::auto_ptr<classname>;
 
-template<class T>
-class Singleton  
+template <class T>
+class Singleton
 {
 public:
+    /** if no Instance exists yet, one is created and its pointer is returned */
+    static T* Instance();
 
-	/** if no Instance exists yet, one is created and its pointer is returned */
-	static T* Instance();
+    /** return the current Instance
+    if no Instance exists, NULL is returned */
+    static T* hasInstance();
 
-	/** return the current Instance
-	if no Instance exists, NULL is returned */
-	static T* hasInstance();
+    /** we _need_ means to destroy the instance, otherwise the destruction of the singletons would be
+        in no particular order, which may be catastrophic if some singletons depend on each other */
+    static void destroyInstance();
 
-	/** we _need_ means to destroy the instance, otherwise the destruction of the singletons would be
-		in no particular order, which may be catastrophic if some singletons depend on each other */
-	static void destroyInstance();
+protected:
+    Singleton();
+    Singleton(const Singleton&);
+    Singleton& operator=(const Singleton&);
+    virtual ~Singleton();
 
-protected:	
-	  Singleton();
-      Singleton(const Singleton&);
-      Singleton& operator= (const Singleton&);
-	  virtual ~Singleton();
-
-private: 
-	static std::auto_ptr<T> s_instance;
+private:
+    static std::auto_ptr<T> s_instance;
 };
 
 #include "Singleton.hh"
 
-#endif // !defined(AFX_SINGLETON_H__C7A159EF_174E_416E_9AA9_85D53EABC439__INCLUDED_)
+#endif  // !defined(AFX_SINGLETON_H__C7A159EF_174E_416E_9AA9_85D53EABC439__INCLUDED_)

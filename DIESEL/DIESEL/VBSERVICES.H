@@ -21,10 +21,10 @@ class CVertexBuffer;
 
 namespace VBServices
 {
-	extern void preTransformBillboard(CVertexBuffer &vb);
-	extern void preTransformAxisBillboard(CVertexBuffer &vb);
+extern void preTransformBillboard(CVertexBuffer& vb);
+extern void preTransformAxisBillboard(CVertexBuffer& vb);
 
-	extern void createGridIndices(CVertexBuffer &vbuffer,int xdim,int ydim);
-	extern void createCompleteGrid(CVertexBuffer &vbuffer,float xsize,float zsize,int xdim,int ydim, int vertexset=1);
-	extern void reverseIndices(CVertexBuffer &vbuffer);
-}
+extern void createGridIndices(CVertexBuffer& vbuffer, int xdim, int ydim);
+extern void createCompleteGrid(CVertexBuffer& vbuffer, float xsize, float zsize, int xdim, int ydim, int vertexset = 1);
+extern void reverseIndices(CVertexBuffer& vbuffer);
+}  // namespace VBServices

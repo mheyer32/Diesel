@@ -25,45 +25,45 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class CWaterTexture : public CTexture
 {
 public:
-	CWaterTexture();
-	virtual ~CWaterTexture(void);
+    CWaterTexture();
+    virtual ~CWaterTexture(void);
 
-	/** sets the given Bitmap as new Image
-	note that this function will
-	completely destroy the old texture and create a new one
-	TEX_KEEPIMAGE will be used by default
-	*/
-	virtual bool setImage(Image *newimage,int Options);
+    /** sets the given Bitmap as new Image
+    note that this function will
+    completely destroy the old texture and create a new one
+    TEX_KEEPIMAGE will be used by default
+    */
+    virtual bool setImage(Image* newimage, int Options);
 
-	/** bind the texture and (if set) proper material settings*/
-	virtual void bindTexture();
+    /** bind the texture and (if set) proper material settings*/
+    virtual void bindTexture();
 
-	void setFPS(float newFPS);
+    void setFPS(float newFPS);
 
 protected:
+    void Water(short*& current_buffer, short*& old_buffer, int width, int height, const unsigned int* sourcetex,
+               unsigned int* desttex);
+    //	void convert(const ARGBBITMAP &Bitmap);
 
-	void Water(short* &current_buffer,short* &old_buffer,int width, int height, const unsigned int *sourcetex,unsigned int *desttex);
-//	void convert(const ARGBBITMAP &Bitmap);
+    short* water1;
+    short* water2;
 
-	short	*water1;
-	short	*water2;
+    unsigned int maskx;
+    unsigned int shiftx;
+    unsigned int masky;
+    unsigned int buffermask;
 
-	unsigned int	maskx;
-	unsigned int	shiftx;
-	unsigned int	masky;
-	unsigned int	buffermask;
+    Image* destimage;
 
-	Image  *destimage;
+    float fps;
+    float lastupdate;
 
-	float	fps;
-	float	lastupdate;
+    float amp;
+    float freq;
+    float phase;
+    float damp;
 
-	float amp;
-	float freq;
-	float phase;
-	float damp;
+    unsigned int addr;
 
-	unsigned int addr;
-
-	static ConVar	r_showWaterWaves;
+    static ConVar r_showWaterWaves;
 };

@@ -22,39 +22,39 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <algorithm>
 #include <map>
-
+#include <string>
 
 namespace STLHelp
 {
 /*
-	struct _deleteObject
-	{ 
-		template <class T> void operator()(const T* ptr) const 
-		{
-			delete ptr;
-		} 
-		template <class _T1, class _T2> void operator()(std::pair<_T1,_T2> &ptr) const 
-		{ 
-			delete ptr.second; 
-		}
-	}; 
+    struct _deleteObject
+    {
+        template <class T> void operator()(const T* ptr) const
+        {
+            delete ptr;
+        }
+        template <class _T1, class _T2> void operator()(std::pair<_T1,_T2> &ptr) const
+        {
+            delete ptr.second;
+        }
+    };
 
-	template<class T>
-	stlwipe (T& container)
-	{
-		std::for_each(container.begin(), container.end(), _deleteObject());
-		container.clear();
-	}
+    template<class T>
+    stlwipe (T& container)
+    {
+        std::for_each(container.begin(), container.end(), _deleteObject());
+        container.clear();
+    }
 */
 
-	inline void tolower (std::string &s)
-	{
-		std::transform(s.begin(), s.end(),s.begin(), ::tolower);
-	}
-
-	inline void replace (std::string &s, std::string::value_type oldvalue, std::string::value_type newvalue)
-	{
-		std::replace(s.begin(), s.end(), oldvalue, newvalue);
-	}
+inline void tolower(std::string& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 }
+
+inline void replace(std::string& s, std::string::value_type oldvalue, std::string::value_type newvalue)
+{
+    std::replace(s.begin(), s.end(), oldvalue, newvalue);
+}
+}  // namespace STLHelp
 #endif

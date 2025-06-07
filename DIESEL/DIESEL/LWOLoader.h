@@ -2,56 +2,53 @@
 
 #include <file/file.h>
 #include <file/path.h>
-#include "Entity.h"
 #include <stack>
+#include "Entity.h"
 
 class LWOLoader
 {
 public:
-	LWOLoader(void);
-	~LWOLoader(void);
+    LWOLoader(void);
+    ~LWOLoader(void);
 
-	bool LoadLWO(const CPath &Filename, CEntity::ENTITYLIST &EntityList);
+    bool LoadLWO(const CPath& Filename, CEntity::ENTITYLIST& EntityList);
 
 protected:
+    struct CHUNK
+    {
+        union
+        {
+            int  id;
+            char name[4];
+        };
+        unsigned int length;
 
-struct CHUNK
-{
-	union
-	{
-	int id;
-	char name[4];
-	};
-	unsigned int length;
+        unsigned int pos;
+        unsigned int maxseek;
+    };
 
-	unsigned int pos;
-	unsigned int maxseek;
-};
+    CEntity* readLayer();
+    void     readPoints(CVertexBuffer* vbuffer);
+    void     readFaces(CVertexBuffer* vbuffer);
+    void     readTexCoords(CVertexBuffer* vbuffer);
 
+    void enterChunk();
+    void exitChunk();
 
-	CEntity* readLayer();
-	void readPoints(CVertexBuffer* vbuffer);
-	void readFaces(CVertexBuffer *vbuffer);
-	void readTexCoords(CVertexBuffer *vbuffer);
+    void pushChunk();
+    void popChunk();
+    void getTopChunk();
 
-	void enterChunk();
-	void exitChunk();
+    void readChunk();
+    bool skipChunk();
+    bool seekChunk(int Name);
 
-	void pushChunk();
-	void popChunk();
-	void getTopChunk();
+    int   readInt();
+    short readShort();
+    float readFloat();
+    int   readVariableIndex();
 
-	void readChunk();
-	bool skipChunk();
-	bool seekChunk(int Name);
-
-	int	readInt();
-	short readShort();
-	float readFloat();
-	int  readVariableIndex();
-
-	CFile	*file;
-	CHUNK	current_chunk;
-	std::stack<CHUNK> chunkstack;
-
+    CFile*            file;
+    CHUNK             current_chunk;
+    std::stack<CHUNK> chunkstack;
 };

@@ -20,41 +20,38 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef FEATURES_H
 #define FEATURES_H
 
+#include <math/matrix4.h>
 #include <math/plane.h>
 #include <math/vector3.h>
-#include <math/matrix4.h>
 #include "shader.h"
 
 enum FEATURENAME
 {
-	FEATURE_FOG,			//data is pointing to a FOGFEATURE structure
-	FEATURE_PATCHDIM,		//data points to int patchdim[2], 
-	FEATURE_DLIGHT
+    FEATURE_FOG,       // data is pointing to a FOGFEATURE structure
+    FEATURE_PATCHDIM,  // data points to int patchdim[2],
+    FEATURE_DLIGHT
 };
 
 struct FEATURE
 {
-	FEATURENAME name;
-	void		*data;		// note that the address given here must be on the heap!
+    FEATURENAME name;
+    void*       data;  // note that the address given here must be on the heap!
 };
-
 
 struct FOGFEATURE
 {
-	PLANE	plane;						// the plane where the fog starts
-	CShader::SMARTPTR shader;	// the shader (contains distance, fogcolor)
-	int		brushnum;					// not used by renderer
+    PLANE             plane;     // the plane where the fog starts
+    CShader::SMARTPTR shader;    // the shader (contains distance, fogcolor)
+    int               brushnum;  // not used by renderer
 };
-
 
 struct LIGHT;
 
 struct DLIGHTFEATURE
 {
-	MATRIX4 tangentspace;
-	LIGHT	*light;
-	int		use_reallight;
+    MATRIX4 tangentspace;
+    LIGHT*  light;
+    int     use_reallight;
 };
-
 
 #endif

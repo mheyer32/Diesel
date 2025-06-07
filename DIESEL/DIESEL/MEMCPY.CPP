@@ -41,8 +41,7 @@ MEMCPY_AMD.CPP
 //
 // Inline assembly syntax for use with Visual C++
 
-void 
-memcpy_amd(void* dest, const void* src, size_t n)
+void memcpy_amd(void* dest, const void* src, size_t n)
 {
   __asm {
 
@@ -187,8 +186,7 @@ $final: femms			; clean up mmx
         }
 }
 
-void
-fast_memcpy(void* dst, const void* src, int count)
+void fast_memcpy(void* dst, const void* src, int count)
 {
     _asm {
         mov ecx,[count]
@@ -221,16 +219,16 @@ fast_memcpy(void* dst, const void* src, int count)
 	    movq mm3,[esi+56]
 	    movq [edi+48],mm2
 	    movq [edi+56],mm3
-        /*
-        movups xmm0,[esi+0]
-        movups xmm1,[esi+16]
-        movups [edi+0],xmm0
-        movups [edi+16],xmm1
-        movups xmm2,[esi+32]
-        movups xmm3,[esi+48]
-        movups [edi+32],xmm2
-        movups [edi+48],xmm3
-        */
+            /*
+            movups xmm0,[esi+0]
+            movups xmm1,[esi+16]
+            movups [edi+0],xmm0
+            movups [edi+16],xmm1
+            movups xmm2,[esi+32]
+            movups xmm3,[esi+48]
+            movups [edi+32],xmm2
+            movups [edi+48],xmm3
+            */
 	    add esi,64
 	    add edi,64
 	    dec ecx

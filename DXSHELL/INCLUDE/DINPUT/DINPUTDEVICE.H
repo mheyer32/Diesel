@@ -26,75 +26,75 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "DirectInput.h"
 #include <messaging/MessagingObject.h>
 #include <list>
+#include "DirectInput.h"
 
-class CDInputDevice :protected Msg::MessagingObject
+class CDInputDevice : protected Msg::MessagingObject
 {
 
 public:
+    CDInputDevice();
+    virtual ~CDInputDevice();
 
-	CDInputDevice();
-	virtual ~CDInputDevice();
+    bool InitDevice(REFGUID DeviceGUID, DIDATAFORMAT* DataFormat = NULL,
+                    DWORD cooplevel = DISCL_EXCLUSIVE | DISCL_FOREGROUND);
+    bool reinitialize();
 
-	bool InitDevice(REFGUID DeviceGUID, DIDATAFORMAT *DataFormat=NULL,DWORD cooplevel=DISCL_EXCLUSIVE | DISCL_FOREGROUND);
-	bool reinitialize();
+    void releaseDevice();
 
-	void releaseDevice();
+    virtual HRESULT GetDeviceState();
 
-	virtual HRESULT GetDeviceState();
+    HRESULT acquire();
 
-	HRESULT acquire();
+    bool SetupDeviceThread(void (*Handler)() = NULL);
+    void StopDeviceThread();
 
-	bool SetupDeviceThread(void (*Handler)()=NULL);
-	void StopDeviceThread();
+    int getNumAxes() const;
+    int getNumButtons() const;
+    int getNumPOVs() const;
 
-	int getNumAxes() const;
-	int getNumButtons() const;
-	int getNumPOVs() const;
-
-	const long*	 getAxes() const;
-	const DWORD* getPOVs() const;
-	const BYTE*	 getButtons() const;
+    const long*  getAxes() const;
+    const DWORD* getPOVs() const;
+    const BYTE*  getButtons() const;
 
 protected:
+    HRESULT              AutoDetectDataFormat();
+    static BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef);
+    static DWORD WINAPI  DeviceThread(CDInputDevice* DeviceObject);
 
-	HRESULT AutoDetectDataFormat();
-	static BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef);
-	static DWORD WINAPI DeviceThread(CDInputDevice *DeviceObject);
+    virtual Msg::MSGRVAL handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID msgId,
+                                       const Msg::Param& parameters = Msg::Param());
 
-	virtual	 Msg::MSGRVAL handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters=Msg::Param());
+    void (*DeviceHandler)();
 
-	void (*DeviceHandler)();
+    HANDLE DeviceEvents[2];
+    HANDLE ThreadHandle;
 
-	HANDLE				DeviceEvents[2];
-	HANDLE				ThreadHandle;
+    bool Format_autodetected;
 
-	bool				Format_autodetected;
-	
-	typedef std::list<DIDEVICEOBJECTINSTANCE> DIDOBJLIST;
-	typedef DIDOBJLIST::iterator DIDOBJITERATOR;
+    typedef std::list<DIDEVICEOBJECTINSTANCE> DIDOBJLIST;
+    typedef DIDOBJLIST::iterator              DIDOBJITERATOR;
 
-	DIDOBJLIST			ObjectList;
+    DIDOBJLIST ObjectList;
 
-	LPDINPUTDEVICE		Device;
+    LPDINPUTDEVICE Device;
 
-	LPVOID				DeviceState;
-	DWORD				DeviceStateSize;
-	DIDATAFORMAT		*DeviceDataFormat;
-	GUID				guid;
-	DWORD				cooplevel;
+    LPVOID        DeviceState;
+    DWORD         DeviceStateSize;
+    DIDATAFORMAT* DeviceDataFormat;
+    GUID          guid;
+    DWORD         cooplevel;
 
-	//FIXME: more privacy
-	DWORD				num_Axes;
-	DWORD				num_Buttons;
-	DWORD				num_POV;
-	long				*Axes;
-	DWORD				*POV;
-	BYTE				*Buttons;
+    // FIXME: more privacy
+    DWORD  num_Axes;
+    DWORD  num_Buttons;
+    DWORD  num_POV;
+    long*  Axes;
+    DWORD* POV;
+    BYTE*  Buttons;
 };
 
-#endif // !defined(AFX_DINPUTDEVICE_H__31079B00_8D92_11D3_BD8A_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_DINPUTDEVICE_H__31079B00_8D92_11D3_BD8A_0000E85E86C1__INCLUDED_)

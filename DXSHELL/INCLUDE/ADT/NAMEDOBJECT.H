@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <string>
 
@@ -35,17 +35,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // FIXME: maintain a list of all instantiated objects and a possibility for ensuring unique
 // names ?
 
-class CNamedObject  
+class CNamedObject
 {
 public:
-	CNamedObject();
-	virtual ~CNamedObject();
+    CNamedObject();
+    virtual ~CNamedObject();
 
-	virtual void setName(const std::string &Name);
-	virtual const std::string& getName() const;
+    virtual void               setName(const std::string& Name);
+    virtual const std::string& getName() const;
 
 protected:
-	std::string m_name;
+    std::string m_name;
 };
 
-#endif // !defined(AFX_NAMEDOBJECT_H__8ADDEF6A_E915_403B_A660_7D70C2FDFADF__INCLUDED_)
+#endif  // !defined(AFX_NAMEDOBJECT_H__8ADDEF6A_E915_403B_A660_7D70C2FDFADF__INCLUDED_)

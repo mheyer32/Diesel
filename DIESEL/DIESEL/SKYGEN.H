@@ -25,29 +25,29 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace SkyGen
 {
-	enum 
-	{
-		SKY_MINS = 0,
-		SKY_MAXS = 1,
-		SKY_MINT = 2,
-        SKY_MAXT  = 3
-	};
+enum
+{
+    SKY_MINS = 0,
+    SKY_MAXS = 1,
+    SKY_MINT = 2,
+    SKY_MAXT = 3
+};
 
-	enum
-	{
-		SKY_RIGHT	=	0,	//positive x
-		SKY_TOP		=	1,	//positive y
-		SKY_BACK	=	2,	//positive z
+enum
+{
+    SKY_RIGHT = 0,  // positive x
+    SKY_TOP   = 1,  // positive y
+    SKY_BACK  = 2,  // positive z
 
-		SKY_LEFT	=	3,
-		SKY_BOTTOM	=	4,
-		SKY_FRONT	=	5
-	};
+    SKY_LEFT   = 3,
+    SKY_BOTTOM = 4,
+    SKY_FRONT  = 5
+};
 
-	extern void genSkyVerts(VECTOR3 forward,VECTOR3 up,VECTOR3 right, int tess, float skyboxsize, VECTOR3 *vertices);
-	extern void genPlainSkyTexcoords(int tess,int textursize,VECTOR2 *texcoords);
-	extern void genSphereTexcoords(float height,VECTOR3 *vertices, int num_vertices, VECTOR2 *texcoords);
-	extern int genSkyIndices(const float *minmax, int tess, INDEX* &indices,int baseindex);
-}
+extern void genSkyVerts(VECTOR3 forward, VECTOR3 up, VECTOR3 right, int tess, float skyboxsize, VECTOR3* vertices);
+extern void genPlainSkyTexcoords(int tess, int textursize, VECTOR2* texcoords);
+extern void genSphereTexcoords(float height, VECTOR3* vertices, int num_vertices, VECTOR2* texcoords);
+extern int  genSkyIndices(const float* minmax, int tess, INDEX*& indices, int baseindex);
+}  // namespace SkyGen
 
 #endif

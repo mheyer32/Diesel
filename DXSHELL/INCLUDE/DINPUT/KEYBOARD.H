@@ -26,38 +26,37 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "DInputDevice.h"
 #include <adt/singleton.h>
+#include <iostream>
 #include <map>
 #include <string>
-#include <iostream>
+#include "DInputDevice.h"
 
 class CKeyboard : public CDInputDevice, public Singleton<CKeyboard>
 {
-	DECLARE_SINGLETON(CKeyboard)
+    DECLARE_SINGLETON(CKeyboard)
 public:
-	bool	initialize(DWORD cooplevel=DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+    bool initialize(DWORD cooplevel = DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 
-	inline  bool isPressed(int key) {return (m_keybuffer[key]&0x80)?true:false;}
+    inline bool isPressed(int key) { return (m_keybuffer[key] & 0x80) ? true : false; }
 
-	const BYTE* getBuffer();
+    const BYTE* getBuffer();
 
-	bool getKeyforASCII(const std::string &keyname,DWORD &keycode);
-	char getASCIIforKey(DWORD scancode);
-	
+    bool getKeyforASCII(const std::string& keyname, DWORD& keycode);
+    char getASCIIforKey(DWORD scancode);
+
 protected:
+    CKeyboard();
+    virtual ~CKeyboard();
 
-	CKeyboard();
-	virtual ~CKeyboard();
+    void initTranslationMaps();
 
-	void	initTranslationMaps();
+    BYTE m_keybuffer[256];
 
-	BYTE	m_keybuffer[256];	
-
-	std::map<std::string,int> ascii2dx;
-	std::map<int,std::string> dx2ascii;
+    std::map<std::string, int> ascii2dx;
+    std::map<int, std::string> dx2ascii;
 };
 
-#endif // !defined(AFX_KEYBOARD_H__31079B01_8D92_11D3_BD8A_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_KEYBOARD_H__31079B01_8D92_11D3_BD8A_0000E85E86C1__INCLUDED_)

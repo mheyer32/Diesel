@@ -29,65 +29,54 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CWndProc::CWndProc()
 {
-
 }
-
 
 CWndProc::~CWndProc()
 {
-
 }
 
-LRESULT CWndProc::callObjWndProc(HWND hWnd,UINT Message,WPARAM wParam,LPARAM lParam)
+LRESULT CWndProc::callObjWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	CWndProc *object=reinterpret_cast<CWndProc*>(GetWindowLong(hWnd, GWL_USERDATA));
-	if (object)
-		return object->WindowProc(hWnd,Message,wParam,lParam);
-	return 0;
+    CWndProc* object = reinterpret_cast<CWndProc*>(GetWindowLong(hWnd, GWL_USERDATA));
+    if (object)
+        return object->WindowProc(hWnd, Message, wParam, lParam);
+    return 0;
 }
 
-
-LRESULT CALLBACK CWndProc::MainWindowProc(HWND hWnd,UINT Message,WPARAM wParam,LPARAM lParam)
+LRESULT CALLBACK CWndProc::MainWindowProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	switch (Message)
-	{
-		case WM_CREATE:
-			{
-				SetWindowLong(hWnd, GWL_USERDATA, (LONG)((CREATESTRUCT*)lParam)->lpCreateParams);
-				callObjWndProc(hWnd,Message,wParam,lParam);
-				return 0;
-			}
-			break;
+    switch (Message) {
+    case WM_CREATE: {
+        SetWindowLong(hWnd, GWL_USERDATA, (LONG)((CREATESTRUCT*)lParam)->lpCreateParams);
+        callObjWndProc(hWnd, Message, wParam, lParam);
+        return 0;
+    } break;
 
-		case WM_DESTROY:
-			SetWindowLong(hWnd, GWL_USERDATA, 0);
-			return TRUE;
-			break;
-	}
-	HRESULT rval=callObjWndProc(hWnd,Message,wParam,lParam);
-	if (rval) return rval;
+    case WM_DESTROY:
+        SetWindowLong(hWnd, GWL_USERDATA, 0);
+        return TRUE;
+        break;
+    }
+    HRESULT rval = callObjWndProc(hWnd, Message, wParam, lParam);
+    if (rval)
+        return rval;
 
-	return DefWindowProc(hWnd,Message,wParam,lParam);
-
+    return DefWindowProc(hWnd, Message, wParam, lParam);
 }
 
-LRESULT CALLBACK CWndProc::MainDialogProc(HWND hWnd,UINT Message,WPARAM wParam,LPARAM lParam)
+LRESULT CALLBACK CWndProc::MainDialogProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	switch (Message)
-	{
-	case WM_INITDIALOG:
-		{
-			SetWindowLong(hWnd, GWL_USERDATA, lParam);
-			callObjWndProc(hWnd,Message,wParam,lParam);
-			return TRUE;
-		}
-		break;
-	case WM_DESTROY:
-		SetWindowLong(hWnd, GWL_USERDATA, 0);
-		return TRUE;
-		break;
-	}
+    switch (Message) {
+    case WM_INITDIALOG: {
+        SetWindowLong(hWnd, GWL_USERDATA, lParam);
+        callObjWndProc(hWnd, Message, wParam, lParam);
+        return TRUE;
+    } break;
+    case WM_DESTROY:
+        SetWindowLong(hWnd, GWL_USERDATA, 0);
+        return TRUE;
+        break;
+    }
 
-	return callObjWndProc(hWnd,Message,wParam,lParam);
+    return callObjWndProc(hWnd, Message, wParam, lParam);
 }
-

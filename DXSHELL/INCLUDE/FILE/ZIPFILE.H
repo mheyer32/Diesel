@@ -26,34 +26,34 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "RamFile.h"
 #include "Path.h"
+#include "RamFile.h"
 
-//extern "C"
+// extern "C"
 //{
 #define ASMV
 #define ASMINF
 #include "contrib/minizip/unzip.h"
 ///};
 
-class CZipFile : public CRamFile  
+class CZipFile : public CRamFile
 {
 public:
-	CZipFile();
-	virtual ~CZipFile();
+    CZipFile();
+    virtual ~CZipFile();
 
-	bool setZipFile(const std::string &zipname);
+    bool setZipFile(const std::string& zipname);
 
-	virtual bool open(const CPath &File, MODE Mode=READ);
-	virtual void close();
+    virtual bool open(const CPath& File, MODE Mode = READ);
+    virtual void close();
 
-	void getFileList(PATHLIST &filelist, const CPath &directory="",const std::string &filter="",bool r_subdirs=false);
+    void getFileList(PATHLIST& filelist, const CPath& directory = "", const std::string& filter = "",
+                     bool r_subdirs = false);
 
 protected:
-
-	unzFile openzip;
+    unzFile openzip;
 };
 
-#endif // !defined(AFX_ZIPFILE_H__826DCABC_7164_4302_A2C7_81CA457DAD95__INCLUDED_)
+#endif  // !defined(AFX_ZIPFILE_H__826DCABC_7164_4302_A2C7_81CA457DAD95__INCLUDED_)

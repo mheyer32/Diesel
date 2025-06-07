@@ -26,31 +26,30 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <list>
-#include <string>
 #include <stdexcept>
+#include <string>
 
-class CException  : public std::exception
+class CException : public std::exception
 {
 public:
-	CException();
-	CException(const std::string &error_text);
-	CException(const std::string &error_text,const std::string &error_text2);
-	virtual ~CException();
+    CException();
+    CException(const std::string& error_text);
+    CException(const std::string& error_text, const std::string& error_text2);
+    virtual ~CException();
 
-	void addText(const std::string &error_text);
-	CException& operator << (const std::string &error_text);
+    void        addText(const std::string& error_text);
+    CException& operator<<(const std::string& error_text);
 
-	std::string getCompleteText();
+    std::string getCompleteText();
 
 protected:
+    typedef std::list<std::string> ERRLIST;
+    typedef ERRLIST::iterator      ERRLISTITERATOR;
 
-	typedef std::list<std::string> ERRLIST;
-	typedef ERRLIST::iterator ERRLISTITERATOR;
-
-	ERRLIST errorlist;
+    ERRLIST errorlist;
 };
 
-#endif // !defined(AFX_EXCEPTION_H__B1C8F0B0_3782_4C4A_87BB_247BF3C230FC__INCLUDED_)
+#endif  // !defined(AFX_EXCEPTION_H__B1C8F0B0_3782_4C4A_87BB_247BF3C230FC__INCLUDED_)

@@ -22,24 +22,29 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 const char* OGLErrorToString(GLenum error)
 {
-	switch (error)
-	{
-	case GL_NO_ERROR:
-		 return "GL_NO_ERROR: No error has been recorded.";
-	case GL_INVALID_ENUM:
-		return "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument. The offending function is ignored, having no side effect other than to set the error flag.";
-	case GL_INVALID_VALUE:
-		return "GL_INVALID_VALUE: A numeric argument is out of range. The offending function is ignored, having no side effect other than to set the error flag.";
-	case GL_INVALID_OPERATION:
-		return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state. The offending function is ignored, having no side effect other than to set the error flag.";
-	case GL_STACK_OVERFLOW:
-		return "GL_STACK_OVERFLOW: This function would cause a stack overflow. The offending function is ignored, having no side effect other than to set the error flag.";
-	case GL_STACK_UNDERFLOW:
-		return "GL_STACK_UNDERFLOW: This function would cause a stack underflow. The offending function is ignored, having no side effect other than to set the error flag.";
-	case GL_OUT_OF_MEMORY:
-		return "GL_OUT_OF_MEMORY: There is not enough memory left to execute the function. The state of OpenGL is undefined, except for the state of the error flags, after this error is recorded.";
-	default:
-		return "Unknown GL-Error";
-	}
-	return NULL; // unsicher, ist aber eh nur hier um den compiler zu beruhigen
+    switch (error) {
+    case GL_NO_ERROR:
+        return "GL_NO_ERROR: No error has been recorded.";
+    case GL_INVALID_ENUM:
+        return "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument. The offending function "
+               "is ignored, having no side effect other than to set the error flag.";
+    case GL_INVALID_VALUE:
+        return "GL_INVALID_VALUE: A numeric argument is out of range. The offending function is ignored, having no "
+               "side effect other than to set the error flag.";
+    case GL_INVALID_OPERATION:
+        return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state. The offending "
+               "function is ignored, having no side effect other than to set the error flag.";
+    case GL_STACK_OVERFLOW:
+        return "GL_STACK_OVERFLOW: This function would cause a stack overflow. The offending function is ignored, "
+               "having no side effect other than to set the error flag.";
+    case GL_STACK_UNDERFLOW:
+        return "GL_STACK_UNDERFLOW: This function would cause a stack underflow. The offending function is ignored, "
+               "having no side effect other than to set the error flag.";
+    case GL_OUT_OF_MEMORY:
+        return "GL_OUT_OF_MEMORY: There is not enough memory left to execute the function. The state of OpenGL is "
+               "undefined, except for the state of the error flags, after this error is recorded.";
+    default:
+        return "Unknown GL-Error";
+    }
+    return NULL;  // unsicher, ist aber eh nur hier um den compiler zu beruhigen
 }

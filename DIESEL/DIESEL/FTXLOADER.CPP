@@ -26,7 +26,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 #include <windows.h>
-#include <gl/gl.h> // unfortunately I need GL_RGBA
+
+#include <gl/gl.h>  // unfortunately I need GL_RGBA
 
 #include <memorytracker.h>
 //////////////////////////////////////////////////////////////////////
@@ -35,25 +36,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 FTXLoader::FTXLoader()
 {
-
 }
 
 FTXLoader::~FTXLoader()
 {
-
 }
 
-Image* FTXLoader::load(CFile &file)
+Image* FTXLoader::load(CFile& file)
 {
-	int width=file.readDWORD();
-	int height=file.readDWORD();
-	file.readDWORD();	// number of frames?
+    int width  = file.readDWORD();
+    int height = file.readDWORD();
+    file.readDWORD();  // number of frames?
 
-	unsigned char *data=new unsigned char[width*height*4];
-	file.readVOID(data,width*height*4);
-	Image *image=new Image(width,height,4,GL_RGBA,data);
+    unsigned char* data = new unsigned char[width * height * 4];
+    file.readVOID(data, width * height * 4);
+    Image* image = new Image(width, height, 4, GL_RGBA, data);
 
-	delete [] data;
+    delete[] data;
 
-	return image;
+    return image;
 }

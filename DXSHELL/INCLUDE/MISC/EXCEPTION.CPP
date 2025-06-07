@@ -30,45 +30,40 @@ using namespace std;
 
 CException::CException()
 {
-
 }
 
 CException::~CException()
 {
-
 }
 
-CException::CException(const std::string &error_text)
+CException::CException(const std::string& error_text)
 {
-	addText(error_text);
+    addText(error_text);
 }
-CException::CException(const std::string &error_text,const std::string &error_text2)
+CException::CException(const std::string& error_text, const std::string& error_text2)
 {
-	addText(error_text+error_text2);
+    addText(error_text + error_text2);
 }
 
-
-void CException::addText(const std::string &error_text)
+void CException::addText(const std::string& error_text)
 {
-	errorlist.push_front(error_text);
+    errorlist.push_front(error_text);
 }
-CException& CException::operator << (const std::string &error_text)
+CException& CException::operator<<(const std::string& error_text)
 {
-	CException::addText(error_text);
-	return *this;
+    CException::addText(error_text);
+    return *this;
 }
-
 
 std::string CException::getCompleteText()
 {
-	std::string text;
-	
-	ERRLISTITERATOR eIt=errorlist.begin();
+    std::string text;
 
-	for (;eIt!=errorlist.end();++eIt)
-	{
-		text+=*eIt+"->";
-	}
+    ERRLISTITERATOR eIt = errorlist.begin();
 
-	return text;
+    for (; eIt != errorlist.end(); ++eIt) {
+        text += *eIt + "->";
+    }
+
+    return text;
 }

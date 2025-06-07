@@ -26,16 +26,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-//FIXME: get rid of these old dirty defines
-#define INSYSMEM		DDSCAPS_SYSTEMMEMORY
-#define INVIDMEM		DDSCAPS_VIDEOMEMORY
-#define INLOCALVIDMEM	DDSCAPS_VIDEOMEMORY|DDSCAPS_LOCALVIDMEM
-#define	OFFSCREEN		DDSCAPS_OFFSCREENPLAIN	
-#define PRIMARY			DDSCAPS_PRIMARYSURFACE
-#define D3D				DDSCAPS_3DDEVICE
-#define	TEXTURE			DDSCAPS_TEXTURE
+// FIXME: get rid of these old dirty defines
+#define INSYSMEM DDSCAPS_SYSTEMMEMORY
+#define INVIDMEM DDSCAPS_VIDEOMEMORY
+#define INLOCALVIDMEM DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM
+#define OFFSCREEN DDSCAPS_OFFSCREENPLAIN
+#define PRIMARY DDSCAPS_PRIMARYSURFACE
+#define D3D DDSCAPS_3DDEVICE
+#define TEXTURE DDSCAPS_TEXTURE
 
 #include "ddraw/DirectDraw.h"
 #include "ddraw/ddutil.h"
@@ -43,66 +43,67 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <string>
 
-typedef	 IDirectDrawSurface7	  DDSURFACE;
-typedef  LPDIRECTDRAWSURFACE7	LPDDSURFACE;
+typedef IDirectDrawSurface7  DDSURFACE;
+typedef LPDIRECTDRAWSURFACE7 LPDDSURFACE;
 
 class CSurface : public Msg::MessagingObject
 {
 public:
+    CSurface(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps, LPDDPIXELFORMAT pf = NULL);
+    CSurface();
+    virtual ~CSurface();
 
-	CSurface(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps,LPDDPIXELFORMAT pf=NULL);
-	CSurface();
-	virtual ~CSurface();
+    HRESULT lock();
+    void    unlock() const;
 
-	HRESULT lock() ;
-	void unlock() const;
+    virtual HRESULT create(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps, LPDDPIXELFORMAT lpDDPixFmt = NULL);
+    virtual void    createFromFile(const std::string& File);
+    virtual void    createAsBackbuffer(CSurface& From);
 
-	virtual HRESULT create(DWORD w, DWORD h, DWORD num_backbuffers, DWORD caps,LPDDPIXELFORMAT lpDDPixFmt=NULL);
-	virtual void createFromFile(const std::string &File);
-	virtual void createAsBackbuffer(CSurface &From);
+    virtual void loadBitmap(const std::string& File);
 
-	virtual void loadBitmap(const std::string &File);
+    void getRect(RECT& rect) const;
+    void getSurfaceDesc(DDSURFACEDESC2& ddsd) const;
+    void getCaps(DDSCAPS2& ddscaps) const;
+    void getPixelFormat(DDPIXELFORMAT& pixelformat) const;
 
-	void getRect(RECT &rect) const;
-	void getSurfaceDesc(DDSURFACEDESC2 &ddsd) const;
-	void getCaps(DDSCAPS2 &ddscaps) const;
-	void getPixelFormat(DDPIXELFORMAT &pixelformat) const;
-
- 	inline LPDDSURFACE getSurface() const{ return Surface;};
-	inline DWORD getWidth() const {return ddsd.dwWidth;};
-	inline DWORD getHeight() const {return ddsd.dwHeight;};
-	inline DWORD getPitch() const {return Pitch;}; // in Pixel!
-	inline void* getPointer() const {return ddsd.lpSurface;};
-	inline DWORD getXMask() const {return XMask;};
-	inline DWORD getYMask() const {return YMask;};
-	inline DWORD getShift() const {return Shift;};
+    inline LPDDSURFACE getSurface() const { return Surface; };
+    inline DWORD       getWidth() const { return ddsd.dwWidth; };
+    inline DWORD       getHeight() const { return ddsd.dwHeight; };
+    inline DWORD       getPitch() const { return Pitch; };  // in Pixel!
+    inline void*       getPointer() const { return ddsd.lpSurface; };
+    inline DWORD       getXMask() const { return XMask; };
+    inline DWORD       getYMask() const { return YMask; };
+    inline DWORD       getShift() const { return Shift; };
 
     void clear() const;
-	void Blit (const CSurface &Source,RECT *dst_rect=NULL,RECT *src_rect=NULL,DWORD ddbltflags=DDBLT_WAIT,DDBLTFX *ddbltfx=NULL);
+    void Blit(const CSurface& Source, RECT* dst_rect = NULL, RECT* src_rect = NULL, DWORD ddbltflags = DDBLT_WAIT,
+              DDBLTFX* ddbltfx = NULL);
 
-	static CSurface* getPrimary() {return Primary;};
+    static CSurface* getPrimary() { return Primary; };
+
 protected:
+    void fillSurfaceDesc(DWORD w, DWORD h, DWORD bc, DWORD caps);
+    void storeSurfaceData();
 
-	void fillSurfaceDesc(DWORD w,DWORD h,DWORD bc,DWORD caps);
-	void storeSurfaceData();
+    virtual Msg::MSGRVAL handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID msgId,
+                                       const Msg::Param& parameters = Msg::Param());
 
-	virtual	 Msg::MSGRVAL handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters=Msg::Param());
+    HRESULT createClipper(HWND hwnd = NULL);
 
-	HRESULT createClipper(HWND hwnd=NULL);
+    DDSURFACEDESC2      ddsd;
+    DDSCAPS2            ddscaps;
+    DWORD               XMask;
+    DWORD               YMask;
+    DWORD               Shift;
+    DWORD               Pitch;
+    DDSURFACE*          Surface;
+    IDirectDrawClipper* Clipper;
+    bool                File_loaded;
+    bool                Is_BackBuffer;
+    std::string         Filename;
 
-	DDSURFACEDESC2			ddsd;
-	DDSCAPS2				ddscaps;
-	DWORD					XMask;
-	DWORD					YMask;
-	DWORD					Shift;
-	DWORD					Pitch;
-	DDSURFACE				*Surface;
-	IDirectDrawClipper		*Clipper;
-	bool					File_loaded;
-	bool					Is_BackBuffer;
-	std::string				Filename;
-
-	static CSurface			*Primary;
+    static CSurface* Primary;
 };
 
-#endif // !defined(AFX_SURFACE_H__8F0B6425_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_SURFACE_H__8F0B6425_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)

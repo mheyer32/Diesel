@@ -25,67 +25,61 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-
-template <class _T> class SmartPointer  
+template <class _T>
+class SmartPointer
 {
 
 public:
+    SmartPointer(_T* pointer = 0)
+    : ptr(pointer)
+    {
+        if (ptr)
+            ptr->AddRef();
+    }
+    SmartPointer(const SmartPointer<_T>& sptr2)
+    : ptr(0)
+    {
+        *this = sptr2;
+    }
+    ~SmartPointer()
+    {
+        if (ptr)
+            ptr->Release();
+    }
 
-	SmartPointer(_T *pointer=0) : ptr(pointer)
-	{
-		if (ptr) ptr->AddRef();
-	}
-	SmartPointer(const SmartPointer<_T> &sptr2) : ptr(0)
-	{
-		*this=sptr2;
-	}
-	~SmartPointer()
-	{
-		if (ptr) ptr->Release();
-	}
+    inline SmartPointer<_T>& operator=(const SmartPointer<_T>& sptr)
+    {
+        *this = sptr.ptr;
+        return *this;
+    }
 
-	inline SmartPointer<_T>& operator = (const SmartPointer<_T>& sptr)
-	{
-		*this=sptr.ptr;
-		return *this;
-	}
+    inline SmartPointer<_T>& operator=(_T* newPtr)
+    {
+        if (newPtr)
+            newPtr->AddRef();
+        if (ptr)
+            ptr->Release();
+        ptr = newPtr;
+        return *this;
+    }
 
-	inline SmartPointer<_T>& operator = (_T *newPtr)
-	{
-		if (newPtr) newPtr->AddRef();
-		if (ptr) ptr->Release();
-		ptr=newPtr;
-		return *this;
-	}
+    inline _T* operator->() const { return ptr; }
 
-	inline _T* operator -> () const
-	{
-		return ptr;
-	}
+    inline _T& operator*() const { return *ptr; }
 
-	inline _T& operator * () const
-	{
-		return *ptr;
-	}
+    inline operator _T*() const { return ptr; }
 
-	inline operator _T* () const
-	{
-		return ptr;
-	}
-
-	inline _T* getPointer() const { return ptr;};
-/*	inline bool operator == (const SmartPointer<_T> &sptr2)
-	{
-		return ptr==sptr2.ptr;
-	}
-*/
+    inline _T* getPointer() const { return ptr; };
+    /*	inline bool operator == (const SmartPointer<_T> &sptr2)
+        {
+            return ptr==sptr2.ptr;
+        }
+    */
 
 protected:
-
-	_T	*ptr;
-
+    _T* ptr;
 };
 
-#endif // !defined(AFX_SMARTPOINTER_H__D4DEE4EB_F166_45BB_8B6B_AD217A4D7624__INCLUDED_)
+#endif  // !defined(AFX_SMARTPOINTER_H__D4DEE4EB_F166_45BB_8B6B_AD217A4D7624__INCLUDED_)

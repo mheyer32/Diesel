@@ -22,28 +22,21 @@ template <class _T>
 class StrideArray
 {
 public:
+    inline StrideArray(void* basepointer, int stride = 0, int offset = 0)
+    {
+        m_baseptr = ((char*)(basepointer)) + offset;
+        if (stride) {
+            m_stride = stride;
+        } else {
+            m_stride = sizeof(_T);
+        }
+    }
 
-	inline StrideArray(void* basepointer, int stride=0, int offset=0)
-	{
-		m_baseptr=((char*)(basepointer))+offset;
-		if (stride)
-		{
-			m_stride=stride;
-		}
-		else
-		{
-			m_stride=sizeof(_T);
-		}
-	}
+    ~StrideArray() {};
 
-	~StrideArray() {};
-
-	inline _T& operator[] (int index) const
-	{
-		return *((_T*)(m_baseptr+(index*m_stride)));
-	}
+    inline _T& operator[](int index) const { return *((_T*)(m_baseptr + (index * m_stride))); }
 
 protected:
-	char *m_baseptr;
-	int m_stride;
+    char* m_baseptr;
+    int   m_stride;
 };

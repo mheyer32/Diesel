@@ -26,81 +26,78 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-
-#include <string>
-#include <map>
 #include <dinput/keyboard.h>
-#include <misc/Timer.h> // for the timers
+#include <misc/Timer.h>  // for the timers
+#include <map>
+#include <string>
 
 #define KEYREPEAT_PAUSE 0.024f
 #define KEYREPEAT_DELAY 0.250f
 
-
-class CKeyMap  
+class CKeyMap
 {
 
 public:
+    typedef void (*KEYCALLBACKFUNC)(int key, void* userdata);
 
-typedef void (*KEYCALLBACKFUNC)(int key,void *userdata);
+    enum KEYOPTION
+    {
+        KEYOPT_REPEAT,       // trigger callback every 250 msecs
+        KEYOPT_TRIGGERONCE,  // trigger callback just once
+        KEYOPT_CONTINUE      // trigger callback every update
+    };
+    enum KEYMAP
+    {
+        KEYMAP1 = 0,
+        KEYMAP2 = 1
+    };
 
-enum KEYOPTION
-{
-	KEYOPT_REPEAT,			// trigger callback every 250 msecs
-	KEYOPT_TRIGGERONCE,	// trigger callback just once
-	KEYOPT_CONTINUE		// trigger callback every update
-};
-enum KEYMAP
-{
-	KEYMAP1=0,
-	KEYMAP2=1
-};
+    CKeyMap();
+    virtual ~CKeyMap();
 
-	CKeyMap();
-	virtual ~CKeyMap();
+    void Update();
+    void BindKey(int key, KEYCALLBACKFUNC pressCB, KEYCALLBACKFUNC releaseCB = NULL, KEYOPTION keyopt = KEYOPT_REPEAT,
+                 void* userdata = NULL);
+    void UnBindKey(int key);
+    void UnbindAll();
 
-	void Update();
-	void BindKey(int key,KEYCALLBACKFUNC pressCB,KEYCALLBACKFUNC releaseCB=NULL,KEYOPTION keyopt=KEYOPT_REPEAT,void *userdata=NULL);
-	void UnBindKey(int key);
-	void UnbindAll();
-
-	void SwitchKeymap(int map);
-	int getKeymapNum() const;
+    void SwitchKeymap(int map);
+    int  getKeymapNum() const;
 
 protected:
+    struct KEYCALLBACK
+    {
+        DWORD           options;
+        KEYCALLBACKFUNC pressCB;
+        KEYCALLBACKFUNC releaseCB;
+        void*           userdata;
+        float           firstpressed;
 
-struct KEYCALLBACK
-{
-	DWORD options;
-	KEYCALLBACKFUNC	pressCB;
-	KEYCALLBACKFUNC releaseCB;
-	void			*userdata;
-	float			firstpressed;
+        KEYCALLBACK()
+        {
+            options      = 0;
+            pressCB      = NULL;
+            releaseCB    = NULL;
+            userdata     = NULL;
+            firstpressed = 0;
+        }
+    };
 
-	KEYCALLBACK()
-	{
-		options=0;
-		pressCB=NULL;
-		releaseCB=NULL;
-		userdata=NULL;
-		firstpressed=0;
-	}
+    void ReleaseKey(int key);
+    void PressKey(int key);
+
+    CKeyboard* keyboard;
+
+    // FIXME: better use a stack of keymaps here, with puhs/pop semantic
+    KEYCALLBACK  keymaps[2][256];  // console-keymap
+    KEYCALLBACK* keymap;           // current keymap
+    int          keymapnum;
+
+    BYTE lastkbstate[256];
+
+    CTimer timer;
 };
 
-	void ReleaseKey(int key);
-	void PressKey(int key);
-
-	CKeyboard *keyboard;
-
-	//FIXME: better use a stack of keymaps here, with puhs/pop semantic
-	KEYCALLBACK keymaps[2][256];	// console-keymap
-	KEYCALLBACK *keymap;		// current keymap
-	int keymapnum;
-
-	BYTE lastkbstate[256];
-
-	CTimer	timer;
-};
-
-#endif // !defined(AFX_KEYMAP_H__BC7F021D_59E0_497A_8785_775ADA58D2AF__INCLUDED_)
+#endif  // !defined(AFX_KEYMAP_H__BC7F021D_59E0_497A_8785_775ADA58D2AF__INCLUDED_)

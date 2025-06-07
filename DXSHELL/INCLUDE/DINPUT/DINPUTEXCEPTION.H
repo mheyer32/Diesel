@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
@@ -37,12 +37,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <iostream>
 #include <string>
 
-class CDInputException : public CException  
+class CDInputException : public CException
 {
 public:
-	CDInputException(const std::string &text,HRESULT dirval);
-	virtual ~CDInputException();
-
+    CDInputException(const std::string& text, HRESULT dirval);
+    virtual ~CDInputException();
 };
 
-#endif // !defined(AFX_DINPUTEXCEPTION_H__9A2BC8D8_64F7_4F92_B8B3_47BD1366B098__INCLUDED_)
+#endif  // !defined(AFX_DINPUTEXCEPTION_H__9A2BC8D8_64F7_4F92_B8B3_47BD1366B098__INCLUDED_)

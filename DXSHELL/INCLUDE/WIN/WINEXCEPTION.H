@@ -26,17 +26,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <MISC\Exception.h>
 
-class CWinException : public CException  
+class CWinException : public CException
 {
 public:
-	CWinException();
-	CWinException(std::string errortext);
-	virtual ~CWinException();
-
+    CWinException();
+    CWinException(std::string errortext);
+    virtual ~CWinException();
 };
 
-#endif // !defined(AFX_WINEXCEPTION_H__D6C8A5CD_9162_42DE_92F4_A4849CC4FE38__INCLUDED_)
+#endif  // !defined(AFX_WINEXCEPTION_H__D6C8A5CD_9162_42DE_92F4_A4849CC4FE38__INCLUDED_)

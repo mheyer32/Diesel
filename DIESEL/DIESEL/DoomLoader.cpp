@@ -1,16 +1,17 @@
 #pragma once
 
-#include <misc/exception.h>
-#include <misc/Lexer.h>
-#include <misc/parsehelper.h>
-#include <file/filemanager.h>
-
 #include "doomloader.h"
+
+#include <file/filemanager.h>
+#include <misc/Lexer.h>
+#include <misc/exception.h>
+#include <misc/parsehelper.h>
+
+#include "TextureManager.h"
 #include "mesh.h"
-#include "vertexbuffer.h"
 #include "shader.h"
 #include "vbservices.h"
-#include "TextureManager.h"
+#include "vertexbuffer.h"
 
 using namespace std;
 
@@ -22,328 +23,291 @@ DoomLoader::~DoomLoader(void)
 {
 }
 
-DoomScene* DoomLoader::LoadPROC(const CPath &filename)
+DoomScene* DoomLoader::LoadPROC(const CPath& filename)
 {
 
-	CFile *file=NULL;
-	if (!(file=CFileManager::Instance()->open(filename)))
-	{
-		cout<<"DoomLoader::LoadPROC() could not open file "<<filename<<endl;
-		return NULL;
-	}
+    CFile* file = NULL;
+    if (!(file = CFileManager::Instance()->open(filename))) {
+        cout << "DoomLoader::LoadPROC() could not open file " << filename << endl;
+        return NULL;
+    }
 
-	char *filecontents=new char[file->getSize()+1];
-	file->readVOID(filecontents,file->getSize());
-	filecontents[file->getSize()]=0;
-	delete file;
+    char* filecontents = new char[file->getSize() + 1];
+    file->readVOID(filecontents, file->getSize());
+    filecontents[file->getSize()] = 0;
+    delete file;
 
-	DoomScene *doomscene=new DoomScene;
-	DoomMap	*doommap=new DoomMap;
+    DoomScene* doomscene = new DoomScene;
+    DoomMap*   doommap   = new DoomMap;
 
     lexer.setText(filecontents);
-	lexer.setCaseSensitive(false);
+    lexer.setCaseSensitive(false);
 
-	try 
-	{
-		while(true)
-		{
-			lexer.nextToken();
-			
-			if (lexer.matchAndSkip("model"))
-			{
-				CMesh *mesh=readModel();
-				models.push_back(mesh);
-			}
-			else if (lexer.matchAndSkip("interareaportals"))
-			{
-				readInterAreaPortals(doommap);
-			}
-			else if (lexer.matchAndSkip("nodes"))
-			{
-				readNodes(doommap);
-				break;
-			}
-		}
-	}
-	catch (LexException &e)
-	{
-		cout<<e.getCompleteText()<<endl;
-	}
+    try {
+        while (true) {
+            lexer.nextToken();
 
-	delete [] filecontents;
+            if (lexer.matchAndSkip("model")) {
+                CMesh* mesh = readModel();
+                models.push_back(mesh);
+            } else if (lexer.matchAndSkip("interareaportals")) {
+                readInterAreaPortals(doommap);
+            } else if (lexer.matchAndSkip("nodes")) {
+                readNodes(doommap);
+                break;
+            }
+        }
+    } catch (LexException& e) {
+        cout << e.getCompleteText() << endl;
+    }
 
-	doomscene->map=doommap;
-	char modelname[32];
+    delete[] filecontents;
 
-	for (int a=0; a<doommap->num_areas; ++a)
-	{
-		sprintf(modelname,"_area%d",a);
-		CMesh *areamodel=CMesh::FindMesh(modelname);
-		if (areamodel)
-		{
-			doommap->areas[a].areamodel=areamodel;
-		}
-		else
-		{	
-			cout<<"WARNING: could not find mesh: "<<modelname<<endl;
-		}
-	}
+    doomscene->map = doommap;
+    char modelname[32];
 
-	for (int p=0; p<doommap->num_portals; ++p)
-	{
-		DoomMap::PORTAL &portal=doommap->portals[p];
-		doommap->areas[portal.areas[0]].portals.push_back(p);
-		doommap->areas[portal.areas[1]].portals.push_back(p);
-		portal.plane=PLANE(portal.vertices[0],portal.vertices[1],portal.vertices[2]);
-	}
+    for (int a = 0; a < doommap->num_areas; ++a) {
+        sprintf(modelname, "_area%d", a);
+        CMesh* areamodel = CMesh::FindMesh(modelname);
+        if (areamodel) {
+            doommap->areas[a].areamodel = areamodel;
+        } else {
+            cout << "WARNING: could not find mesh: " << modelname << endl;
+        }
+    }
 
-	LoadMAP(filename,doommap);
+    for (int p = 0; p < doommap->num_portals; ++p) {
+        DoomMap::PORTAL& portal = doommap->portals[p];
+        doommap->areas[portal.areas[0]].portals.push_back(p);
+        doommap->areas[portal.areas[1]].portals.push_back(p);
+        portal.plane = PLANE(portal.vertices[0], portal.vertices[1], portal.vertices[2]);
+    }
 
-	return doomscene;
+    LoadMAP(filename, doommap);
+
+    return doomscene;
 }
 
-void DoomLoader::LoadMAP(const CPath &filename, DoomMap *doommap)
+void DoomLoader::LoadMAP(const CPath& filename, DoomMap* doommap)
 {
-	CPath tempfilename(filename);
-	tempfilename.setExtension("map");
-	CFile *file=NULL;
-	if (!(file=CFileManager::Instance()->open(tempfilename)))
-	{
-		cout<<"DoomLoader::LoadPROC() could not open file"<<endl;
-		return;
-	}
+    CPath tempfilename(filename);
+    tempfilename.setExtension("map");
+    CFile* file = NULL;
+    if (!(file = CFileManager::Instance()->open(tempfilename))) {
+        cout << "DoomLoader::LoadPROC() could not open file" << endl;
+        return;
+    }
 
-	char *filecontents=new char[file->getSize()+1];
-	file->readVOID(filecontents,file->getSize());
-	filecontents[file->getSize()]=0;
-	delete file;
+    char* filecontents = new char[file->getSize() + 1];
+    file->readVOID(filecontents, file->getSize());
+    filecontents[file->getSize()] = 0;
+    delete file;
 
     lexer.setText(filecontents);
-	lexer.setCaseSensitive(false);
+    lexer.setCaseSensitive(false);
 
-	try // as long as entity definitions follow
-	{
-		while (true)
-		{
-			
-			lexer.skipUntil('{');
-			D3Entity *ent=new D3Entity;
-			int endofentity=lexer.getEndOfNextBlock();
-			
-			int eofposition=lexer.getMaxPosition();
+    try  // as long as entity definitions follow
+    {
+        while (true) {
 
-			lexer.setMaxPosition(endofentity);
-			
-			try
-			{
-				
-				while (true)
-				{
-					// found start of key-value-pair
-					char key[1024];
-					char value[1024];
-					lexer.readQuotedString(key);
-					lexer.readQuotedString(value);
-					ent->addKeyValue(key,value);
-					lexer.nextToken();
+            lexer.skipUntil('{');
+            D3Entity* ent         = new D3Entity;
+            int       endofentity = lexer.getEndOfNextBlock();
 
-					//std::cout<<key<<' '<<value<<endl;
-				}
-			}
-			catch (LexException &)
-			{
-				// hit the end of the entity
-			}
-			ent->parseKeyValues();
-			doommap->linkEntity(ent);
+            int eofposition = lexer.getMaxPosition();
 
-			lexer.setMaxPosition(eofposition);
-			lexer.setPosition(endofentity);
+            lexer.setMaxPosition(endofentity);
 
-			//cout<<endl<<endl;
-		}
-	}
-	catch (LexException &)
-	{
-		// probably end of file;
-	}
+            try {
 
+                while (true) {
+                    // found start of key-value-pair
+                    char key[1024];
+                    char value[1024];
+                    lexer.readQuotedString(key);
+                    lexer.readQuotedString(value);
+                    ent->addKeyValue(key, value);
+                    lexer.nextToken();
+
+                    // std::cout<<key<<' '<<value<<endl;
+                }
+            } catch (LexException&) {
+                // hit the end of the entity
+            }
+            ent->parseKeyValues();
+            doommap->linkEntity(ent);
+
+            lexer.setMaxPosition(eofposition);
+            lexer.setPosition(endofentity);
+
+            // cout<<endl<<endl;
+        }
+    } catch (LexException&) {
+        // probably end of file;
+    }
 }
 
-
-void DoomLoader::readNodes(DoomMap *dmap)
+void DoomLoader::readNodes(DoomMap* dmap)
 {
-	cout<<"reading BSP Nodes... "<<flush;
+    cout << "reading BSP Nodes... " << flush;
 
-	lexer.skipBeyondNext('{');
+    lexer.skipBeyondNext('{');
 
-	int numNodes=lexer.readInteger();
+    int numNodes = lexer.readInteger();
 
-	cout<<"numNodes: "<<numNodes;
+    cout << "numNodes: " << numNodes;
 
-	dmap->nodes=new DoomMap::NODE[numNodes];
-	dmap->num_nodes=numNodes;
+    dmap->nodes     = new DoomMap::NODE[numNodes];
+    dmap->num_nodes = numNodes;
 
-	DoomMap::NODE *nodes=dmap->nodes;
+    DoomMap::NODE* nodes = dmap->nodes;
 
-	for (int n=0; n<numNodes; ++n)
-	{
-		PLANE plane=nodes[n].plane;
-		readVec((float*)&plane,4);
-		convertVec(plane.n);
-		plane.d=-plane.d;
-		nodes[n].plane=plane;
+    for (int n = 0; n < numNodes; ++n) {
+        PLANE plane = nodes[n].plane;
+        readVec((float*)&plane, 4);
+        convertVec(plane.n);
+        plane.d        = -plane.d;
+        nodes[n].plane = plane;
 
-		nodes[n].children[0]=lexer.readInteger();
-		nodes[n].children[1]=lexer.readInteger();
+        nodes[n].children[0] = lexer.readInteger();
+        nodes[n].children[1] = lexer.readInteger();
 
-		//cout<<"Plane: "<<plane.n.x<<" "<<plane.n.y<<" "<<plane.n.z<<" "<<plane.d<<endl;
-		//cout<<nodes[n].children[0]<<" "<<nodes[n].children[1]<<endl;
-	}
+        // cout<<"Plane: "<<plane.n.x<<" "<<plane.n.y<<" "<<plane.n.z<<" "<<plane.d<<endl;
+        // cout<<nodes[n].children[0]<<" "<<nodes[n].children[1]<<endl;
+    }
 
-	lexer.skipBeyondNext('}');
-	cout<<"successful."<<endl;
+    lexer.skipBeyondNext('}');
+    cout << "successful." << endl;
 }
 
-void DoomLoader::readInterAreaPortals(DoomMap *dmap)
+void DoomLoader::readInterAreaPortals(DoomMap* dmap)
 {
-	cout<<"reading InterAreaPortals... "<<flush;
+    cout << "reading InterAreaPortals... " << flush;
 
-	lexer.skipBeyondNext('{');
+    lexer.skipBeyondNext('{');
 
-	int numAreas=lexer.readInteger();
-	int numPortals=lexer.readInteger();
+    int numAreas   = lexer.readInteger();
+    int numPortals = lexer.readInteger();
 
-	dmap->num_areas=numAreas;
-	dmap->num_portals=numPortals;
+    dmap->num_areas   = numAreas;
+    dmap->num_portals = numPortals;
 
-	dmap->portals=new DoomMap::PORTAL[numPortals];
-	dmap->areas=new DoomMap::AREA[numAreas];
+    dmap->portals = new DoomMap::PORTAL[numPortals];
+    dmap->areas   = new DoomMap::AREA[numAreas];
 
-	for (int p=0; p<numPortals; ++p)
-	{
-		dmap->portals[p].num_vertices=lexer.readInteger();
-		dmap->portals[p].areas[0]=lexer.readInteger();
-		dmap->portals[p].areas[1]=lexer.readInteger();
+    for (int p = 0; p < numPortals; ++p) {
+        dmap->portals[p].num_vertices = lexer.readInteger();
+        dmap->portals[p].areas[0]     = lexer.readInteger();
+        dmap->portals[p].areas[1]     = lexer.readInteger();
 
-		dmap->portals[p].vertices=new VECTOR3[dmap->portals[p].num_vertices];
-		VECTOR3 *verts=dmap->portals[p].vertices;
-		for (int v=0;v<dmap->portals[p].num_vertices; ++v)
-		{
-			readVec((float*)&verts[v],3);
-			convertVec(verts[v]);
-		}
-	}
-	lexer.skipBeyondNext('}');
-	cout<<"successful."<<endl;
+        dmap->portals[p].vertices = new VECTOR3[dmap->portals[p].num_vertices];
+        VECTOR3* verts            = dmap->portals[p].vertices;
+        for (int v = 0; v < dmap->portals[p].num_vertices; ++v) {
+            readVec((float*)&verts[v], 3);
+            convertVec(verts[v]);
+        }
+    }
+    lexer.skipBeyondNext('}');
+    cout << "successful." << endl;
 }
 
-void DoomLoader::readVec(float *coordinates, int dim)
+void DoomLoader::readVec(float* coordinates, int dim)
 {
-	lexer.skipBeyondNext('(');
-	for (int d=0; d<dim; ++d)
-	{
-		coordinates[d]=lexer.readDouble();
-	}
-	lexer.skipBeyondNext(')');
+    lexer.skipBeyondNext('(');
+    for (int d = 0; d < dim; ++d) {
+        coordinates[d] = lexer.readDouble();
+    }
+    lexer.skipBeyondNext(')');
 }
 
 CMesh* DoomLoader::readModel()
 {
-	lexer.skipBeyondNext('{');
+    lexer.skipBeyondNext('{');
 
-	char modelname[1024];
-	lexer.readQuotedString(modelname);
+    char modelname[1024];
+    lexer.readQuotedString(modelname);
 
-	CMesh *mesh=new CMesh();
+    CMesh* mesh = new CMesh();
 
-	mesh->setName(modelname);
-	cout<<"load Model: "<<mesh->getName()<<endl;
+    mesh->setName(modelname);
+    cout << "load Model: " << mesh->getName() << endl;
 
-	int num_surfaces=lexer.readInteger();
+    int num_surfaces = lexer.readInteger();
 
-	//cout<<"num_Surfaces:"<<num_surfaces<<endl;
+    // cout<<"num_Surfaces:"<<num_surfaces<<endl;
 
-	for (int s=0; s<num_surfaces; ++s)
-	{
-		CVertexBuffer *vbuffer=readSurface();
-		mesh->addVertexBuffer(vbuffer);
-	}
+    for (int s = 0; s < num_surfaces; ++s) {
+        CVertexBuffer* vbuffer = readSurface();
+        mesh->addVertexBuffer(vbuffer);
+    }
 
-	lexer.skipBeyondNext('}');
+    lexer.skipBeyondNext('}');
 
-	mesh->calcBoundingBox();
+    mesh->calcBoundingBox();
 
-	return mesh;
+    return mesh;
 }
 
 CVertexBuffer* DoomLoader::readSurface()
 {
-	lexer.skipBeyondNext('{');
+    lexer.skipBeyondNext('{');
 
-	CVertexBuffer*	vbuffer=new CVertexBuffer;
+    CVertexBuffer* vbuffer = new CVertexBuffer;
 
+    char materialname[1024];
+    lexer.readQuotedString(materialname);
 
-	char materialname[1024];
-	lexer.readQuotedString(materialname);
-	
-	strcat(materialname,"_d.tga");
+    strcat(materialname, "_d.tga");
 
-	CShader	*shader=CShader::findOrLoadShader(materialname,false);
+    CShader* shader = CShader::findOrLoadShader(materialname, false);
 
-	// Material einlesen
-	if (shader)
-	{
-		vbuffer->setShader(shader);
-	}
-	else
-	{
-				
-		vbuffer->setShader(CShader::DefaultShader);
-	}
-	
+    // Material einlesen
+    if (shader) {
+        vbuffer->setShader(shader);
+    } else {
 
-	int numVerts=lexer.readInteger();
-	int numIndices=lexer.readInteger();
+        vbuffer->setShader(CShader::DefaultShader);
+    }
 
-	vbuffer->AllocArrays(VERTEXARRAY|INDEXARRAY|TEXCOORDARRAY,numVerts,numIndices);
-	vbuffer->num_vertices=numVerts;
-	vbuffer->num_indices=numIndices;
+    int numVerts   = lexer.readInteger();
+    int numIndices = lexer.readInteger();
 
-	//cout<<"surface: "<<numVerts<<" "<<numIndices<<endl;
+    vbuffer->AllocArrays(VERTEXARRAY | INDEXARRAY | TEXCOORDARRAY, numVerts, numIndices);
+    vbuffer->num_vertices = numVerts;
+    vbuffer->num_indices  = numIndices;
 
-	for (int v=0; v<numVerts; ++v)
-	{
-			lexer.skipBeyondNext('(');
-			vbuffer->vertices[0][v].x=lexer.readDouble();
-			vbuffer->vertices[0][v].z=-lexer.readDouble();
-			vbuffer->vertices[0][v].y=lexer.readDouble();
+    // cout<<"surface: "<<numVerts<<" "<<numIndices<<endl;
 
-			vbuffer->texcoords[v].x=lexer.readDouble();
-			vbuffer->texcoords[v].y=lexer.readDouble();
+    for (int v = 0; v < numVerts; ++v) {
+        lexer.skipBeyondNext('(');
+        vbuffer->vertices[0][v].x = lexer.readDouble();
+        vbuffer->vertices[0][v].z = -lexer.readDouble();
+        vbuffer->vertices[0][v].y = lexer.readDouble();
 
-			//readDouble();
-			//readDouble();
-			//readDouble();
+        vbuffer->texcoords[v].x = lexer.readDouble();
+        vbuffer->texcoords[v].y = lexer.readDouble();
 
-			lexer.skipBeyondNext(')');
-	}
+        // readDouble();
+        // readDouble();
+        // readDouble();
 
-	for (int i=0; i<numIndices; ++i)
-	{
-		vbuffer->indices[i]=lexer.readInteger();
-	}
+        lexer.skipBeyondNext(')');
+    }
 
-	VBServices::reverseIndices(*vbuffer);
+    for (int i = 0; i < numIndices; ++i) {
+        vbuffer->indices[i] = lexer.readInteger();
+    }
 
-	lexer.skipBeyondNext('}');
+    VBServices::reverseIndices(*vbuffer);
 
-	return vbuffer;
+    lexer.skipBeyondNext('}');
+
+    return vbuffer;
 }
 
-void DoomLoader::convertVec(VECTOR3 &vec)
+void DoomLoader::convertVec(VECTOR3& vec)
 {
-	float t=vec.y;
-	vec.y=vec.z;
-	vec.z=-t;
+    float t = vec.y;
+    vec.y   = vec.z;
+    vec.z   = -t;
 }

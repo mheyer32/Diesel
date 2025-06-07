@@ -27,8 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "VertexBuffer.h"
 #include "shader.h"
 
-#include <iostream>
 #include <memorytracker.h>
+#include <iostream>
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
@@ -37,149 +37,132 @@ using namespace std;
 
 MESHLoader::MESHLoader()
 {
-	file=NULL;
+    file = NULL;
 }
 
 MESHLoader::~MESHLoader()
 {
-	if (file)
-	{	
-		file->close();
-		KILLOBJECT(file);
-	}	
+    if (file) {
+        file->close();
+        KILLOBJECT(file);
+    }
 }
 
 CMesh* MESHLoader::loadMESH(std::string filename)
 {
 
-	std::cout<<std::endl<<"MESHLoader::loadMESH()"<<std::endl;
-	file=new CFile;
+    std::cout << std::endl << "MESHLoader::loadMESH()" << std::endl;
+    file = new CFile;
 
-	if (!file->open(filename.c_str()))
-	{
-		return NULL;
-	}
-	
-	int num_shaders=file->readDWORD();
-	cout<<"num_shader: "<<num_shaders<<endl;
+    if (!file->open(filename.c_str())) {
+        return NULL;
+    }
 
-	shaders.resize(num_shaders);
+    int num_shaders = file->readDWORD();
+    cout << "num_shader: " << num_shaders << endl;
 
-	char buffer[256];
-	for (int s=0;s<num_shaders;++s)
-	{
-		file->readSTRING(buffer);
-		std::cout<<buffer<<std::endl;
-		shaders[s]=CShader::findOrLoadShader(buffer);
-		if (shaders[s]==NULL)
-		{
-			std::cout<<"MESHLoader::loadMESH() missing shader: "<<buffer<<std::endl;
-			shaders[s]=CShader::DefaultShader;
-		}
-	}
+    shaders.resize(num_shaders);
 
-	CMesh *mesh=new CMesh;
-	mesh->setName("mesh");
+    char buffer[256];
+    for (int s = 0; s < num_shaders; ++s) {
+        file->readSTRING(buffer);
+        std::cout << buffer << std::endl;
+        shaders[s] = CShader::findOrLoadShader(buffer);
+        if (shaders[s] == NULL) {
+            std::cout << "MESHLoader::loadMESH() missing shader: " << buffer << std::endl;
+            shaders[s] = CShader::DefaultShader;
+        }
+    }
 
-	int num_vbuffers=file->readDWORD();
-	cout<<"num_vbuffers: "<<num_vbuffers<<endl;
-	for (int v=0;v<num_vbuffers;++v)
-	{
-		CVertexBuffer *vbuffer;
-		vbuffer=readVertexBuffer();
-		mesh->addVertexBuffer(vbuffer);
-	}
-	mesh->calcBoundingBox();
+    CMesh* mesh = new CMesh;
+    mesh->setName("mesh");
 
-	KILLOBJECT(file);
+    int num_vbuffers = file->readDWORD();
+    cout << "num_vbuffers: " << num_vbuffers << endl;
+    for (int v = 0; v < num_vbuffers; ++v) {
+        CVertexBuffer* vbuffer;
+        vbuffer = readVertexBuffer();
+        mesh->addVertexBuffer(vbuffer);
+    }
+    mesh->calcBoundingBox();
 
-	return mesh;
+    KILLOBJECT(file);
+
+    return mesh;
 }
 
 CVertexBuffer* MESHLoader::readVertexBuffer()
 {
-	int arrays=file->readDWORD();
-	int num_vertices=file->readDWORD();
-	int num_indices=file->readDWORD();
-	
-//	cout<<"face: num_vertices: "<<num_vertices<<" num_indices: "<<num_indices<<endl;
+    int arrays       = file->readDWORD();
+    int num_vertices = file->readDWORD();
+    int num_indices  = file->readDWORD();
 
-	CVertexBuffer *vbuffer=new CVertexBuffer;
-	vbuffer->AllocArrays(arrays,num_vertices,num_indices,1);
-	// FIXME I should somehow automate this, it already brought too many unforseen consequences
-	// when I forgot it 
-	vbuffer->num_vertices=num_vertices;
-	vbuffer->num_indices=num_indices;
+    //	cout<<"face: num_vertices: "<<num_vertices<<" num_indices: "<<num_indices<<endl;
 
-	vbuffer->mode=file->readDWORD();
-	int shadernum=file->readDWORD();
+    CVertexBuffer* vbuffer = new CVertexBuffer;
+    vbuffer->AllocArrays(arrays, num_vertices, num_indices, 1);
+    // FIXME I should somehow automate this, it already brought too many unforseen consequences
+    // when I forgot it
+    vbuffer->num_vertices = num_vertices;
+    vbuffer->num_indices  = num_indices;
 
-	vbuffer->setShader(shaders[shadernum]);
+    vbuffer->mode = file->readDWORD();
+    int shadernum = file->readDWORD();
 
-	for (int v=0;v<num_vertices;++v)
-	{
-		vbuffer->vertices[0][v]=readVector3();
-	}
-	if (arrays&NORMALARRAY)
-	{
-		for (int v=0;v<num_vertices;++v)
-		{
-			vbuffer->normals[0][v]=readVector3();
-		}
-	}
-	if (arrays&TEXCOORDARRAY)
-	{
-		for (int v=0;v<num_vertices;++v)
-		{
-			vbuffer->texcoords[v]=readVector2();
-		}
-	}
-	if (arrays&LMCOORDARRAY)
-	{
-		for (int v=0;v<num_vertices;++v)
-		{
-			vbuffer->lmcoords[v]=readVector2();
-		}
-	}
-	if (arrays&COLORARRAY)
-	{
-		for (int v=0;v<num_vertices;++v)
-		{
-			vbuffer->colors[v]=readColor();
-		}
-	}
-	if (arrays&INDEXARRAY)
-	{
-		for (int i=0;i<num_indices;++i)
-		{
-			vbuffer->indices[i]=(INDEX)file->readDWORD();
-		}
-	}
+    vbuffer->setShader(shaders[shadernum]);
 
-	return vbuffer;
+    for (int v = 0; v < num_vertices; ++v) {
+        vbuffer->vertices[0][v] = readVector3();
+    }
+    if (arrays & NORMALARRAY) {
+        for (int v = 0; v < num_vertices; ++v) {
+            vbuffer->normals[0][v] = readVector3();
+        }
+    }
+    if (arrays & TEXCOORDARRAY) {
+        for (int v = 0; v < num_vertices; ++v) {
+            vbuffer->texcoords[v] = readVector2();
+        }
+    }
+    if (arrays & LMCOORDARRAY) {
+        for (int v = 0; v < num_vertices; ++v) {
+            vbuffer->lmcoords[v] = readVector2();
+        }
+    }
+    if (arrays & COLORARRAY) {
+        for (int v = 0; v < num_vertices; ++v) {
+            vbuffer->colors[v] = readColor();
+        }
+    }
+    if (arrays & INDEXARRAY) {
+        for (int i = 0; i < num_indices; ++i) {
+            vbuffer->indices[i] = (INDEX)file->readDWORD();
+        }
+    }
 
+    return vbuffer;
 }
 
 VECTOR3 MESHLoader::readVector3()
 {
-	VECTOR3 vec;
-	vec.x=file->readFLOAT();
-	vec.y=file->readFLOAT();
-	vec.z=file->readFLOAT();
-	return vec;
+    VECTOR3 vec;
+    vec.x = file->readFLOAT();
+    vec.y = file->readFLOAT();
+    vec.z = file->readFLOAT();
+    return vec;
 }
 
 VECTOR2 MESHLoader::readVector2()
 {
-	VECTOR2 vec;
-	vec.x=file->readFLOAT();
-	vec.y=file->readFLOAT();
-	return vec;
+    VECTOR2 vec;
+    vec.x = file->readFLOAT();
+    vec.y = file->readFLOAT();
+    return vec;
 }
 
 COLOR MESHLoader::readColor()
 {
-	COLOR col;
-	(DWORD&)col=file->readDWORD();
-	return col;
+    COLOR col;
+    (DWORD&)col = file->readDWORD();
+    return col;
 }

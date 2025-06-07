@@ -8,11 +8,11 @@
 class PTSLoader
 {
 public:
-	PTSLoader(void);
-	~PTSLoader(void);
+    PTSLoader(void);
+    ~PTSLoader(void);
 
-	bool LoadPTS(const CPath &filename, CEntity::ENTITYLIST &entities);
+    bool LoadPTS(const CPath& filename, CEntity::ENTITYLIST& entities);
 
 protected:
-	CFile	*file;
+    CFile* file;
 };

@@ -21,9 +21,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef _DSERR_H
 #define _DSERR_H
 
-#include <windows.h> // for HRESULT
+#include <windows.h>  // for HRESULT
 
 const char* DSErrorToString(HRESULT dsrval);
-
 
 #endif

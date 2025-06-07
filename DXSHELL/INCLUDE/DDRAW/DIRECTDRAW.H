@@ -26,11 +26,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include <win/appwindow.h>
-#include <messaging/messagingobject.h>
 #include <adt/singleton.h>
+#include <messaging/messagingobject.h>
+#include <win/appwindow.h>
 #include <vector>
 
 #include <InitGuid.h>
@@ -45,58 +45,53 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <ddraw.h>
 #include "ddraw/dderr.h"
 
-#pragma comment( lib, "d2d1.lib" )
+#pragma comment(lib, "d2d1.lib")
 
-typedef IDirectDraw7	DDRAW;
-typedef LPDIRECTDRAW7	LPDDRAW;
-#define DDINTERFACE		IID_IDirectDraw7
+typedef IDirectDraw7  DDRAW;
+typedef LPDIRECTDRAW7 LPDDRAW;
+#define DDINTERFACE IID_IDirectDraw7
 
-class CDirectDraw : public Msg::MessagingObject , public Singleton<CDirectDraw>
+class CDirectDraw : public Msg::MessagingObject, public Singleton<CDirectDraw>
 {
 
-DECLARE_SINGLETON(CDirectDraw)
+    DECLARE_SINGLETON(CDirectDraw)
 
 public:
+    bool InitDirectDraw(GUID* lpGuid = NULL);
 
+    bool InitDisplay(DWORD Width, DWORD Height, DWORD Depth, bool Fullscreen);
+    bool InitDisplay();
 
-	bool InitDirectDraw(GUID *lpGuid=NULL);
+    void ShutDownDirectDraw();
 
-	bool InitDisplay(DWORD Width,DWORD Height,DWORD Depth,bool Fullscreen);
-	bool InitDisplay();
+    inline LPDDRAW getLPDD() const { return lpDDx; };
+    HRESULT        getCaps(DDCAPS& caps) const;
 
-	void ShutDownDirectDraw();
+    bool runsFullscreen() const { return run_fullscreen; };
 
-	inline LPDDRAW getLPDD() const {return lpDDx;};
-	HRESULT getCaps(DDCAPS &caps) const;
-	
-	bool runsFullscreen() const {return run_fullscreen;};
-
-	BOOL chooseDevice(GUID &Guid);
+    BOOL chooseDevice(GUID& Guid);
 
 protected:
+    typedef std::vector<DDSURFACEDESC2> MODELIST;
+    typedef MODELIST::iterator          MODEITERATOR;
 
-typedef std::vector<DDSURFACEDESC2> MODELIST;
-typedef MODELIST::iterator		  MODEITERATOR;
+    CDirectDraw();
+    ~CDirectDraw();
 
-	CDirectDraw();
-	~CDirectDraw();
+    virtual Msg::MSGRVAL handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID msgId,
+                                       const Msg::Param& parameters = Msg::Param());
 
-	virtual	 Msg::MSGRVAL handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters=Msg::Param());
+    bool CheckCoopLevel();
+    void InitMisc();
 
+    HRESULT enumModes(MODELIST& modelist, LPDDSURFACEDESC2 lpRefddsd = NULL);
 
-	bool	CheckCoopLevel();
-	void	InitMisc();
+    static BOOL WINAPI    EnumDevicesCallback(GUID* lpGuid, LPSTR lpDescription, LPSTR lpName, LPVOID lpContext);
+    static HRESULT WINAPI EnumModesCallback2(LPDDSURFACEDESC2 lpDDSurfaceDesc, LPVOID lpContext);
 
-	HRESULT enumModes(MODELIST &modelist, LPDDSURFACEDESC2 lpRefddsd=NULL);
-
-	static BOOL WINAPI EnumDevicesCallback(GUID * lpGuid,LPSTR  lpDescription,LPSTR  lpName,LPVOID lpContext);
-	static HRESULT WINAPI EnumModesCallback2(LPDDSURFACEDESC2 lpDDSurfaceDesc,LPVOID lpContext);
-
-
-	LPDDRAW					lpDDx;
-	CAppWindow				*appwindow;
-	bool					run_fullscreen;
-
+    LPDDRAW     lpDDx;
+    CAppWindow* appwindow;
+    bool        run_fullscreen;
 };
 
-#endif // !defined(AFX_DIRECTDRAW_H__C0693D80_4837_11D3_9743_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_DIRECTDRAW_H__C0693D80_4837_11D3_9743_0000E85E86C1__INCLUDED_)

@@ -21,422 +21,385 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <defs.h>
+#include <misc/exception.h>
+#include <win/appwindow.h>
+#include <iostream>
 #include "DInputDevice.h"
 #include "dierr.h"
 #include "dinputexception.h"
-#include <misc/exception.h>
-#include <win/appwindow.h>
-#include <defs.h>
-#include <iostream>
 
 #include <memorytracker.h>
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-
 CDInputDevice::CDInputDevice()
 {
-	
-	Device=NULL;
-	DeviceEvents[0]=NULL;
-	DeviceEvents[1]=NULL;
-	ThreadHandle=NULL;
 
-	num_Axes=0;
-	num_Buttons=0;
-	num_POV=0;
-	Axes=NULL;
-	Buttons=NULL;
-	POV=NULL;
+    Device          = NULL;
+    DeviceEvents[0] = NULL;
+    DeviceEvents[1] = NULL;
+    ThreadHandle    = NULL;
 
-	Format_autodetected=false;
+    num_Axes    = 0;
+    num_Buttons = 0;
+    num_POV     = 0;
+    Axes        = NULL;
+    Buttons     = NULL;
+    POV         = NULL;
+
+    Format_autodetected = false;
 }
-
-
 
 CDInputDevice::~CDInputDevice()
 {
-	CAppWindow *appwindow=CAppWindow::Instance();
-	unregisterForMessage(appwindow, Msg::GAME_ACTIVATED);
-	unregisterForMessage(appwindow, Msg::AUTOACQUIRE);
+    CAppWindow* appwindow = CAppWindow::Instance();
+    unregisterForMessage(appwindow, Msg::GAME_ACTIVATED);
+    unregisterForMessage(appwindow, Msg::AUTOACQUIRE);
 
-	releaseDevice();
+    releaseDevice();
 }
 
 void CDInputDevice::releaseDevice()
 {
-	StopDeviceThread();
+    StopDeviceThread();
 
-	if (Device!=NULL){
-		Device->Unacquire();
-		Device->Release();
-		Device=NULL;
-	};
+    if (Device != NULL) {
+        Device->Unacquire();
+        Device->Release();
+        Device = NULL;
+    };
 
-	if (Format_autodetected)
-	{
-		KILLARRAY(DeviceDataFormat->rgodf)
-		KILLOBJECT(DeviceDataFormat)
-		KILLOBJECT(DeviceState)
-	}
+    if (Format_autodetected) {
+        KILLARRAY(DeviceDataFormat->rgodf)
+        KILLOBJECT(DeviceDataFormat)
+        KILLOBJECT(DeviceState)
+    }
 }
 
-bool CDInputDevice::InitDevice(REFGUID DeviceGUID,DIDATAFORMAT *DataFormat,DWORD Cooplevel)
+bool CDInputDevice::InitDevice(REFGUID DeviceGUID, DIDATAFORMAT* DataFormat, DWORD Cooplevel)
 {
-HRESULT dirval;
-	// DInput-Device  öffnen
+    HRESULT dirval;
+    // DInput-Device  öffnen
 
-	std::cout<<std::endl<<"======== CDInputDevice::InitDevice() ========"<<std::endl<<std::endl;
+    std::cout << std::endl << "======== CDInputDevice::InitDevice() ========" << std::endl << std::endl;
 
-	if (CDirectInput::Instance()->getlpDI()==NULL)
-	{
-		if (!CDirectInput::Instance()->InitDirectInput())
-		{
-			return false;
-		}
-	}
- 
-	guid=DeviceGUID;
-	cooplevel=Cooplevel;
+    if (CDirectInput::Instance()->getlpDI() == NULL) {
+        if (!CDirectInput::Instance()->InitDirectInput()) {
+            return false;
+        }
+    }
 
-	std::cout<<"CreateDeviceEx().... ";
-	dirval = CDirectInput::Instance()->getlpDI()->CreateDevice(DeviceGUID, &Device, NULL); 
+    guid      = DeviceGUID;
+    cooplevel = Cooplevel;
 
-	if (dirval!=DI_OK) 
-	{ 
-		std::cout<<"failed, because"<<DIErrorToString(dirval)<<std::flush;
-		throw CDInputException("CDInputDevice::InitDevice() lpDI->CreateDevice() failed",dirval);
-		return false;
-	} 
+    std::cout << "CreateDeviceEx().... ";
+    dirval = CDirectInput::Instance()->getlpDI()->CreateDevice(DeviceGUID, &Device, NULL);
 
-	std::cout<<"successful"<<std::endl;
+    if (dirval != DI_OK) {
+        std::cout << "failed, because" << DIErrorToString(dirval) << std::flush;
+        throw CDInputException("CDInputDevice::InitDevice() lpDI->CreateDevice() failed", dirval);
+        return false;
+    }
 
-	std::cout<<"get device capablilities.... "<<std::endl;
-	DIDEVCAPS	caps;
-	DXINITSTRUCT(caps);
-	Device->GetCapabilities(&caps);
-	num_Axes=caps.dwAxes;
-	num_Buttons=caps.dwButtons;
-	num_POV=caps.dwPOVs;
+    std::cout << "successful" << std::endl;
 
-	std::cout<<num_Axes<<" axes, "<<num_Buttons<<" buttons, "<<num_POV<<" povs"<<std::endl;
+    std::cout << "get device capablilities.... " << std::endl;
+    DIDEVCAPS caps;
+    DXINITSTRUCT(caps);
+    Device->GetCapabilities(&caps);
+    num_Axes    = caps.dwAxes;
+    num_Buttons = caps.dwButtons;
+    num_POV     = caps.dwPOVs;
 
-	// set the cooperative level 
-	std::cout<<"SetCooperativeLevel().... ";
-	dirval=Device->SetCooperativeLevel(CAppWindow::Instance()->getHWND(),cooplevel); 
- 
-	if (dirval!=DI_OK)
-	{ 
-		std::cout<<" failed,because "<<DIErrorToString(dirval)<<std::endl;
-		return false;
-	} 
-	std::cout<<" successful"<<std::endl;
+    std::cout << num_Axes << " axes, " << num_Buttons << " buttons, " << num_POV << " povs" << std::endl;
 
-	// set dataformat 
-	if (DataFormat!=NULL)
-	{
-		std::cout<<"SetDataFormat()... ";
-		dirval = Device->SetDataFormat(DataFormat); 
- 
-		if (dirval!=DI_OK)
-		{ 
-			std::cout<<"failed,because "<<DIErrorToString(dirval)<<std::endl;
-			return false;
-		} 
-		DeviceDataFormat=DataFormat;
-		std::cout<<"successful"<<std::endl;
-	}
-	else
-	{
-		dirval=AutoDetectDataFormat();
-	}
+    // set the cooperative level
+    std::cout << "SetCooperativeLevel().... ";
+    dirval = Device->SetCooperativeLevel(CAppWindow::Instance()->getHWND(), cooplevel);
 
+    if (dirval != DI_OK) {
+        std::cout << " failed,because " << DIErrorToString(dirval) << std::endl;
+        return false;
+    }
+    std::cout << " successful" << std::endl;
 
-	CAppWindow	*appwindow=CAppWindow::Instance();
+    // set dataformat
+    if (DataFormat != NULL) {
+        std::cout << "SetDataFormat()... ";
+        dirval = Device->SetDataFormat(DataFormat);
 
-	std::cout<<"registering for window messages"<<std::endl;
-	if (cooplevel&(DISCL_EXCLUSIVE|DISCL_FOREGROUND))
-	{
-		registerForMessage(appwindow, Msg::GAME_ACTIVATED);
-		registerForMessage(appwindow, Msg::AUTOACQUIRE);
-	}
+        if (dirval != DI_OK) {
+            std::cout << "failed,because " << DIErrorToString(dirval) << std::endl;
+            return false;
+        }
+        DeviceDataFormat = DataFormat;
+        std::cout << "successful" << std::endl;
+    } else {
+        dirval = AutoDetectDataFormat();
+    }
 
-	// acquire device
-	std::cout<<"Acquire()... ";
-	dirval=Device->Acquire(); 
+    CAppWindow* appwindow = CAppWindow::Instance();
 
-	if (dirval!=DI_OK)
-	{
-		std::cout<<"failed,because:\n"<<DIErrorToString(dirval)<<"\n will try again"<<std::endl;
-		PostMessage(appwindow->getHWND(),Msg::AUTOACQUIRE,0,0);
-		return true; // mal sehen, ob das eine gute Idee ist
-	}
+    std::cout << "registering for window messages" << std::endl;
+    if (cooplevel & (DISCL_EXCLUSIVE | DISCL_FOREGROUND)) {
+        registerForMessage(appwindow, Msg::GAME_ACTIVATED);
+        registerForMessage(appwindow, Msg::AUTOACQUIRE);
+    }
 
-	std::cout<<"successful"<<std::endl;
-	std::cout<<std::endl<<"device successfully initialized"<<std::endl<<std::endl;
-	return true;
+    // acquire device
+    std::cout << "Acquire()... ";
+    dirval = Device->Acquire();
+
+    if (dirval != DI_OK) {
+        std::cout << "failed,because:\n" << DIErrorToString(dirval) << "\n will try again" << std::endl;
+        PostMessage(appwindow->getHWND(), Msg::AUTOACQUIRE, 0, 0);
+        return true;  // mal sehen, ob das eine gute Idee ist
+    }
+
+    std::cout << "successful" << std::endl;
+    std::cout << std::endl << "device successfully initialized" << std::endl << std::endl;
+    return true;
 }
 
-
-
-Msg::MSGRVAL CDInputDevice::handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters)
+Msg::MSGRVAL CDInputDevice::handleMessage(Msg::MessagingObject* sender,
+                                          Msg::MESSAGEID        msgId,
+                                          const Msg::Param&     parameters)
 {
-HRESULT dirval;
+    HRESULT dirval;
 
-	switch (msgId)
-	{
-	case Msg::GAME_ACTIVATED:
-	case Msg::AUTOACQUIRE:
-		if(Device!=NULL)
-		{
-			//dirval = Device->SetDataFormat(DeviceDataFormat); //FIXME: ever needed?
-			dirval= Device->Acquire();
-			//if (((dirval!=DI_OK)||(WinStart::bCoopLevelOK==FALSE))&&(dirval!=S_FALSE))
-			//FIXME: check for Cooplevel still needed?
-			if ((dirval!=DI_OK)&&(dirval!=S_FALSE))
-			{
-				// this would really block the app, need something else here
-				//PostMessage(CAppWindow::Instance()->getHWND(),WM_AUTOACQUIRE,0,0); 
-			}
-		}
-		break;
-	}
+    switch (msgId) {
+    case Msg::GAME_ACTIVATED:
+    case Msg::AUTOACQUIRE:
+        if (Device != NULL) {
+            // dirval = Device->SetDataFormat(DeviceDataFormat); //FIXME: ever needed?
+            dirval = Device->Acquire();
+            // if (((dirval!=DI_OK)||(WinStart::bCoopLevelOK==FALSE))&&(dirval!=S_FALSE))
+            // FIXME: check for Cooplevel still needed?
+            if ((dirval != DI_OK) && (dirval != S_FALSE)) {
+                // this would really block the app, need something else here
+                // PostMessage(CAppWindow::Instance()->getHWND(),WM_AUTOACQUIRE,0,0);
+            }
+        }
+        break;
+    }
 
-	return Msg::PASS_ON;
+    return Msg::PASS_ON;
 }
-
 
 HRESULT CDInputDevice::GetDeviceState()
 {
-	return Device->GetDeviceState(DeviceStateSize,DeviceState);
+    return Device->GetDeviceState(DeviceStateSize, DeviceState);
 }
-
 
 bool CDInputDevice::SetupDeviceThread(void (*Handler)())
 {
-HRESULT dirval;
+    HRESULT dirval;
 
-	DeviceEvents[0] = CreateEvent(0, 0, 0, 0);
-	DeviceEvents[1] = CreateEvent(0, 0, 0, 0);
+    DeviceEvents[0] = CreateEvent(0, 0, 0, 0);
+    DeviceEvents[1] = CreateEvent(0, 0, 0, 0);
 
-	DeviceHandler=Handler;
+    DeviceHandler = Handler;
 
-	DWORD ThreadId=NULL;
-	
-	ThreadHandle=CreateThread(	0,           // pointer to security attributes
-								0,           // initial thread stack size
-								(LPTHREAD_START_ROUTINE)DeviceThread,     // pointer to thread function
-								this,        // argument for new thread
-								0,           // creation flags
-								&ThreadId    // pointer to receive thread ID
-							);
-	if (ThreadHandle==NULL)
-	{
-		throw CException("DInputDevice->DeviceThread could not created");
-		return false;
-	}
-	SetThreadPriority(ThreadHandle,THREAD_PRIORITY_ABOVE_NORMAL);
+    DWORD ThreadId = NULL;
 
-	Device->Unacquire();
-	dirval= Device->SetEventNotification(DeviceEvents[0]);
+    ThreadHandle = CreateThread(0,                                     // pointer to security attributes
+                                0,                                     // initial thread stack size
+                                (LPTHREAD_START_ROUTINE)DeviceThread,  // pointer to thread function
+                                this,                                  // argument for new thread
+                                0,                                     // creation flags
+                                &ThreadId                              // pointer to receive thread ID
+    );
+    if (ThreadHandle == NULL) {
+        throw CException("DInputDevice->DeviceThread could not created");
+        return false;
+    }
+    SetThreadPriority(ThreadHandle, THREAD_PRIORITY_ABOVE_NORMAL);
 
-	if (dirval!=DI_OK)
-	{
-		throw CException("DInputDevice->SetEventNotification failed");
-		return false;
-	}
-	Device->Acquire();
-	return true;
+    Device->Unacquire();
+    dirval = Device->SetEventNotification(DeviceEvents[0]);
+
+    if (dirval != DI_OK) {
+        throw CException("DInputDevice->SetEventNotification failed");
+        return false;
+    }
+    Device->Acquire();
+    return true;
 }
 
 void CDInputDevice::StopDeviceThread()
 {
-DWORD signal;
-	if (Device!=NULL)
-	{
-		Device->SetEventNotification(NULL);
-	}
-	if ((ThreadHandle!=NULL) && (DeviceEvents[1]!=NULL))
-	{
-		SetEvent(DeviceEvents[1]);
-		signal=WaitForSingleObject(ThreadHandle,5000);
-		if (signal==WAIT_TIMEOUT)
-		{
-			TerminateThread(ThreadHandle,-1);
-		}
-		CloseHandle(ThreadHandle);
-	};
-	if (DeviceEvents[0]!=NULL)
-		CloseHandle(DeviceEvents[0]);
-	if (DeviceEvents[1]!=NULL)
-		CloseHandle(DeviceEvents[1]);
+    DWORD signal;
+    if (Device != NULL) {
+        Device->SetEventNotification(NULL);
+    }
+    if ((ThreadHandle != NULL) && (DeviceEvents[1] != NULL)) {
+        SetEvent(DeviceEvents[1]);
+        signal = WaitForSingleObject(ThreadHandle, 5000);
+        if (signal == WAIT_TIMEOUT) {
+            TerminateThread(ThreadHandle, -1);
+        }
+        CloseHandle(ThreadHandle);
+    };
+    if (DeviceEvents[0] != NULL)
+        CloseHandle(DeviceEvents[0]);
+    if (DeviceEvents[1] != NULL)
+        CloseHandle(DeviceEvents[1]);
 }
 
-DWORD WINAPI CDInputDevice::DeviceThread(CDInputDevice *DeviceObject)
+DWORD WINAPI CDInputDevice::DeviceThread(CDInputDevice* DeviceObject)
 {
-HRESULT dirval;
+    HRESULT dirval;
 
-LOOP:	
+LOOP:
 
-	DWORD dwEvt = MsgWaitForMultipleObjects(
-			2,      // How many possible events
-			DeviceObject->DeviceEvents,       // Location of handles
-			FALSE,          // Wait for all?
-			INFINITE,       // How long to wait
-			QS_ALLEVENTS);   // Any message is an event
+    DWORD dwEvt = MsgWaitForMultipleObjects(2,                           // How many possible events
+                                            DeviceObject->DeviceEvents,  // Location of handles
+                                            FALSE,                       // Wait for all?
+                                            INFINITE,                    // How long to wait
+                                            QS_ALLEVENTS);               // Any message is an event
 
-	dwEvt -= WAIT_OBJECT_0;
+    dwEvt -= WAIT_OBJECT_0;
 
-	switch (dwEvt)
-	{ 
-	case 0:
-		dirval=DeviceObject->Device->GetDeviceState(DeviceObject->DeviceStateSize, DeviceObject->DeviceState);
-		if ((dirval==DI_OK)&&(DeviceObject->DeviceHandler!=NULL)){
-			DeviceObject->DeviceHandler();
-		}
-	/*	else if(dirval==DIERR_NOTACQUIRED)
-		{
-			DeviceObject->MessageHandler();
-		}
-		*/
-		break;
-	case 1:
-		ExitThread(0);
-		break;
-	}
-	goto LOOP;
-	
+    switch (dwEvt) {
+    case 0:
+        dirval = DeviceObject->Device->GetDeviceState(DeviceObject->DeviceStateSize, DeviceObject->DeviceState);
+        if ((dirval == DI_OK) && (DeviceObject->DeviceHandler != NULL)) {
+            DeviceObject->DeviceHandler();
+        }
+        /*	else if(dirval==DIERR_NOTACQUIRED)
+            {
+                DeviceObject->MessageHandler();
+            }
+            */
+        break;
+    case 1:
+        ExitThread(0);
+        break;
+    }
+    goto LOOP;
 }
 
 HRESULT CDInputDevice::AutoDetectDataFormat()
 {
-HRESULT dirval;
-DWORD act_axis,act_button,act_pov,act_object,num_objects;
+    HRESULT dirval;
+    DWORD   act_axis, act_button, act_pov, act_object, num_objects;
 
-	dirval=Device->EnumObjects(CDInputDevice::DIEnumDeviceObjectsCallback,(LPVOID)&ObjectList,DIDFT_AXIS|DIDFT_BUTTON|DIDFT_POV);                             
-	if (dirval!=DI_OK)
-	{
-		throw CDInputException("CDInputDevice::AutoDetectDataFormat() fehlgeschlagen",dirval);
-		return dirval;
-	}
+    dirval = Device->EnumObjects(CDInputDevice::DIEnumDeviceObjectsCallback,
+                                 (LPVOID)&ObjectList,
+                                 DIDFT_AXIS | DIDFT_BUTTON | DIDFT_POV);
+    if (dirval != DI_OK) {
+        throw CDInputException("CDInputDevice::AutoDetectDataFormat() fehlgeschlagen", dirval);
+        return dirval;
+    }
 
-	num_objects=num_Axes+num_Buttons+num_POV;
+    num_objects = num_Axes + num_Buttons + num_POV;
 
-	DIOBJECTDATAFORMAT *objectdataformat=new DIOBJECTDATAFORMAT[num_objects];
+    DIOBJECTDATAFORMAT* objectdataformat = new DIOBJECTDATAFORMAT[num_objects];
 
-	DeviceStateSize=num_Axes*sizeof(long)+num_Buttons+num_POV*sizeof(DWORD);
-	// datenbytes auf 4-Byte-Boundary bringen
-	if (DeviceStateSize&0x00000003)
-	{
-		DeviceStateSize=(DeviceStateSize&0xFFFFFFFC)+4;
-	}
+    DeviceStateSize = num_Axes * sizeof(long) + num_Buttons + num_POV * sizeof(DWORD);
+    // datenbytes auf 4-Byte-Boundary bringen
+    if (DeviceStateSize & 0x00000003) {
+        DeviceStateSize = (DeviceStateSize & 0xFFFFFFFC) + 4;
+    }
 
-	// "Emfpangspuffer" anlegen
-	DeviceState=new BYTE[DeviceStateSize];
+    // "Emfpangspuffer" anlegen
+    DeviceState = new BYTE[DeviceStateSize];
 
-	act_axis=act_button=act_pov=act_object=0;
+    act_axis = act_button = act_pov = act_object = 0;
 
-	int startPOVs=sizeof(long)*num_Axes;
-	int startButtons=sizeof(long)*num_Axes+sizeof(DWORD)*num_POV;
+    int startPOVs    = sizeof(long) * num_Axes;
+    int startButtons = sizeof(long) * num_Axes + sizeof(DWORD) * num_POV;
 
-	// OBJECTDATAFORMATs festlegen: Axen:4 Bytes, Buttons 1 Byte, POVs 4 bytes (?)
-	DIDEVICEOBJECTINSTANCE object;
-	DIDOBJITERATOR dIt=ObjectList.begin();
+    // OBJECTDATAFORMATs festlegen: Axen:4 Bytes, Buttons 1 Byte, POVs 4 bytes (?)
+    DIDEVICEOBJECTINSTANCE object;
+    DIDOBJITERATOR         dIt = ObjectList.begin();
 
-	for (;dIt!=ObjectList.end();++dIt)
-	{
-		object=*dIt;
-		objectdataformat[act_object].dwFlags=0;
-		objectdataformat[act_object].dwType=object.dwType;
-		objectdataformat[act_object].pguid=&object.guidType;
+    for (; dIt != ObjectList.end(); ++dIt) {
+        object                               = *dIt;
+        objectdataformat[act_object].dwFlags = 0;
+        objectdataformat[act_object].dwType  = object.dwType;
+        objectdataformat[act_object].pguid   = &object.guidType;
 
-		if(object.dwType&DIDFT_AXIS)
-		{
-			objectdataformat[act_object].dwOfs=sizeof(long)*act_axis++;
-		}
-		else if(object.dwType&DIDFT_POV)
-		{
-			objectdataformat[act_object].dwOfs=startPOVs+sizeof(DWORD)*act_pov++;
-		}
-		else if(object.dwType&DIDFT_BUTTON)
-		{
-			objectdataformat[act_object].dwOfs=startButtons+act_button++;
-		};
+        if (object.dwType & DIDFT_AXIS) {
+            objectdataformat[act_object].dwOfs = sizeof(long) * act_axis++;
+        } else if (object.dwType & DIDFT_POV) {
+            objectdataformat[act_object].dwOfs = startPOVs + sizeof(DWORD) * act_pov++;
+        } else if (object.dwType & DIDFT_BUTTON) {
+            objectdataformat[act_object].dwOfs = startButtons + act_button++;
+        };
 
-		act_object++;
-	}
+        act_object++;
+    }
 
-	DeviceDataFormat=new DIDATAFORMAT;
+    DeviceDataFormat = new DIDATAFORMAT;
 
-	DXINITSTRUCTPTR(DeviceDataFormat);
+    DXINITSTRUCTPTR(DeviceDataFormat);
 
-	DeviceDataFormat->dwObjSize=sizeof(DIOBJECTDATAFORMAT);
-	DeviceDataFormat->dwDataSize=DeviceStateSize;
-	DeviceDataFormat->dwFlags=DIDF_ABSAXIS;
-	DeviceDataFormat->dwNumObjs=num_objects;
-	DeviceDataFormat->rgodf=objectdataformat;
+    DeviceDataFormat->dwObjSize  = sizeof(DIOBJECTDATAFORMAT);
+    DeviceDataFormat->dwDataSize = DeviceStateSize;
+    DeviceDataFormat->dwFlags    = DIDF_ABSAXIS;
+    DeviceDataFormat->dwNumObjs  = num_objects;
+    DeviceDataFormat->rgodf      = objectdataformat;
 
-	dirval=Device->SetDataFormat(DeviceDataFormat);
-	if (dirval!=DI_OK)
-	{ 
-		throw CDInputException("Device->SetDataFormat fehlgeschlagen",dirval);
-		return dirval;
-	} 
-	
-	Axes=(long*)DeviceState;
-	POV=(DWORD*)((BYTE*)DeviceState+num_Axes*sizeof(long));
-	Buttons=(BYTE*)((BYTE*)DeviceState+num_Axes*sizeof(long)+num_POV*sizeof(DWORD));
+    dirval = Device->SetDataFormat(DeviceDataFormat);
+    if (dirval != DI_OK) {
+        throw CDInputException("Device->SetDataFormat fehlgeschlagen", dirval);
+        return dirval;
+    }
 
-	return DI_OK;
+    Axes    = (long*)DeviceState;
+    POV     = (DWORD*)((BYTE*)DeviceState + num_Axes * sizeof(long));
+    Buttons = (BYTE*)((BYTE*)DeviceState + num_Axes * sizeof(long) + num_POV * sizeof(DWORD));
+
+    return DI_OK;
 }
 
-BOOL CALLBACK CDInputDevice::DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef)
+BOOL CALLBACK CDInputDevice::DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef)
 {
-DIDOBJLIST *ObjectList;
-DIDEVICEOBJECTINSTANCE object;
+    DIDOBJLIST*            ObjectList;
+    DIDEVICEOBJECTINSTANCE object;
 
-	ObjectList=(DIDOBJLIST*)pvRef;
-	object=*lpddoi;
-	ObjectList->push_back(object);	
-	return DIENUM_CONTINUE;
+    ObjectList = (DIDOBJLIST*)pvRef;
+    object     = *lpddoi;
+    ObjectList->push_back(object);
+    return DIENUM_CONTINUE;
 }
 
 bool CDInputDevice::reinitialize()
 {
-	return InitDevice(guid,DeviceDataFormat,cooplevel);
+    return InitDevice(guid, DeviceDataFormat, cooplevel);
 }
 
 HRESULT CDInputDevice::acquire()
 {
-	return Device->Acquire();
+    return Device->Acquire();
 }
-
 
 int CDInputDevice::getNumAxes() const
 {
-	return num_Axes;
+    return num_Axes;
 }
 int CDInputDevice::getNumButtons() const
 {
-	return num_Buttons;
+    return num_Buttons;
 }
 
 int CDInputDevice::getNumPOVs() const
 {
-	return num_POV;
+    return num_POV;
 }
 
-const long*	CDInputDevice::getAxes() const
+const long* CDInputDevice::getAxes() const
 {
-	return Axes;
+    return Axes;
 }
 const DWORD* CDInputDevice::getPOVs() const
 {
-	return POV;
+    return POV;
 }
-const BYTE*	CDInputDevice::getButtons() const
+const BYTE* CDInputDevice::getButtons() const
 {
-	return Buttons;
+    return Buttons;
 }
-

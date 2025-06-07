@@ -31,103 +31,96 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 MemoryManager::MemoryManager()
 {
-	baseptr=0;
-	memsize=0;
-	realbaseptr=0;
-	realmemsize=0;
+    baseptr     = 0;
+    memsize     = 0;
+    realbaseptr = 0;
+    realmemsize = 0;
 
-	align=0;
+    align = 0;
 }
 
 MemoryManager::~MemoryManager()
 {
-	freeAll();
+    freeAll();
 }
 
 char* MemoryManager::allocMem(unsigned int size)
 {
-	MCB mcb;
-	if (!size) throw CException("MemoryManager::allocMem() tried to allocate 0-sized block");
-	mcb.size=(size+align+1);
-	if ((mcb.index=memmap.getIndex(mcb.size))!=-1)
-	{	
-		// align index
-		unsigned int useindex=(mcb.index+align)&(~align);
+    MCB mcb;
+    if (!size)
+        throw CException("MemoryManager::allocMem() tried to allocate 0-sized block");
+    mcb.size = (size + align + 1);
+    if ((mcb.index = memmap.getIndex(mcb.size)) != -1) {
+        // align index
+        unsigned int useindex = (mcb.index + align) & (~align);
 
-		char *ptr=baseptr+useindex; // cheat a bit to allow pointer-arithmetic
+        char* ptr = baseptr + useindex;  // cheat a bit to allow pointer-arithmetic
 
-		// memorize the memory control block
-		mcbmap[ptr]=mcb;
-		return ptr;
-	}
-	else
-	{
-		std::cout<<std::endl;
-		
-		std::strstream stream;
-		stream<<"MemoryManager::allocMem() failed, tried to allocate "<<size<<" bytes";
-		throw CException(stream.str());
-		return 0; //FIXME: throw exception here ?
-	}
+        // memorize the memory control block
+        mcbmap[ptr] = mcb;
+        return ptr;
+    } else {
+        std::cout << std::endl;
+
+        std::strstream stream;
+        stream << "MemoryManager::allocMem() failed, tried to allocate " << size << " bytes";
+        throw CException(stream.str());
+        return 0;  // FIXME: throw exception here ?
+    }
 }
 
-void  MemoryManager::freeMem(char *ptr)
+void MemoryManager::freeMem(char* ptr)
 {
-	MCBITERATOR mIt=mcbmap.find(ptr);
-	if (mIt!=mcbmap.end())
-	{
-		memmap.freeIndex((*mIt).second.index,(*mIt).second.size);
-		mcbmap.erase(mIt);
-	}
-	else
-	{
-		throw CException("MemoryManager::freeMem invalid pointer given!");
-	}
+    MCBITERATOR mIt = mcbmap.find(ptr);
+    if (mIt != mcbmap.end()) {
+        memmap.freeIndex((*mIt).second.index, (*mIt).second.size);
+        mcbmap.erase(mIt);
+    } else {
+        throw CException("MemoryManager::freeMem invalid pointer given!");
+    }
 }
 
-void MemoryManager::setBasePointer(char *ptr, unsigned int size)
+void MemoryManager::setBasePointer(char* ptr, unsigned int size)
 {
-	assert(ptr);
-	assert(size);
+    assert(ptr);
+    assert(size);
 
-	freeAll();
+    freeAll();
 
-	realmemsize=size;
-	realbaseptr=ptr;
+    realmemsize = size;
+    realbaseptr = ptr;
 
-	// align base
-	// FIXME: this method contradicts the possibility of using templates!
-	baseptr=(char*)((int)(realbaseptr+align)&~align);
-	memsize=realmemsize&~align;
+    // align base
+    // FIXME: this method contradicts the possibility of using templates!
+    baseptr = (char*)((int)(realbaseptr + align) & ~align);
+    memsize = realmemsize & ~align;
 
-	memmap.initialize(memsize);
+    memmap.initialize(memsize);
 }
-
 
 void MemoryManager::freeAll()
 {
-	memmap.freeAll();
-	mcbmap.clear();
-	memmap.initialize(memsize);
+    memmap.freeAll();
+    mcbmap.clear();
+    memmap.initialize(memsize);
 }
-
 
 unsigned int MemoryManager::getFreeMemorySize() const
 {
-	return memmap.getFreeIndexCount();
+    return memmap.getFreeIndexCount();
 }
-
 
 unsigned int MemoryManager::getAllocatedMemorySize() const
 {
-	return memsize-memmap.getFreeIndexCount();
+    return memsize - memmap.getFreeIndexCount();
 }
-
 
 void MemoryManager::setAlignment(unsigned int alignment)
 {
-	if (baseptr) throw CException("MemoryManager::setAlignment() change of alignment not allowed after setting the basepointer");
-	if (!alignment) throw CException("MemoryManager::setAlignment() alignment of 0 is not allowed!");
+    if (baseptr)
+        throw CException("MemoryManager::setAlignment() change of alignment not allowed after setting the basepointer");
+    if (!alignment)
+        throw CException("MemoryManager::setAlignment() alignment of 0 is not allowed!");
 
-	align=alignment-1;
+    align = alignment - 1;
 }

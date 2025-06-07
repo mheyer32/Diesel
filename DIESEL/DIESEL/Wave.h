@@ -24,52 +24,43 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class CWave
 {
 public:
+    enum WAVEFORM
+    {
+        WF_SIN,
+        WF_TRIANGLE,
+        WF_SQUARE,
+        WF_SAWTOOTH,
+        WF_INVERSESAWTOOTH,
+        WF_NOISE
+    };
 
-enum WAVEFORM
-{
-    WF_SIN,
-    WF_TRIANGLE,
-    WF_SQUARE,
-    WF_SAWTOOTH,
-    WF_INVERSESAWTOOTH,
-	WF_NOISE
-};
+    CWave(void);
+    CWave(WAVEFORM form, float base, float amplitude, float phase, float freq);
+    ~CWave(void);
 
-	CWave(void);
-	CWave(WAVEFORM form, float base, float amplitude, float phase, float freq);
-	~CWave(void);
+    inline float evaluate(float time) const { return (this->*wavefunc)(time); }
 
-	inline float evaluate (float time) const
-	{
-		return (this->*wavefunc)(time);		
-	}
+    inline float operator()(float time) const { return (this->*wavefunc)(time); }
 
-	inline float operator () (float time) const
-	{
-		return (this->*wavefunc)(time);	
-	}
+    void setParams(WAVEFORM form, float base, float amplitude, float phase, float freq);
 
-	void setParams(WAVEFORM form, float base, float amplitude, float phase, float freq);
-    
-	static WAVEFORM getWaveForm(const char* wavename);
+    static WAVEFORM getWaveForm(const char* wavename);
 
 protected:
+    typedef float (CWave::*WAVEFUNC)(float time) const;
+    WAVEFUNC funcForWaveform(WAVEFORM form);
 
-	typedef float (CWave::* WAVEFUNC)(float time) const;
-	WAVEFUNC funcForWaveform(WAVEFORM form);
+    float sin(float time) const;
+    float triangle(float time) const;
+    float sawtooth(float time) const;
+    float invsawtooth(float time) const;
+    float square(float time) const;
+    float noise(float time) const;
 
-	float sin (float time) const;
-	float triangle(float time) const;
-	float sawtooth(float time) const;
-	float invsawtooth(float time) const;
-	float square(float time) const;
-	float noise(float time) const;
-
-	WAVEFORM waveform;
-	WAVEFUNC wavefunc;
-	float base;
-	float amplitude;
-	float phase;
-	float freq;
-
+    WAVEFORM waveform;
+    WAVEFUNC wavefunc;
+    float    base;
+    float    amplitude;
+    float    phase;
+    float    freq;
 };

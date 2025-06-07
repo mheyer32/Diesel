@@ -27,17 +27,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-CDDrawException::CDDrawException(const std::string &text,HRESULT ddrval) : CException(text,DDErrorToString(ddrval)), errorcode(ddrval)
+CDDrawException::CDDrawException(const std::string& text, HRESULT ddrval)
+: CException(text, DDErrorToString(ddrval))
+, errorcode(ddrval)
 {
-	
 }
 
 CDDrawException::~CDDrawException()
 {
-
 }
 
-const char * CDDrawException::getErrorText() const
+const char* CDDrawException::getErrorText() const
 {
-	return DDErrorToString(errorcode);
+    return DDErrorToString(errorcode);
 }

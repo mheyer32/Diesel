@@ -26,20 +26,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 #include "DInputDevice.h"
 
-class CJoystick : public CDInputDevice  
+class CJoystick : public CDInputDevice
 {
 public:
-	CJoystick(DWORD CoopLevel=DISCL_EXCLUSIVE|DISCL_FOREGROUND);
-	virtual ~CJoystick();
+    CJoystick(DWORD CoopLevel = DISCL_EXCLUSIVE | DISCL_FOREGROUND);
+    virtual ~CJoystick();
 
-	virtual HRESULT GetDeviceState();
-	HRESULT SetRange(DWORD Object,long Min=-1000,long Max=1000);
-	HRESULT SetDeadzone(DWORD Object,long Min=-500,long Max=500);
+    virtual HRESULT GetDeviceState();
+    HRESULT         SetRange(DWORD Object, long Min = -1000, long Max = 1000);
+    HRESULT         SetDeadzone(DWORD Object, long Min = -500, long Max = 500);
 
-	DIJOYSTATE JoyState; 
+    DIJOYSTATE JoyState;
 };
 
-#endif // !defined(AFX_JOYSTICK_H__713B6817_D2DD_4DAB_A552_C526620F9D91__INCLUDED_)
+#endif  // !defined(AFX_JOYSTICK_H__713B6817_D2DD_4DAB_A552_C526620F9D91__INCLUDED_)

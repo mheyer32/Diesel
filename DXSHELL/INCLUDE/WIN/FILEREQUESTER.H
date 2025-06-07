@@ -20,13 +20,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
 #include <string>
 
 class CFileRequester
 {
 public:
-	CFileRequester(void);
-	~CFileRequester(void);
+    CFileRequester(void);
+    ~CFileRequester(void);
 
-	bool  openRequester(std::string &filename);
+    bool openRequester(std::string& filename);
 };

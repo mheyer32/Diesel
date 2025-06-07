@@ -21,38 +21,35 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Mouse.h"
 #include <misc/exception.h>
 #include <iostream>
+#include "Mouse.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 CMouse::CMouse()
 {
-
 }
 
 CMouse::~CMouse()
 {
-
 }
 
 bool CMouse::initialize(DWORD cooplevel)
 {
 
-	std::cout<<"======== CMouse::initialize() ========"<<std::endl;
-	if(InitDevice(GUID_SysMouse,(_DIDATAFORMAT *)&c_dfDIMouse,cooplevel)!=TRUE)
-	{
-		std::cout<<"CMouse::initialize() failed"<<std::endl;
-		return false;
-	}
+    std::cout << "======== CMouse::initialize() ========" << std::endl;
+    if (InitDevice(GUID_SysMouse, (_DIDATAFORMAT*)&c_dfDIMouse, cooplevel) != TRUE) {
+        std::cout << "CMouse::initialize() failed" << std::endl;
+        return false;
+    }
 
-	DeviceState=&MouseState;
-	DeviceStateSize=sizeof(MouseState);
-	Axes=&MouseState.lX;
-	Buttons=MouseState.rgbButtons;
-	POV=NULL;
+    DeviceState     = &MouseState;
+    DeviceStateSize = sizeof(MouseState);
+    Axes            = &MouseState.lX;
+    Buttons         = MouseState.rgbButtons;
+    POV             = NULL;
 
-	std::cout<<"CMouse::initialize() successful"<<std::endl;
-	return true;
+    std::cout << "CMouse::initialize() successful" << std::endl;
+    return true;
 }

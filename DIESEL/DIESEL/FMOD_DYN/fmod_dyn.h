@@ -164,7 +164,7 @@
 
 // Our safety function.
 #if !defined(FMOD_DYN_NOASSERT) && defined(_ASSERT_BASE)
-#define FMOD_DYN_SAFETY(func) _ASSERT_BASE(0,#func)
+#define FMOD_DYN_SAFETY(func) _ASSERT_BASE(0, #func)
 #else /* !defined(FMOD_DYN_NOASSERT) && defined(_ASSERT_BASE) */
 #define FMOD_DYN_SAFETY(func) ((void)0)
 #endif /* !defined(FMOD_DYN_NOASSERT) && defined(_ASSERT_BASE) */
@@ -174,11 +174,17 @@ typedef HMODULE FMOD_DYN_MODULE;
 
 // Platform-specific methods.
 FMOD_DYN_MODULE myLoadLibrary(LPCSTR library)
-	{ return LoadLibraryA(library); }
+{
+    return LoadLibraryA(library);
+}
 void myFreeLibrary(FMOD_DYN_MODULE module)
-	{ FreeLibrary(module); }
-void *myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
-	{ return GetProcAddress(module, symbol); }
+{
+    FreeLibrary(module);
+}
+void* myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
+{
+    return GetProcAddress(module, symbol);
+}
 
 #else /* WIN32 */
 
@@ -193,9 +199,14 @@ void *myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
 #ifndef FMOD_DYN_NOSAFETY
 
 #ifdef FMOD_DYN_IMPL
-#define FMOD_DYN_FUNC(sym,func,ret,val,args) ret F_API safe##func args { FMOD_DYN_SAFETY(func); return val; }
+#define FMOD_DYN_FUNC(sym, func, ret, val, args)                                                                       \
+    ret F_API safe##func args                                                                                          \
+    {                                                                                                                  \
+        FMOD_DYN_SAFETY(func);                                                                                         \
+        return val;                                                                                                    \
+    }
 #else /* FMOD_DYN_IMPL */
-#define FMOD_DYN_FUNC(sym,func,ret,val,args) ret F_API safe##func args;
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) ret F_API safe##func args;
 #endif /* FMOD_DYN_IMPL */
 
 #include "fmod_funcs.h"
@@ -210,14 +221,14 @@ void *myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
 #ifdef FMOD_DYN_IMPL
 
 #ifndef FMOD_DYN_NOSAFETY
-#define FMOD_DYN_FUNC(sym,func,ret,val,args) ret (F_API *func) args = safe##func;
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) ret(F_API* func) args = safe##func;
 #else /* FMOD_DYN_NOSAFETY */
-#define FMOD_DYN_FUNC(sym,func,ret,val,args) ret (F_API *func) args = NULL;
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) ret(F_API* func) args = NULL;
 #endif /* FMOD_DYN_NOSAFETY */
 
 #else /* FMOD_DYN_IMPL */
 
-#define FMOD_DYN_FUNC(sym,func,ret,val,args) extern ret (F_API *func) args;
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) extern ret(F_API* func) args;
 
 #endif /* FMOD_DYN_IMPL */
 
@@ -228,18 +239,18 @@ void *myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-#define FMOD_DYN_GETVERSION		((NULL != FSOUND_GetVersion) ? FSOUND_GetVersion() : 0.0f)
+#define FMOD_DYN_GETVERSION ((NULL != FSOUND_GetVersion) ? FSOUND_GetVersion() : 0.0f)
 
-#define FMOD_DYN_LOADED			(NULL != g_fmod)
-#define FMOD_DYN_PARTIAL		(0 != g_fmodPartial)
-#define FMOD_DYN_BADVERSION		(FMOD_VERSION > FMOD_DYN_GETVERSION)
+#define FMOD_DYN_LOADED (NULL != g_fmod)
+#define FMOD_DYN_PARTIAL (0 != g_fmodPartial)
+#define FMOD_DYN_BADVERSION (FMOD_VERSION > FMOD_DYN_GETVERSION)
 
-#define FMOD_DYN_FULLYLOADED	(FMOD_DYN_LOADED && !FMOD_DYN_PARTIAL && !FMOD_DYN_BADVERSION)
+#define FMOD_DYN_FULLYLOADED (FMOD_DYN_LOADED && !FMOD_DYN_PARTIAL && !FMOD_DYN_BADVERSION)
 
-#define FMOD_DYN_SOFTGUARD		if (FMOD_DYN_LOADED) {
-#define FMOD_DYN_GUARD			if (FMOD_DYN_FULLYLOADED) {
+#define FMOD_DYN_SOFTGUARD if (FMOD_DYN_LOADED) {
+#define FMOD_DYN_GUARD if (FMOD_DYN_FULLYLOADED) {
 
-#define FMOD_DYN_UNGUARD		}
+#define FMOD_DYN_UNGUARD }
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -247,60 +258,59 @@ void *myGetProcAddress(FMOD_DYN_MODULE module, LPCSTR symbol)
 
 #ifndef FMOD_DYN_IMPL
 
-extern FMOD_DYN_MODULE	g_fmod;
-extern signed char		g_fmodPartial;
+extern FMOD_DYN_MODULE g_fmod;
+extern signed char     g_fmodPartial;
 
 signed char LoadFMOD(LPCSTR library);
-void UnloadFMOD();
+void        UnloadFMOD();
 
 #else /* FMOD_DYN_IMPL */
 
-FMOD_DYN_MODULE	g_fmod			= NULL;
-signed char		g_fmodPartial	= 0;
+FMOD_DYN_MODULE g_fmod        = NULL;
+signed char     g_fmodPartial = 0;
 
 signed char LoadFMOD(LPCSTR library)
 {
-	// Ignore multiple calls.
-	if (FMOD_DYN_LOADED)
-		return 0;
+    // Ignore multiple calls.
+    if (FMOD_DYN_LOADED)
+        return 0;
 
-	// Load the library.	
-	if (NULL == (g_fmod = myLoadLibrary(library)))
-		return 0;
-	
-	// Get the procedure addresses.
-	g_fmodPartial = 0;
-	void *temp = NULL;
-	
-	#define FMOD_DYN_FUNC(sym,func,ret,val,args)			\
-		if (NULL != (temp = myGetProcAddress(g_fmod,sym)))	\
-			func = (ret (F_API *)args)temp;					\
-		else												\
-			g_fmodPartial = 1;
-	#include "fmod_funcs.h"
-	#undef FMOD_DYN_FUNC
+    // Load the library.
+    if (NULL == (g_fmod = myLoadLibrary(library)))
+        return 0;
 
-	// Finished.
-	return FMOD_DYN_FULLYLOADED;
+    // Get the procedure addresses.
+    g_fmodPartial = 0;
+    void* temp    = NULL;
+
+#define FMOD_DYN_FUNC(sym, func, ret, val, args)                                                                       \
+    if (NULL != (temp = myGetProcAddress(g_fmod, sym)))                                                                \
+        func = (ret(F_API*) args)temp;                                                                                 \
+    else                                                                                                               \
+        g_fmodPartial = 1;
+#include "fmod_funcs.h"
+#undef FMOD_DYN_FUNC
+
+    // Finished.
+    return FMOD_DYN_FULLYLOADED;
 }
 void UnloadFMOD()
 {
-	// Free the library, if needed.
-	if (FMOD_DYN_LOADED)
-	{
-		myFreeLibrary(g_fmod);
-		g_fmod = NULL;
-	}
+    // Free the library, if needed.
+    if (FMOD_DYN_LOADED) {
+        myFreeLibrary(g_fmod);
+        g_fmod = NULL;
+    }
 
-	// Reset the function pointers.
-	#ifndef FMOD_DYN_NOSAFETY
-	#define FMOD_DYN_FUNC(sym,func,ret,val,args) func = safe##func;
-	#else /* FMOD_DYN_NOSAFETY */
-	#define FMOD_DYN_FUNC(sym,func,ret,val,args) func = NULL;
-	#endif /* FMOD_DYN_NOSAFETY */
-	
-	#include "fmod_funcs.h"
-	#undef FMOD_DYN_FUNC
+// Reset the function pointers.
+#ifndef FMOD_DYN_NOSAFETY
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) func = safe##func;
+#else /* FMOD_DYN_NOSAFETY */
+#define FMOD_DYN_FUNC(sym, func, ret, val, args) func = NULL;
+#endif /* FMOD_DYN_NOSAFETY */
+
+#include "fmod_funcs.h"
+#undef FMOD_DYN_FUNC
 }
 
 #endif /* FMOD_DYN_IMPL */
@@ -315,9 +325,9 @@ void UnloadFMOD()
 
 class AutoLoadFmod
 {
-	public:
-		AutoLoadFmod() { LoadFMOD(FMOD_DYN_AUTOLOAD); }
-		~AutoLoadFmod() { UnloadFMOD(); }
+public:
+    AutoLoadFmod() { LoadFMOD(FMOD_DYN_AUTOLOAD); }
+    ~AutoLoadFmod() { UnloadFMOD(); }
 };
 
 #ifdef FMOD_DYN_IMPL

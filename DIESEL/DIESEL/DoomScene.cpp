@@ -8,30 +8,29 @@ DoomScene::DoomScene(void)
 
 DoomScene::~DoomScene(void)
 {
-	delete map;
+    delete map;
 }
 
 void DoomScene::cullScene()
 {
-	map->cullMap();
+    map->cullMap();
 }
 
 void DoomScene::renderScene()
 {
-	g_TNLStack->execute();
-	g_TNLStack->clearStack();
+    g_TNLStack->execute();
+    g_TNLStack->clearStack();
 }
 
 bool DoomScene::initialize()
 {
-	return true;
+    return true;
 }
 
-void DoomScene::addEntity(CEntity *newEntity)
+void DoomScene::addEntity(CEntity* newEntity)
 {
 }
 
-void DoomScene::addEntities(CEntity::ENTITYLIST &list)
+void DoomScene::addEntities(CEntity::ENTITYLIST& list)
 {
-
 }

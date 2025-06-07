@@ -21,18 +21,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define WINMAIN_H
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <misc/history.h>
+#include <windows.h>
 #include <string>
 
-extern bool	GameInit();
-extern int	GameUpdate();
-extern void	GameShutDown();
+extern bool GameInit();
+extern int  GameUpdate();
+extern void GameShutDown();
 
 extern HINSTANCE getInstanceHandle();
-extern LPSTR	getCommandLine();
+extern LPSTR     getCommandLine();
 
 extern CHistory<std::string>& getHistory();
-
 
 #endif

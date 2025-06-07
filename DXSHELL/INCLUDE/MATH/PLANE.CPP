@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include "Plane.h"
 
-std::ostream& operator << (std::ostream& stream, const PLANE &plane)
+std::ostream& operator<<(std::ostream& stream, const PLANE& plane)
 {
-	stream<<'('<<plane.n.x<<", "<<plane.n.y<<", "<<plane.n.z<<", "<<plane.d<<')';
-	return stream;
+    stream << '(' << plane.n.x << ", " << plane.n.y << ", " << plane.n.z << ", " << plane.d << ')';
+    return stream;
 }

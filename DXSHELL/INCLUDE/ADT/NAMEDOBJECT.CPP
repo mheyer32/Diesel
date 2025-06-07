@@ -29,20 +29,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CNamedObject::CNamedObject()
 {
-
 }
 
 CNamedObject::~CNamedObject()
 {
-
 }
 
-void CNamedObject::setName(const std::string &Name)
+void CNamedObject::setName(const std::string& Name)
 {
-	m_name=Name;
+    m_name = Name;
 }
 
 const std::string& CNamedObject::getName() const
 {
-	return m_name;
+    return m_name;
 }

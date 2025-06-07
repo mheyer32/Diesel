@@ -26,63 +26,59 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-
+#include <file/file.h>
+#include <file/path.h>
 #include <list>
 #include <string>
 #include <vector>
-#include <file/file.h>
-#include <file/path.h>
-#include "shader.h"
 #include "entity.h"
+#include "shader.h"
 
 class CMesh;
 
-class DOFLoader  
+class DOFLoader
 {
 public:
+    DOFLoader();
+    virtual ~DOFLoader();
 
+    bool LoadDOF(const CPath& filename, CEntity::ENTITYLIST& entities);
 
-	DOFLoader();
-	virtual ~DOFLoader();
+protected:
+    struct CHUNK
+    {
+        union
+        {
+            int  name;
+            char cname[4];
+        };
+        int length;
+        int pos;
+        int maxseek;
+    };
 
-	bool LoadDOF(const CPath &filename, CEntity::ENTITYLIST &entities);
+    void readChunk();
+    void pushChunk();
+    void popChunk();
+    void topChunk();
+    void skipChunk();
+    bool seekChunk(int chunkname);
+    void enterSubChunk();
+    void exitSubChunk();
 
-protected:	
+    std::string readString();
+    CShader*    readMaterial();
+    void        readGeometryObject(CMesh* geob);
+    void        read4Floats(float* dest);
 
+    CFile* file;
 
-struct CHUNK
-{
-	union{
-		int name;
-		char cname[4];
-	};
-	int length;
-	int pos;
-	int maxseek;
+    CHUNK            chunk;
+    std::list<CHUNK> chunkstack;
+
+    std::vector<CShader::SMARTPTR> materials;
 };
 
-	void readChunk();
-	void pushChunk();
-	void popChunk();
-	void topChunk();
-	void skipChunk();
-	bool seekChunk(int chunkname);
-	void enterSubChunk();
-	void exitSubChunk();
-
-	std::string readString();
-	CShader* readMaterial();
-	void readGeometryObject(CMesh *geob);
-	void read4Floats(float *dest);
-
-	CFile *file;
-
-	CHUNK	chunk;
-	std::list<CHUNK> chunkstack;
-
-	std::vector<CShader::SMARTPTR> materials;
-};
-
-#endif // !defined(AFX_DOFLOADER_H__13CA2B03_1684_42D8_BE11_7165441902C2__INCLUDED_)
+#endif  // !defined(AFX_DOFLOADER_H__13CA2B03_1684_42D8_BE11_7165441902C2__INCLUDED_)

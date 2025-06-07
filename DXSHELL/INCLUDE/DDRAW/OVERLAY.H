@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <ddraw/Surface.h>
 
@@ -36,39 +36,39 @@ class COverlay : public CSurface
 {
 
 public:
+    COverlay();
+    COverlay(DWORD w, DWORD h, DWORD bc = 0, DWORD caps = 0, LPDDPIXELFORMAT pf = NULL);
+    virtual ~COverlay();
 
-	COverlay();
-	COverlay(DWORD w,DWORD h,DWORD bc=0,DWORD caps=0,LPDDPIXELFORMAT pf=NULL);
-	virtual ~COverlay();
+    virtual HRESULT create(DWORD w, DWORD h, DWORD bc = 0, DWORD caps = 0, LPDDPIXELFORMAT pf = NULL);
 
-	virtual HRESULT create(DWORD w,DWORD h,DWORD bc=0,DWORD caps=0,LPDDPIXELFORMAT pf=NULL);
+    BOOL    OverlaySupport();
+    HRESULT GetOverlayCaps();
+    HRESULT UpdateOverlay(const RECT* destRect = NULL);
+    HRESULT Show();
+    HRESULT Hide();
+    HRESULT Screensize();
 
-	BOOL OverlaySupport();
-	HRESULT GetOverlayCaps();
-	HRESULT UpdateOverlay(const RECT *destRect=NULL);
-	HRESULT Show();
-	HRESULT Hide();
-	HRESULT Screensize();
-
-	HRESULT SourceAlpha(DWORD AlphaValue);
-	HRESULT DestAlpha(DWORD AlphaValue);
-	HRESULT SourceColorKey(DWORD ColorKey);
-	HRESULT DestColorKey(DWORD ColorKey);
-	void AttachToWindow(BOOL KA=FALSE);
+    HRESULT SourceAlpha(DWORD AlphaValue);
+    HRESULT DestAlpha(DWORD AlphaValue);
+    HRESULT SourceColorKey(DWORD ColorKey);
+    HRESULT DestColorKey(DWORD ColorKey);
+    void    AttachToWindow(BOOL KA = FALSE);
 
 protected:
-	void CreateOverlayFX();
+    void CreateOverlayFX();
 
-	virtual	 Msg::MSGRVAL handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters=Msg::Param());
+    virtual Msg::MSGRVAL handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID msgId,
+                                       const Msg::Param& parameters = Msg::Param());
 
-	RECT	srcRect,destRect;
-	DWORD	minStretch,maxStretch;
-	DWORD	OverlayFlags;
-	LPDDOVERLAYFX OverlayFX;
-	BOOL	KeepAspect;
-	BOOL	ShowOverlay;
+    RECT          srcRect, destRect;
+    DWORD         minStretch, maxStretch;
+    DWORD         OverlayFlags;
+    LPDDOVERLAYFX OverlayFX;
+    BOOL          KeepAspect;
+    BOOL          ShowOverlay;
 
-	CAppWindow	*appwindow;
+    CAppWindow* appwindow;
 };
 
-#endif // !defined(AFX_OVERLAY_H__29627520_8ECB_11D3_AF5D_0080AD17B2BB__INCLUDED_)
+#endif  // !defined(AFX_OVERLAY_H__29627520_8ECB_11D3_AF5D_0080AD17B2BB__INCLUDED_)

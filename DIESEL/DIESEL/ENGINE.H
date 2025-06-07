@@ -25,8 +25,8 @@ Includes
 ////////////////////////////////////////////////////////////////////*/
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <adt/ConVar.h>
 
+#include <adt/ConVar.h>
 
 class CCamera;
 class CTimer;
@@ -37,36 +37,33 @@ class CBaseScene;
 Defines
 ////////////////////////////////////////////////////////////////////*/
 
-
-
 /*////////////////////////////////////////////////////////////////////
 Variables
 ////////////////////////////////////////////////////////////////////*/
 
-extern CBaseScene	*g_Scene;		//global SceneObject
-extern TNLStack		*g_TNLStack;	// global TNLStack (may be overwritten by another)
-extern CCamera		*g_Camera;		// global currently used Camera Object
+extern CBaseScene* g_Scene;     // global SceneObject
+extern TNLStack*   g_TNLStack;  // global TNLStack (may be overwritten by another)
+extern CCamera*    g_Camera;    // global currently used Camera Object
 
-extern CGLText		*g_Text;		// global TextOut (mostly for debug output)
+extern CGLText* g_Text;  // global TextOut (mostly for debug output)
 
-extern float g_Time;	// gloabal time sice startup
-extern int	 g_FrameCounter; 
-extern float g_SecsPerFrame; //
+extern float g_Time;  // gloabal time sice startup
+extern int   g_FrameCounter;
+extern float g_SecsPerFrame;  //
 extern float g_FPS;
 
-extern CTimer Timer1; // miﬂt die Zeit seit Start
-extern CTimer Timer2; // miﬂt 1 Frame;
-extern CTimer Timer3; // miﬂt die FPS
+extern CTimer Timer1;  // miﬂt die Zeit seit Start
+extern CTimer Timer2;  // miﬂt 1 Frame;
+extern CTimer Timer3;  // miﬂt die FPS
 
-extern CTimer Timer4; // extra timers
+extern CTimer Timer4;  // extra timers
 extern CTimer Timer5;
 extern CTimer Timer6;
 extern CTimer Timer7;
 
 // these will disappear some beautiful day
 // the numbers are generated in Q3BSPMesh,CCamera and Renderer
-extern DWORD drawnnodes,skippednodes,seenboxes,unseenboxes,gl_apicalls,triangles,strippedtris,num_framevbuffers;
-
+extern DWORD drawnnodes, skippednodes, seenboxes, unseenboxes, gl_apicalls, triangles, strippedtris, num_framevbuffers;
 
 extern ConVar fs_basepath;
 /*////////////////////////////////////////////////////////////////////

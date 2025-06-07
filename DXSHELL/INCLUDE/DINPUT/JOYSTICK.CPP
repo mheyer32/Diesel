@@ -23,55 +23,48 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "Joystick.h"
 
-#include "DInputException.h"
 #include <iostream>
+#include "DInputException.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
 CJoystick::CJoystick(DWORD CoopLevel)
 {
-HRESULT dirval;
-	GUID Joystick_GUID;
+    HRESULT dirval;
+    GUID    Joystick_GUID;
 
-	std::cout<<"======== CJoystick::CJoystick() ========"<<std::endl;
+    std::cout << "======== CJoystick::CJoystick() ========" << std::endl;
 
+    if (CDirectInput::Instance()->selectDevice(Joystick_GUID, DIEDFL_ATTACHEDONLY, DI8DEVCLASS_GAMECTRL)) {
 
-	if (CDirectInput::Instance()->selectDevice(Joystick_GUID, DIEDFL_ATTACHEDONLY, DI8DEVCLASS_GAMECTRL))
-	{
+        std::cout << "found an attached joystick" << std::endl;
+        dirval = InitDevice(Joystick_GUID, (_DIDATAFORMAT*)&c_dfDIJoystick, CoopLevel);
 
-		std::cout<<"found an attached joystick"<<std::endl;
-		dirval=InitDevice(Joystick_GUID,(_DIDATAFORMAT *)&c_dfDIJoystick,CoopLevel);
+        SetRange(DIJOFS_X);
+        SetRange(DIJOFS_Y);
+        SetRange(DIJOFS_Z);
+        SetDeadzone(DIJOFS_X);
+        SetDeadzone(DIJOFS_Y);
+        SetDeadzone(DIJOFS_Z);
 
-		SetRange(DIJOFS_X);
-		SetRange(DIJOFS_Y);
-		SetRange(DIJOFS_Z);
-		SetDeadzone(DIJOFS_X);
-		SetDeadzone(DIJOFS_Y);
-		SetDeadzone(DIJOFS_Z);
-
-		DeviceState=&JoyState;
-		DeviceStateSize=sizeof(JoyState);
-	}
-	else
-	{
-		throw CException("CJoystick::CJoystick() no attached joystick found");
-	}
-	std::cout<<"CJoystick::CJoystick()  device successfully initialized"<<std::endl;
-
+        DeviceState     = &JoyState;
+        DeviceStateSize = sizeof(JoyState);
+    } else {
+        throw CException("CJoystick::CJoystick() no attached joystick found");
+    }
+    std::cout << "CJoystick::CJoystick()  device successfully initialized" << std::endl;
 }
 
 CJoystick::~CJoystick()
 {
-
 }
 
 HRESULT CJoystick::GetDeviceState()
 {
-	Device->Poll();
-	return CDInputDevice::GetDeviceState();
+    Device->Poll();
+    return CDInputDevice::GetDeviceState();
 }
- 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // Setzt die Range-Property
@@ -79,17 +72,17 @@ HRESULT CJoystick::GetDeviceState()
 /////////////////////////////////////////////////////////////////////////////////////////
 HRESULT CJoystick::SetRange(DWORD Object, long Min, long Max)
 {
-	
-   DIPROPRANGE diprg; 
 
-   diprg.diph.dwSize       = sizeof(diprg); 
-   diprg.diph.dwHeaderSize = sizeof(diprg.diph); 
-   diprg.diph.dwObj        = Object; 
-   diprg.diph.dwHow        = DIPH_BYOFFSET; 
-   diprg.lMin              = Min; 
-   diprg.lMax              = Max; 
+    DIPROPRANGE diprg;
 
-   return Device->SetProperty(DIPROP_RANGE, &diprg.diph);
+    diprg.diph.dwSize       = sizeof(diprg);
+    diprg.diph.dwHeaderSize = sizeof(diprg.diph);
+    diprg.diph.dwObj        = Object;
+    diprg.diph.dwHow        = DIPH_BYOFFSET;
+    diprg.lMin              = Min;
+    diprg.lMax              = Max;
+
+    return Device->SetProperty(DIPROP_RANGE, &diprg.diph);
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 // Setzt die Deadzone-Property
@@ -97,16 +90,16 @@ HRESULT CJoystick::SetRange(DWORD Object, long Min, long Max)
 // Min und Max liegen im Bereich zwischen 0 und 10000
 /////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT CJoystick::SetDeadzone(DWORD Object,long Min,long Max)
+HRESULT CJoystick::SetDeadzone(DWORD Object, long Min, long Max)
 {
-   DIPROPRANGE diprg; 
+    DIPROPRANGE diprg;
 
-   diprg.diph.dwSize       = sizeof(diprg); 
-   diprg.diph.dwHeaderSize = sizeof(diprg.diph); 
-   diprg.diph.dwObj        = Object; 
-   diprg.diph.dwHow        = DIPH_BYOFFSET; 
-   diprg.lMin              = Min; 
-   diprg.lMax              = Max; 
+    diprg.diph.dwSize       = sizeof(diprg);
+    diprg.diph.dwHeaderSize = sizeof(diprg.diph);
+    diprg.diph.dwObj        = Object;
+    diprg.diph.dwHow        = DIPH_BYOFFSET;
+    diprg.lMin              = Min;
+    diprg.lMax              = Max;
 
-   return Device->SetProperty(DIPROP_DEADZONE, &diprg.diph);
+    return Device->SetProperty(DIPROP_DEADZONE, &diprg.diph);
 }

@@ -23,157 +23,149 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "Palette.h"
 
-#include "directdraw.h"
 #include "ddraw/ddutil.H"
+#include "directdraw.h"
 
-#include "ddrawexception.h"
-#include <math.h> 
 #include <defs.h>
+#include <math.h>
+#include "ddrawexception.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-
 CPalette::CPalette()
 {
-	for (int i=0; i<256; i++)
-	{
-		pe[i].peFlags=0;
-	}
-	DDPalette=NULL;
+    for (int i = 0; i < 256; i++) {
+        pe[i].peFlags = 0;
+    }
+    DDPalette = NULL;
 
-	Initialize();
+    Initialize();
 }
 
 CPalette::CPalette(LPCSTR szPalette)
 {
-	if (!setFromFile(szPalette)) throw CException("CPalette::CPalette()->setFromFile() failed");
+    if (!setFromFile(szPalette))
+        throw CException("CPalette::CPalette()->setFromFile() failed");
 }
 
 CPalette::CPalette(LPDIRECTDRAWPALETTE Palette)
-{	
-	if (!setFrom(Palette))
-	{
-		throw CException("CPalette::CPalette()->createFrom() failed:\n ");
-	}
+{
+    if (!setFrom(Palette)) {
+        throw CException("CPalette::CPalette()->createFrom() failed:\n ");
+    }
 }
 
 CPalette::~CPalette()
 {
-	if (DDPalette!=NULL)
-	{
-		DDPalette->Release();
-		DDPalette=NULL;
-	}
-	KILLARRAY(ShadeTable);
-	KILLARRAY(FogTable);
-	KILLARRAY(ConvertTableRGB);
-	KILLARRAY(ConvertTableYUV);
+    if (DDPalette != NULL) {
+        DDPalette->Release();
+        DDPalette = NULL;
+    }
+    KILLARRAY(ShadeTable);
+    KILLARRAY(FogTable);
+    KILLARRAY(ConvertTableRGB);
+    KILLARRAY(ConvertTableYUV);
 }
 
 inline void CPalette::Initialize()
 {
-	ShadeTable=NULL;
-	FogTable=NULL;
-	ConvertTableRGB=NULL;
-	ConvertTableYUV=NULL;
-	if (DDPalette!=NULL)
-	{
-		DDPalette->GetEntries(0,0,256,pe);
-	}
+    ShadeTable      = NULL;
+    FogTable        = NULL;
+    ConvertTableRGB = NULL;
+    ConvertTableYUV = NULL;
+    if (DDPalette != NULL) {
+        DDPalette->GetEntries(0, 0, 256, pe);
+    }
 }
 
 bool CPalette::setFromFile(LPCSTR PalFilename)
 {
-LPDIRECTDRAWPALETTE tempPal;
+    LPDIRECTDRAWPALETTE tempPal;
 
+    CDirectDraw::Instance()->getLPDD()->CreatePalette(DDPCAPS_8BIT | DDPCAPS_ALLOW256, pe, &DDPalette, NULL);
 
-	CDirectDraw::Instance()->getLPDD()->CreatePalette(DDPCAPS_8BIT|DDPCAPS_ALLOW256,pe,&DDPalette,NULL);
+    tempPal = DDLoadPalette(CDirectDraw::Instance()->getLPDD(), PalFilename);
 
-	tempPal = DDLoadPalette(CDirectDraw::Instance()->getLPDD(), PalFilename);
+    ZeroMemory(pe, sizeof(pe));
+    tempPal->GetEntries(0, 0, 256, pe);
+    tempPal->Release();
 
-	ZeroMemory(pe,sizeof(pe));
-	tempPal->GetEntries(0,0,256,pe);
-	tempPal->Release();
+    for (int i = 0; i < 256; i++) {
+        pe[i].peFlags |= PC_RESERVED;
+    }
+    HRESULT ddrval = DDPalette->SetEntries(0, 0, 256, pe);
+    if (ddrval != DD_OK) {
+        throw CDDrawException("CPalette::setFromFile() SetPalette fehlgeschlagen", ddrval);
+        return false;
+    }
 
-	for (int i=0; i<256; i++){
-		pe[i].peFlags|=PC_RESERVED;
-	}
-	HRESULT ddrval=DDPalette->SetEntries(0,0,256,pe);
-	if (ddrval!=DD_OK)
-	{
-		throw CDDrawException("CPalette::setFromFile() SetPalette fehlgeschlagen",ddrval);
-		return false;
-	}
-	
-	Initialize();
-	return true;
+    Initialize();
+    return true;
 }
 
 bool CPalette::setFrom(LPDIRECTDRAWPALETTE Palette)
 {
 
-	for (int i=0; i<256; i++)
-	{
-		pe[i].peFlags=0;
-	}
-	DDPalette=Palette;
-	DDPalette->AddRef();	// now WE have a pointer to it, too
+    for (int i = 0; i < 256; i++) {
+        pe[i].peFlags = 0;
+    }
+    DDPalette = Palette;
+    DDPalette->AddRef();  // now WE have a pointer to it, too
 
-	Initialize();
+    Initialize();
 
-	return true;
+    return true;
 }
 
 bool CPalette::setFromSurface(LPDDSURFACE Surface)
 {
-	HRESULT ddrval=Surface->GetPalette(&DDPalette);
-	if (ddrval!=DD_OK) return false;
+    HRESULT ddrval = Surface->GetPalette(&DDPalette);
+    if (ddrval != DD_OK)
+        return false;
 
-	Initialize();
-	return true;
+    Initialize();
+    return true;
 }
- /*Its also a good idea to weight the rgb distances differently. Your eyes are
- generally more sensitive to the green band of colour, then red, then blue.
- So weight them perhaps:
+/*Its also a good idea to weight the rgb distances differently. Your eyes are
+generally more sensitive to the green band of colour, then red, then blue.
+So weight them perhaps:
 
- 0.30*Red
- 0.59*Green
- 0.11*Blue
+0.30*Red
+0.59*Green
+0.11*Blue
 
- This usually improves quality a bit. Also, you can avoid the sqrt()
- function call, by just comparing the squared distance. I'm not sure if this
- works perfectly as a replacement, but it seems fine to me.
- */
-int CPalette::getBestColor(float r,float g, float b)
+This usually improves quality a bit. Also, you can avoid the sqrt()
+function call, by just comparing the squared distance. I'm not sure if this
+works perfectly as a replacement, but it seems fine to me.
+*/
+int CPalette::getBestColor(float r, float g, float b)
 {
-	#define RW 0.30f
-	#define GW 0.59f
-	#define BW 0.11f
-	 int             n;
-	 int             bestcol = 0;
-	 float          bestdist = 999999;
-	 float          dist, rdist, gdist, bdist;
-	 float          red, green, blue;
+#define RW 0.30f
+#define GW 0.59f
+#define BW 0.11f
+    int   n;
+    int   bestcol  = 0;
+    float bestdist = 999999;
+    float dist, rdist, gdist, bdist;
+    float red, green, blue;
 
-	 for(n=0; n<256; n++) {
-             red   = (float) pe[n].peRed;
-             green = (float) pe[n].peGreen;
-             blue  = (float) pe[n].peBlue;
-             rdist = (red   - r)*RW;
-             gdist = (green - g)*GW;
-             bdist = (blue  - b)*BW;
-             dist = rdist * rdist + gdist * gdist + bdist * bdist;
-			 //if(dist == 0) return n;
-             if(dist < bestdist)
-			 {
-				 bestdist = dist;
-				 bestcol = n;
-             }
-      }
-	  return bestcol;
- }
-
+    for (n = 0; n < 256; n++) {
+        red   = (float)pe[n].peRed;
+        green = (float)pe[n].peGreen;
+        blue  = (float)pe[n].peBlue;
+        rdist = (red - r) * RW;
+        gdist = (green - g) * GW;
+        bdist = (blue - b) * BW;
+        dist  = rdist * rdist + gdist * gdist + bdist * bdist;
+        // if(dist == 0) return n;
+        if (dist < bestdist) {
+            bestdist = dist;
+            bestcol  = n;
+        }
+    }
+    return bestcol;
+}
 
 /*
  Calculating The Colour For A Given Shade
@@ -226,50 +218,45 @@ BYTE CPalette::getShadeOfColor(float red, float green, float blue, float shade, 
 #define n 20
 float r,g,b,temp;
 
-	 temp=Ks*pow(specular,n);
-	 r=Ia*Ka*rOa + I*(red*Kd*shade + rOs*temp);
-	 g=Ia*Ka*gOa + I*(green*Kd*shade + gOs*temp);
-	 b=Ia*Ka*bOa + I*(blue*Kd*shade + bOs*temp);
-	return BestColor(r,g,b);
+     temp=Ks*pow(specular,n);
+     r=Ia*Ka*rOa + I*(red*Kd*shade + rOs*temp);
+     g=Ia*Ka*gOa + I*(green*Kd*shade + gOs*temp);
+     b=Ia*Ka*bOa + I*(blue*Kd*shade + bOs*temp);
+    return BestColor(r,g,b);
 }
 */
 
 void CPalette::createShadeTable(int Threshold)
 {
-	if (ShadeTable==NULL)
-	{
-		ShadeTable=new BYTE [256*256];
-	}
+    if (ShadeTable == NULL) {
+        ShadeTable = new BYTE[256 * 256];
+    }
 
-	//DDPalette->GetEntries(0,0,256,pe);
+    // DDPalette->GetEntries(0,0,256,pe);
 
-	float red,green,blue,redstep,greenstep,bluestep;
-	for (int color=0;color<256;color++)
-	{
-		redstep = (float)pe[color].peRed/(float)Threshold;
-		greenstep = (float)pe[color].peGreen/(float)Threshold;
-		bluestep = (float)pe[color].peBlue/(float)Threshold;
-		red=green=blue=0;
-		for (int shade=0;shade<Threshold;shade++)
-		{			
-			red+=redstep;
-			green+=greenstep;
-			blue+=bluestep;
-			ShadeTable[(color<<8)+shade]=getBestColor(red,green,blue);
-		}
-		redstep = (255.0f-(float)pe[color].peRed)/(255.0f-(float)Threshold);
-		greenstep = (255.0f-(float)pe[color].peGreen)/(255.0f-(float)Threshold);
-		bluestep = (255.0f-(float)pe[color].peBlue)/(255.0f-(float)Threshold);
+    float red, green, blue, redstep, greenstep, bluestep;
+    for (int color = 0; color < 256; color++) {
+        redstep   = (float)pe[color].peRed / (float)Threshold;
+        greenstep = (float)pe[color].peGreen / (float)Threshold;
+        bluestep  = (float)pe[color].peBlue / (float)Threshold;
+        red = green = blue = 0;
+        for (int shade = 0; shade < Threshold; shade++) {
+            red += redstep;
+            green += greenstep;
+            blue += bluestep;
+            ShadeTable[(color << 8) + shade] = getBestColor(red, green, blue);
+        }
+        redstep   = (255.0f - (float)pe[color].peRed) / (255.0f - (float)Threshold);
+        greenstep = (255.0f - (float)pe[color].peGreen) / (255.0f - (float)Threshold);
+        bluestep  = (255.0f - (float)pe[color].peBlue) / (255.0f - (float)Threshold);
 
-		for (int shade=Threshold;shade<256;shade++)
-		{
-			red+=redstep;
-			green+=greenstep;
-			blue+=bluestep;
-			ShadeTable[(color<<8)+shade]=getBestColor(red,green,blue);
-		}
-	}
-
+        for (int shade = Threshold; shade < 256; shade++) {
+            red += redstep;
+            green += greenstep;
+            blue += bluestep;
+            ShadeTable[(color << 8) + shade] = getBestColor(red, green, blue);
+        }
+    }
 }
 /*
 void CPalette::CreateFogTable(float rF,float gF,float bF, float density, float distance){
@@ -278,94 +265,90 @@ float r,g,b,fr,fg,fb,f,d,dstep;
 char c;
 #define EXP2FOG
 
-	if (FogTable==NULL)
-		FogTable=new unsigned char [256*256];
-	
-	dstep=distance/256;
-	d=0;
+    if (FogTable==NULL)
+        FogTable=new unsigned char [256*256];
 
-	for (color=0;color<256;color++){
-			r=pe[color].peRed;
-			g=pe[color].peGreen;
-			b=pe[color].peBlue;
-			f=1/256;
-		for (dist=0;dist<256;dist++,d+=dstep){
+    dstep=distance/256;
+    d=0;
+
+    for (color=0;color<256;color++){
+            r=pe[color].peRed;
+            g=pe[color].peGreen;
+            b=pe[color].peBlue;
+            f=1/256;
+        for (dist=0;dist<256;dist++,d+=dstep){
 
 #ifndef EXP2FOG
-			f=1/(exp(d*density));
+            f=1/(exp(d*density));
 #else
-	
-			f=1/(exp(d*d*density*density));
+
+            f=1/(exp(d*d*density*density));
 #endif
-			fr=f*r+(1-f)*rF;
-			fg=f*g+(1-f)*gF;
-			fb=f*b+(1-f)*bF;
-			c=BestColor(fr,fg,fb);
-			FogTable[(dist<<8)+color]=c;
-			//Primary->SetPixel(color,shade,c);
-		}
-	}
+            fr=f*r+(1-f)*rF;
+            fg=f*g+(1-f)*gF;
+            fb=f*b+(1-f)*bF;
+            c=BestColor(fr,fg,fb);
+            FogTable[(dist<<8)+color]=c;
+            //Primary->SetPixel(color,shade,c);
+        }
+    }
 }
 */
 void CPalette::CreateConvertTableRGB(LPDDSURFACE DestSurface)
 {
-DWORD	rshift,gshift,bshift,r,g,b,rmask,gmask,bmask,
-		rshift2,gshift2,bshift2;
+    DWORD rshift, gshift, bshift, r, g, b, rmask, gmask, bmask, rshift2, gshift2, bshift2;
 
-DDPIXELFORMAT ddpf;
+    DDPIXELFORMAT ddpf;
 
-	
-	if (ConvertTableRGB==NULL) ConvertTableRGB=new DWORD[256];
+    if (ConvertTableRGB == NULL)
+        ConvertTableRGB = new DWORD[256];
 
-	DestSurface->GetPixelFormat(&ddpf);
+    DestSurface->GetPixelFormat(&ddpf);
 
-	rshift=gshift=bshift=0;
-	rshift2=gshift2=bshift2=8;
-	rmask=ddpf.dwRBitMask;
-	gmask=ddpf.dwGBitMask;
-	bmask=ddpf.dwBBitMask;
-	while (!(rmask&1)) { // Nullen zählen
-		rmask>>=1;
-		rshift++;
-	}
+    rshift = gshift = bshift = 0;
+    rshift2 = gshift2 = bshift2 = 8;
+    rmask                       = ddpf.dwRBitMask;
+    gmask                       = ddpf.dwGBitMask;
+    bmask                       = ddpf.dwBBitMask;
+    while (!(rmask & 1)) {  // Nullen zählen
+        rmask >>= 1;
+        rshift++;
+    }
 
-	while (!(gmask&1)) {
-		gmask>>=1;
-		gshift++;
-	}
-	
-	while (!(bmask&1)) {
-		bmask>>=1;
-		bshift++;
-	}
-	while (rmask){	// Einsen zählen
-		rmask>>=1;
-		rshift2--;
-	}	
-	while (gmask){
-		gmask>>=1;
-		gshift2--;
-	}
-	while (bmask){
-		bmask>>=1;
-		bshift2--;
-	}
-	
-	rshift-=rshift2;
-	gshift-=gshift2;
-	bshift-=bshift2;
+    while (!(gmask & 1)) {
+        gmask >>= 1;
+        gshift++;
+    }
 
-	for (int color=0; color<256; ++color)
-	{
-		r=((DWORD)pe[color].peRed<<rshift)&ddpf.dwRBitMask;
-		g=((DWORD)pe[color].peGreen<<gshift)&ddpf.dwGBitMask;
-		b=((DWORD)pe[color].peBlue<<bshift)&ddpf.dwBBitMask;
-		ConvertTableRGB[color]=(r|g|b);
-	};
+    while (!(bmask & 1)) {
+        bmask >>= 1;
+        bshift++;
+    }
+    while (rmask) {  // Einsen zählen
+        rmask >>= 1;
+        rshift2--;
+    }
+    while (gmask) {
+        gmask >>= 1;
+        gshift2--;
+    }
+    while (bmask) {
+        bmask >>= 1;
+        bshift2--;
+    }
 
+    rshift -= rshift2;
+    gshift -= gshift2;
+    bshift -= bshift2;
+
+    for (int color = 0; color < 256; ++color) {
+        r                      = ((DWORD)pe[color].peRed << rshift) & ddpf.dwRBitMask;
+        g                      = ((DWORD)pe[color].peGreen << gshift) & ddpf.dwGBitMask;
+        b                      = ((DWORD)pe[color].peBlue << bshift) & ddpf.dwBBitMask;
+        ConvertTableRGB[color] = (r | g | b);
+    };
 }
 
 void CPalette::CreateConvertTableYUV(LPDDSURFACE DestSurface)
 {
-
 }

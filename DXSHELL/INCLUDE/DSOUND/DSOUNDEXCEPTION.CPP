@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include "dsoundexception.h"
 #include "dserr.h"
+#include "dsoundexception.h"
 
-
-CDSoundException::CDSoundException(const std::string &text,HRESULT dsrval):CException(text,DSErrorToString(dsrval))
+CDSoundException::CDSoundException(const std::string& text, HRESULT dsrval)
+: CException(text, DSErrorToString(dsrval))
 {
 }
 
@@ -29,7 +29,7 @@ CDSoundException::~CDSoundException(void)
 {
 }
 
-const char * CDSoundException::getErrorText() const
+const char* CDSoundException::getErrorText() const
 {
-	return DSErrorToString(errorcode);
+    return DSErrorToString(errorcode);
 }

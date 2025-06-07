@@ -5,6 +5,4 @@
 //	#include "ZedTracker.h"
 #endif
 
-
-
 #endif

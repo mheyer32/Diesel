@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef __fast_memcpy_h__
 #define __fast_memcpy_h__
 
-void memcpy_amd(void *dest, const void *src, size_t n);
+void memcpy_amd(void* dest, const void* src, size_t n);
 void fast_memcpy(void* dst, const void* src, int count);
 void copy_verts(void* dst, const void* src, int vert_count);
 
-#endif // __fast_memcpy_h__
+#endif  // __fast_memcpy_h__

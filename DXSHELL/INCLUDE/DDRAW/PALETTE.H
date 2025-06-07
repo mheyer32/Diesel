@@ -26,56 +26,53 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include "Surface.h"
 #include <cassert>
+#include "Surface.h"
 
 class CPalette
 {
 public:
+    CPalette();
+    CPalette(LPCSTR szPalette);
+    CPalette(LPDIRECTDRAWPALETTE Palette);
+    virtual ~CPalette();
 
-	CPalette();
-	CPalette(LPCSTR szPalette);
-	CPalette(LPDIRECTDRAWPALETTE Palette);
-	virtual ~CPalette();
+    LPDIRECTDRAWPALETTE getLPDDP() const { return DDPalette; };
 
-	LPDIRECTDRAWPALETTE getLPDDP() const {return DDPalette;};
+    bool                setFromFile(LPCSTR PalFile);
+    bool                setFrom(LPDIRECTDRAWPALETTE Palette);
+    bool                setFromSurface(LPDDSURFACE Surface);
+    const PALETTEENTRY* getEntries() const { return pe; };
 
-	bool setFromFile(LPCSTR PalFile);
-	bool setFrom(LPDIRECTDRAWPALETTE Palette);
-	bool setFromSurface(LPDDSURFACE Surface);
-	const PALETTEENTRY* getEntries() const {return pe;};
+    void CreateConvertTableRGB(LPDDSURFACE DestSurface);
+    void CreateConvertTableYUV(LPDDSURFACE DestSurface);
 
-	void CreateConvertTableRGB(LPDDSURFACE DestSurface);
-	void CreateConvertTableYUV(LPDDSURFACE DestSurface);
+    int getBestColor(float r, float g, float b);
+    // int  getShadeOfColor(float red, float green, float blue, float shade, float specular);
 
-	int  getBestColor(float r,float g, float b);
-	//int  getShadeOfColor(float red, float green, float blue, float shade, float specular);
+    void createShadeTable(int threshold);
+    // void CreateFogTable(float rF,float F,float bF, float density, float distance);
 
+    inline BYTE getShade(int color, int shade) const
+    {
+        assert(ShadeTable);
+        assert(color < 256 && color >= 0);
+        assert(shade < 256 && shade >= 0);
 
-	void createShadeTable(int threshold);
-	//void CreateFogTable(float rF,float F,float bF, float density, float distance);
-
-	inline BYTE getShade(int color, int shade) const
-	{
-		assert(ShadeTable);
-		assert(color<256 && color>=0);
-		assert(shade<256 && shade>=0);
-
-		return ShadeTable[(color<<8)+shade];
-	}
+        return ShadeTable[(color << 8) + shade];
+    }
 
 protected:
+    inline void Initialize();
 
-	inline void Initialize();
+    LPDIRECTDRAWPALETTE DDPalette;
+    PALETTEENTRY        pe[256];
 
-	LPDIRECTDRAWPALETTE		DDPalette;
-	PALETTEENTRY			pe[256];
-
-	DWORD					*ConvertTableRGB;
-	DWORD					*ConvertTableYUV;
-	BYTE					*ShadeTable,*FogTable;
+    DWORD* ConvertTableRGB;
+    DWORD* ConvertTableYUV;
+    BYTE * ShadeTable, *FogTable;
 };
 
-#endif // !defined(AFX_PALETTE_H__8F0B6429_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_PALETTE_H__8F0B6429_1EA2_11D3_ADDC_0000E85E86C1__INCLUDED_)

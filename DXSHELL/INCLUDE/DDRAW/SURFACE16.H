@@ -26,22 +26,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  // _MSC_VER >= 1000
 
 #include "Surface.h"
 
 class CSurface16 : public CSurface
 {
 public:
+    CSurface16();
+    CSurface16(DWORD w, DWORD h, DWORD bc = 0, DWORD caps = 0);
+    CSurface16(LPDDSURFACE Srfc);
+    CSurface16(const std::string& file);
+    virtual ~CSurface16();
 
-	CSurface16();
-	CSurface16(DWORD w,DWORD h,DWORD bc=0,DWORD caps=0);
-	CSurface16(LPDDSURFACE Srfc);
-	CSurface16(const std::string &file);
-	virtual ~CSurface16();
-
-	static void setBitMasks(LPDDSURFACE From);
-	static DWORD RMask,GMask,BMask;
-
+    static void  setBitMasks(LPDDSURFACE From);
+    static DWORD RMask, GMask, BMask;
 };
-#endif // !defined(AFX_SURFACE16_H__C989F7A1_1C50_11D3_ADDC_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_SURFACE16_H__C989F7A1_1C50_11D3_ADDC_0000E85E86C1__INCLUDED_)

@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <InitGuid.h>
 
@@ -38,36 +38,35 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <dinput.h>
 
-typedef LPDIRECTINPUT8			LPDINPUT;
-typedef LPDIRECTINPUTDEVICE8 	LPDINPUTDEVICE;
+typedef LPDIRECTINPUT8       LPDINPUT;
+typedef LPDIRECTINPUTDEVICE8 LPDINPUTDEVICE;
 
-#pragma comment( lib, "dinput8.lib" )
+#pragma comment(lib, "dinput8.lib")
 
 #include <adt/Singleton.h>
 
-class CDirectInput: public Singleton<CDirectInput>
+class CDirectInput : public Singleton<CDirectInput>
 {
-DECLARE_SINGLETON(CDirectInput)
+    DECLARE_SINGLETON(CDirectInput)
 
 public:
+    bool InitDirectInput();
+    void ShutDownDirectInput();
 
-	bool InitDirectInput();
-	void ShutDownDirectInput();
+    LPDINPUT getlpDI() const;
 
-	LPDINPUT getlpDI() const;	
-
-	//opens a requester where all devices specified with "Flags" are listed
-	//if a device was successfully selected, its GUID is return in guid and
-	// the function returns true
-	bool selectDevice(GUID &Guid,DWORD Flags=DIEDFL_ALLDEVICES,DWORD devType=0);
+    // opens a requester where all devices specified with "Flags" are listed
+    // if a device was successfully selected, its GUID is return in guid and
+    //  the function returns true
+    bool selectDevice(GUID& Guid, DWORD Flags = DIEDFL_ALLDEVICES, DWORD devType = 0);
 
 protected:
-	CDirectInput();	
-	virtual ~CDirectInput();
+    CDirectInput();
+    virtual ~CDirectInput();
 
-	static BOOL CALLBACK EnumDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
+    static BOOL CALLBACK EnumDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
 
-	LPDINPUT	lpDI;
+    LPDINPUT lpDI;
 };
 
-#endif // !defined(AFX_DIRECTINPUT_H__23864E60_8980_11D3_AF5D_0080AD17B2BB__INCLUDED_)
+#endif  // !defined(AFX_DIRECTINPUT_H__23864E60_8980_11D3_AF5D_0080AD17B2BB__INCLUDED_)

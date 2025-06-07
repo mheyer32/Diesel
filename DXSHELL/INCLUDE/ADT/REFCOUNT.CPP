@@ -21,23 +21,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "RefCount.h"
 #include <cassert>
+#include "RefCount.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
 CRefCount::CRefCount()
 {
-	m_RefCount=0;
+    m_RefCount = 0;
 }
 
 CRefCount::~CRefCount()
 {
-	assert(m_RefCount==0);
+    assert(m_RefCount == 0);
 }
-
-
-
-
-

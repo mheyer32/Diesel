@@ -26,92 +26,87 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include <list> 
+#include <list>
 #include <string>
 
-#include <adt/RefCount.h>
 #include <adt/NamedObject.h>
+#include <adt/RefCount.h>
 #include <adt/smartpointer.h>
 #include <geometry/aabb.h>
 
-#include "Transformation.h"
-#include "Camera.h" // only for ALL_PLANES - fix that ?
+#include "Camera.h"  // only for ALL_PLANES - fix that ?
 #include "Mesh.h"
-
+#include "Transformation.h"
 
 ////////////////////////////////////////////////////////////////////////
 
-class CEntity :  public CRefCount, public CNamedObject
+class CEntity : public CRefCount, public CNamedObject
 {
 
 public:
+    typedef SmartPointer<CEntity>  SMARTPTR;
+    typedef std::list<SMARTPTR>    SMARTPTRLIST;
+    typedef SMARTPTRLIST::iterator SMARTPTRITERATOR;
 
-typedef SmartPointer< CEntity >	SMARTPTR;
-typedef std::list< SMARTPTR >	SMARTPTRLIST;
-typedef SMARTPTRLIST::iterator	SMARTPTRITERATOR;
+    typedef std::list<CEntity*>  ENTITYLIST;
+    typedef ENTITYLIST::iterator ENTITYITERATOR;
 
-typedef std::list< CEntity* >	ENTITYLIST;
-typedef ENTITYLIST::iterator	ENTITYITERATOR;
+    CEntity(CMesh* Mesh = NULL);
+    virtual ~CEntity();
 
-	CEntity(CMesh *Mesh=NULL);
-	virtual ~CEntity();
+    // check entity against frustum, if visible add its faces to g_TNLStack
+    virtual void cullEntity(int testplanes = ALLPLANES);
 
-	// check entity against frustum, if visible add its faces to g_TNLStack
-	virtual void cullEntity(int testplanes=ALLPLANES);
+    CEntity*         getParent() const;
+    int              getNumChildren() const;
+    CEntity*         getChild(unsigned int childNum);
+    virtual void     removeChild(CEntity* Entity);
+    virtual void     addChild(CEntity* newEntity);
+    virtual void     addChild(CEntity::ENTITYLIST& children);
+    virtual CEntity* clone();
 
+    void   addMesh(CMesh* newMesh);
+    CMesh* getMesh(int lod = 0);
 
-	CEntity* getParent() const;
-	int getNumChildren() const;
-	CEntity* getChild(unsigned int childNum);
-	virtual void removeChild(CEntity *Entity);
-	virtual void addChild(CEntity *newEntity);
-	virtual void addChild(CEntity::ENTITYLIST &children);
-	virtual CEntity* clone();
+    // FIXME: does not belong to the "essence" of CEntity, move it outwards?
+    void collapseChildren(VECTOR3 t = NullVector3);
 
-	void addMesh(CMesh* newMesh);
-	CMesh* getMesh(int lod=0);
+    inline Transformation& getTransformation() { return m_transform; };
 
-	// FIXME: does not belong to the "essence" of CEntity, move it outwards?
-	void collapseChildren(VECTOR3 t=NullVector3);
+    // FIXME make virtual to allow different implementations that override
+    // (slow) default behavior, or even better abstract enveloping objects
+    // (spheres, OBBs, AABBs etc)
+    const BBOX& getBoundingBox(int Frame = 0, int lod = 0);
 
-	inline Transformation& getTransformation() {return m_transform;};
+    int isEntityInFrustum(int& testplanes);
 
-	// FIXME make virtual to allow different implementations that override
-	// (slow) default behavior, or even better abstract enveloping objects
-	// (spheres, OBBs, AABBs etc)
-	const BBOX& getBoundingBox( int Frame=0,int lod=0);
+    // don´t allow simple copying!
+    CEntity& operator=(const CEntity& E);
 
-	int isEntityInFrustum(int &testplanes);
+    static CEntity*          findEntity(const std::string& Name);
+    static const ENTITYLIST& GetEntityList();
 
-	// don´t allow simple copying!
-	CEntity& operator =(const CEntity &E);
-
-
-	static CEntity* findEntity(const std::string &Name);
-	static const ENTITYLIST& GetEntityList();
-
-	//FIXME: still public...
-	int		markentity;
+    // FIXME: still public...
+    int markentity;
 
 protected:
+    BBOX           m_bbox;
+    int            m_earlyout;
+    Transformation m_transform;
 
-	BBOX				m_bbox;
-	int					m_earlyout;
-	Transformation		m_transform;
+    std::vector<CMesh::SMARTPTR> m_meshes;  // all LOD levels, last mesh is smallest detail
 
-	std::vector<CMesh::SMARTPTR> m_meshes;	// all LOD levels, last mesh is smallest detail
+    CEntity* m_parent;  // normal pointer, otherwise child and parent would
+                        //  reference each other, as a result the child would
+                        //  avoid the dstruction of the parent and vice versa
 
-	CEntity				*m_parent; //normal pointer, otherwise child and parent would
-								 // reference each other, as a result the child would
-								 // avoid the dstruction of the parent and vice versa
+    SMARTPTRLIST m_children;
 
-	SMARTPTRLIST		m_children;
-
-	// must not be a smartpointerlist, otherweise the entity will add a reference to itself
-	// upon construction and this reference will prevent it from being ever deleted
-	static ENTITYLIST	s_allentities;
+    // must not be a smartpointerlist, otherweise the entity will add a reference to itself
+    // upon construction and this reference will prevent it from being ever deleted
+    static ENTITYLIST s_allentities;
 };
 
-#endif // !defined(AFX_ENTITY_H__7F8B4521_D049_11D3_AF5D_0080AD17B2BB__INCLUDED_)
+#endif  // !defined(AFX_ENTITY_H__7F8B4521_D049_11D3_AF5D_0080AD17B2BB__INCLUDED_)

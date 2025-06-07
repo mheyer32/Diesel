@@ -25,10 +25,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class ImageLoader
 {
 public:
-	ImageLoader(void);
-	virtual ~ImageLoader(void);
+    ImageLoader(void);
+    virtual ~ImageLoader(void);
 
-	/** load() will try to load an Image from an open File */
-	virtual Image* load (CFile &file) = 0;
-
+    /** load() will try to load an Image from an open File */
+    virtual Image* load(CFile& file) = 0;
 };

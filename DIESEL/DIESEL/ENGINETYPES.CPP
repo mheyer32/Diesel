@@ -23,10 +23,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /*inline _COLOR::_COLOR (GLfloat nr,GLfloat ng,GLfloat nb)
 {
-	r=GLubyte(nr*255.0);g=GLubyte(ng*255.0),b=GLubyte(nb*255.0); // Werte zwischen 0 und 1 ?
+    r=GLubyte(nr*255.0);g=GLubyte(ng*255.0),b=GLubyte(nb*255.0); // Werte zwischen 0 und 1 ?
 }
 */
 //////////////////////////////////////////////////////////////////////////////////////////////
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////

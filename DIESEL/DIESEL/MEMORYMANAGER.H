@@ -20,67 +20,59 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma once
 
-#include "MemoryMap.h"
 #include <map>
+#include "MemoryMap.h"
 
-class MemoryManager 
+class MemoryManager
 {
 public:
-	MemoryManager();
-	virtual ~MemoryManager();
+    MemoryManager();
+    virtual ~MemoryManager();
 
-	/** try to allocate the given amount of memory (in units of char) */
-	char* allocMem(unsigned int size);
-	/** free the memory */
-	void  freeMem(char *pointer);
+    /** try to allocate the given amount of memory (in units of char) */
+    char* allocMem(unsigned int size);
+    /** free the memory */
+    void freeMem(char* pointer);
 
-	/** set needed Alignment, set before calling setBasePointer() */
-	void setAlignment(unsigned int alignment);
+    /** set needed Alignment, set before calling setBasePointer() */
+    void setAlignment(unsigned int alignment);
 
-	/** set continues block of memory to be managed */
-	void setBasePointer(char *ptr, unsigned int size);
+    /** set continues block of memory to be managed */
+    void setBasePointer(char* ptr, unsigned int size);
 
-	char* getBasePointer() const {return realbaseptr;};
-	unsigned int getSize() const {return realmemsize;};
+    char*        getBasePointer() const { return realbaseptr; };
+    unsigned int getSize() const { return realmemsize; };
 
-	/** return remaining free memory */
-	unsigned int getFreeMemorySize() const;
+    /** return remaining free memory */
+    unsigned int getFreeMemorySize() const;
 
-	/** return allocated memory */
-	unsigned int getAllocatedMemorySize() const;
+    /** return allocated memory */
+    unsigned int getAllocatedMemorySize() const;
 
-	/** return number of allocated memory blocks */
-	unsigned int getBlockCount() const
-	{
-		return (unsigned int)mcbmap.size();
-	}
+    /** return number of allocated memory blocks */
+    unsigned int getBlockCount() const { return (unsigned int)mcbmap.size(); }
 
-	const MemoryMap& getMemoryMap() const
-	{
-		return memmap;
-	}
+    const MemoryMap& getMemoryMap() const { return memmap; }
 
-	void freeAll();
-
+    void freeAll();
 
 protected:
+    struct MCB
+    {
+        unsigned int index;
+        unsigned int size;
+    };
 
-struct MCB
-{
-	unsigned int index;
-	unsigned int size;
-};
+    typedef std::map<char*, MCB> MCBMAP;
+    typedef MCBMAP::iterator     MCBITERATOR;
 
-typedef std::map < char* ,MCB > MCBMAP;
-typedef MCBMAP::iterator MCBITERATOR;
+    MCBMAP       mcbmap;   // fast assignment of memoryptr and index-range in memorymap
+    MemoryMap    memmap;   // manages free and allocated blocks
+    char*        baseptr;  // aligned base pointer in memory
+    unsigned int memsize;  // aligned size of the continues block of memory to be managed
 
-	MCBMAP		mcbmap;			// fast assignment of memoryptr and index-range in memorymap
-	MemoryMap	memmap;		// manages free and allocated blocks
-	char			*baseptr;		// aligned base pointer in memory
-	unsigned int memsize;		// aligned size of the continues block of memory to be managed
+    char*        realbaseptr;
+    unsigned int realmemsize;
 
-	char			*realbaseptr;
-	unsigned int realmemsize;
-
-	unsigned int	align;
+    unsigned int align;
 };

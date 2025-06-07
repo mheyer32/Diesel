@@ -6,18 +6,17 @@
 class DoomScene : public CBaseScene
 {
 public:
+    friend class DoomLoader;
 
-	friend class DoomLoader;
+    DoomScene(void);
+    ~DoomScene(void);
 
-	DoomScene(void);
-	~DoomScene(void);
+    virtual void cullScene();
+    virtual void renderScene();
+    virtual bool initialize();
+    virtual void addEntity(CEntity* newEntity);
+    virtual void addEntities(CEntity::ENTITYLIST& list);
 
-	virtual void cullScene();
-	virtual void renderScene();
-	virtual bool initialize();
-	virtual void addEntity(CEntity *newEntity);
-	virtual void addEntities(CEntity::ENTITYLIST &list);
 protected:
-
-DoomMap	*map;
+    DoomMap* map;
 };

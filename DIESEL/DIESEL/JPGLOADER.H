@@ -26,17 +26,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "ImageLoader.h"
 
-class JPGLoader : public ImageLoader  
+class JPGLoader : public ImageLoader
 {
 public:
-	JPGLoader();
-	virtual ~JPGLoader();
+    JPGLoader();
+    virtual ~JPGLoader();
 
-	virtual Image* load(CFile &file);
+    virtual Image* load(CFile& file);
 };
 
-#endif // !defined(AFX_JPGLOADER_H__10BF8C70_0E1D_4888_98A9_8D9E3E786A8B__INCLUDED_)
+#endif  // !defined(AFX_JPGLOADER_H__10BF8C70_0E1D_4888_98A9_8D9E3E786A8B__INCLUDED_)

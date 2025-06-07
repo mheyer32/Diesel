@@ -19,8 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*////////////////////////////////////////////////////////////////////
 Defines
 ////////////////////////////////////////////////////////////////////*/
-#define PLANE_EPSILON   0.001
-#define POINT_EPSILON	0.001		//how much difference may be between two points
-#define NORMAL_EPSILON	0.0001
+#define PLANE_EPSILON 0.001
+#define POINT_EPSILON 0.001  // how much difference may be between two points
+#define NORMAL_EPSILON 0.0001
 #define COLINEAR_EPSILON 0.001
-

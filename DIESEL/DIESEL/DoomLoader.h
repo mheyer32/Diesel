@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include <file/path.h>
 #include <misc/Lexer.h>
 
@@ -9,28 +7,28 @@
 #include "DoomScene.h"
 #include "Mesh.h"
 
+#include <iostream>
 
 class DoomLoader
 {
 public:
-	DoomLoader(void);
-	~DoomLoader(void);
+    DoomLoader(void);
+    ~DoomLoader(void);
 
-	DoomScene* LoadPROC(const CPath &filename);
+    DoomScene* LoadPROC(const CPath& filename);
 
 protected:
+    void LoadMAP(const CPath& filename, DoomMap* map);
 
-	void LoadMAP(const CPath &filename, DoomMap *map);
+    CMesh*         readModel();
+    CVertexBuffer* readSurface();
+    void           readInterAreaPortals(DoomMap* doomap);
+    void           readNodes(DoomMap* dmap);
 
-	CMesh* readModel();
-	CVertexBuffer* readSurface();
-	void readInterAreaPortals(DoomMap *doomap);
-	void readNodes(DoomMap *dmap);
+    void readVec(float* coordinates, int dim);
+    void convertVec(VECTOR3& vec);
 
-	void  readVec(float *coordinates, int dim);
-	void convertVec(VECTOR3 &vec);
+    Lexer lexer;
 
-	Lexer lexer;
-
-	CMesh::SMARTPTRLIST	models;
+    CMesh::SMARTPTRLIST models;
 };

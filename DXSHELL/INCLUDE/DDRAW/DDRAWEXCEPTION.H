@@ -26,26 +26,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <misc/Exception.h>
+#include <windows.h>
 
-
-class CDDrawException : public CException  
+class CDDrawException : public CException
 {
 public:
-	CDDrawException(const std::string &text,HRESULT ddrval);
-	virtual ~CDDrawException();
+    CDDrawException(const std::string& text, HRESULT ddrval);
+    virtual ~CDDrawException();
 
-	HRESULT getErrorCode() const {return errorcode;};
-	const char * getErrorText() const;
+    HRESULT     getErrorCode() const { return errorcode; };
+    const char* getErrorText() const;
 
 protected:
-
-	HRESULT errorcode;
-
+    HRESULT errorcode;
 };
 
-#endif // !defined(AFX_DDRAWEXCEPTION_H__4F2879B1_6293_4ABC_A963_D44039BBF6FF__INCLUDED_)
+#endif  // !defined(AFX_DDRAWEXCEPTION_H__4F2879B1_6293_4ABC_A963_D44039BBF6FF__INCLUDED_)

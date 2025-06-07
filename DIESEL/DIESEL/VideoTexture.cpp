@@ -25,5 +25,4 @@ CVideoTexture::CVideoTexture(void)
 
 CVideoTexture::~CVideoTexture(void)
 {
-
 }

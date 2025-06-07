@@ -27,77 +27,72 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-//needed for sorting the list
-bool CKernel::TCB::operator < (const CKernel::TCB &t2) const
+// needed for sorting the list
+bool CKernel::TCB::operator<(const CKernel::TCB& t2) const
 {
-	return task->getPriority()<t2.task->getPriority();
+    return task->getPriority() < t2.task->getPriority();
 }
 
 // needed for correctly removing tasks
-bool CKernel::TCB::operator == (const CKernel::TCB &t2) const
+bool CKernel::TCB::operator==(const CKernel::TCB& t2) const
 {
-	return task==t2.task;
+    return task == t2.task;
 }
-
 
 CKernel::CKernel()
 {
-	timer.start();
-	timescale=1.0f;
-	time=0.0;
+    timer.start();
+    timescale = 1.0f;
+    time      = 0.0;
 }
 
 CKernel::~CKernel()
 {
-
 }
 
 void CKernel::runTasks()
 {
-	timer.stop();
-	time=timer.getElapsedSecs();
-	scaledtime=time*timescale;
+    timer.stop();
+    time       = timer.getElapsedSecs();
+    scaledtime = time * timescale;
 
-	//FIXME: what if a task removes itself while the list is traversed ?
-	TASKITERATOR tIt=tasklist.begin();
+    // FIXME: what if a task removes itself while the list is traversed ?
+    TASKITERATOR tIt = tasklist.begin();
 
-	for (;tIt!=tasklist.end();++tIt)
-	{
-		if ((tIt->task->getNextThink()>=0.0f) && (scaledtime>=tIt->task->getNextThink()))
-		{
-			tIt->task->setNextThink(0.0f);
-			tIt->task->runTask();
-		}
-	}
+    for (; tIt != tasklist.end(); ++tIt) {
+        if ((tIt->task->getNextThink() >= 0.0f) && (scaledtime >= tIt->task->getNextThink())) {
+            tIt->task->setNextThink(0.0f);
+            tIt->task->runTask();
+        }
+    }
 }
 
 void CKernel::setTimeScale(float Scale)
 {
-
 }
 
 float CKernel::getTime() const
 {
-	return scaledtime;
+    return scaledtime;
 }
 
 float CKernel::getRealTime() const
 {
-	return time;
+    return time;
 }
 
-void CKernel::addTask(CTask *Task)
+void CKernel::addTask(CTask* Task)
 {
-	tasklist.push_back(Task);
-	sortTasks();
+    tasklist.push_back(Task);
+    sortTasks();
 }
 
-void CKernel::removeTask(CTask *Task)
+void CKernel::removeTask(CTask* Task)
 {
-	tasklist.remove(Task);
+    tasklist.remove(Task);
 }
 
 void CKernel::sortTasks()
 {
-	tasklist.sort();
+    tasklist.sort();
 }

@@ -26,12 +26,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "Window.h"
 
-#include <adt/singleton.h>
 #include <MESSAGING/MessagingObject.h>
+#include <adt/singleton.h>
 
 /*//////////////////////////////////////////////////////////////
 User-defined Messages
@@ -40,36 +40,34 @@ User-defined Messages
 class CAppWindow : public CWindow, public Singleton<CAppWindow>
 {
 
-DECLARE_SINGLETON(CAppWindow)
+    DECLARE_SINGLETON(CAppWindow)
 
 public:
+    bool isActive() const;
 
-	bool isActive() const;
+    void setReady(bool ready);
+    bool isReady() const;
 
-	void setReady(bool ready);
-	bool isReady() const;
-
-	virtual bool open(int nCmdShow=SW_SHOWNORMAL );
-	virtual void close();
+    virtual bool open(int nCmdShow = SW_SHOWNORMAL);
+    virtual void close();
 
 protected:
+    CAppWindow();
+    virtual ~CAppWindow();
 
-	CAppWindow();
-	virtual ~CAppWindow();
+    void initialize();
+    void GameActivation();
+    // will be called if a message arrives
+    // implements CWndProc::WindowProc
+    virtual LRESULT WindowProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-	void initialize();
-	void GameActivation();
-	// will be called if a message arrives
-	// implements CWndProc::WindowProc
-	virtual LRESULT WindowProc(HWND hWnd,UINT Message,WPARAM wParam,LPARAM lParam);
-
-	bool	bAppActive;
-	bool	bActive;        // is application active? 
-	bool	bMinimized;		// minimiert?
-	bool	bFocus;			// Focus?
-	bool	bReady;			// darf gerendert werden ?
-	bool	bRunning;
-	bool	bCoopLevelOK;	// TestCooperativeLevel() ging gut oder schlug fehl
+    bool bAppActive;
+    bool bActive;     // is application active?
+    bool bMinimized;  // minimiert?
+    bool bFocus;      // Focus?
+    bool bReady;      // darf gerendert werden ?
+    bool bRunning;
+    bool bCoopLevelOK;  // TestCooperativeLevel() ging gut oder schlug fehl
 };
 
-#endif // !defined(AFX_APPWINDOW_H__BAF238FF_E8D2_4B85_A252_49ECB330B0C3__INCLUDED_)
+#endif  // !defined(AFX_APPWINDOW_H__BAF238FF_E8D2_4B85_A252_49ECB330B0C3__INCLUDED_)

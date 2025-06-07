@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define STRIPOPT_SORTONCE 0x00000001
 #define STRIPOPT_SORTEVERYTIME 0x00000002
 
-//FIXME: this must match the define in Renderer
-#ifndef INDEX
-#define INDEX unsigned short
-#endif
+// FIXME: this must match the define in Renderer
+//#ifndef INDEX
+typedef unsigned short INDEX;
+//#endif
 
-extern void ArrangeForStrips( INDEX *Indizes, int num_Indizes, int Options=0);
+extern void ArrangeForStrips(INDEX* Indizes, int num_Indizes, int Options = 0);

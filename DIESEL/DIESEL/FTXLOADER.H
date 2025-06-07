@@ -26,19 +26,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include "imageloader.h"
 
 class FTXLoader : public ImageLoader
 {
 public:
-	FTXLoader();
-	virtual ~FTXLoader();
-	
-	//
-	virtual Image* load(CFile &file);
+    FTXLoader();
+    virtual ~FTXLoader();
 
+    //
+    virtual Image* load(CFile& file);
 };
 
-#endif // !defined(AFX_FTXLOADER_H__B01A7C3C_FFB9_4285_BDA2_410808C1C433__INCLUDED_)
+#endif  // !defined(AFX_FTXLOADER_H__B01A7C3C_FFB9_4285_BDA2_410808C1C433__INCLUDED_)

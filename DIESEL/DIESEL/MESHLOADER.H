@@ -26,13 +26,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include <math/vector3.h>
-#include <math/vector2.h>
 #include <file/file.h>
+#include <math/vector2.h>
+#include <math/vector3.h>
 
-#include "Color.h"	// Hinzugefügt von der Klassenansicht
+#include "Color.h"  // Hinzugefügt von der Klassenansicht
 
 #include <vector>
 
@@ -40,23 +40,23 @@ class CMesh;
 class CShader;
 class CVertexBuffer;
 
-class MESHLoader  
+class MESHLoader
 {
 public:
-	MESHLoader();
-	virtual ~MESHLoader();
+    MESHLoader();
+    virtual ~MESHLoader();
 
-	CMesh* loadMESH(std::string filename);
+    CMesh* loadMESH(std::string filename);
 
 protected:
-	COLOR readColor();
-	VECTOR3 readVector3();
-	VECTOR2 readVector2();
+    COLOR   readColor();
+    VECTOR3 readVector3();
+    VECTOR2 readVector2();
 
-	CVertexBuffer* readVertexBuffer();
+    CVertexBuffer* readVertexBuffer();
 
-	std::vector<CShader*> shaders;
-	CFile *file;
+    std::vector<CShader*> shaders;
+    CFile*                file;
 };
 
-#endif // !defined(AFX_MESHLOADER_H__94E5697A_DFCF_45A5_AE42_FF46FED9021F__INCLUDED_)
+#endif  // !defined(AFX_MESHLOADER_H__94E5697A_DFCF_45A5_AE42_FF46FED9021F__INCLUDED_)

@@ -26,29 +26,30 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <deque>
 
 /** maintaines a history of objects of type T */
-template<typename T> class CHistory  
+template <typename T>
+class CHistory
 {
 public:
-	CHistory();
-	virtual ~CHistory();
+    CHistory();
+    virtual ~CHistory();
 
-	void add(T elem);
+    void add(T elem);
 
-	void setMaxHistoryLength(int new_max_size);
-	int getHistoryLength();
+    void setMaxHistoryLength(int new_max_size);
+    int  getHistoryLength();
 
-	inline const T& operator [] (const int history_pos) const {return history[history_pos];};
+    inline const T& operator[](const int history_pos) const { return history[history_pos]; };
 
 protected:
-	std::deque<T> history;
+    std::deque<T> history;
 
-	typename std::deque<T>::size_type max_size;
+    typename std::deque<T>::size_type max_size;
 };
 
 #include "History.hh"
-#endif // !defined(AFX_HISTORY_H__324526A0_0B01_4674_B889_D14411D9C06A__INCLUDED_)
+#endif  // !defined(AFX_HISTORY_H__324526A0_0B01_4674_B889_D14411D9C06A__INCLUDED_)

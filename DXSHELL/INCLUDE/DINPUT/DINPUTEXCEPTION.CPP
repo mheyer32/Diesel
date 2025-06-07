@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-
 #include "DInputException.h"
 
 #include "dierr.h"
@@ -29,13 +28,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-CDInputException::CDInputException(const std::string &text,HRESULT dirval)
+CDInputException::CDInputException(const std::string& text, HRESULT dirval)
 {
-	addText(DIErrorToString(dirval));
-	addText(text);
+    addText(DIErrorToString(dirval));
+    addText(text);
 }
 
 CDInputException::~CDInputException()
 {
-
 }

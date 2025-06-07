@@ -20,47 +20,47 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma once
 
-#include "ImageLoader.h"
 #include <string>
+#include "ImageLoader.h"
 
-class TGALoader : public ImageLoader 
+class TGALoader : public ImageLoader
 {
 public:
-	TGALoader();
-	virtual ~TGALoader();
+    TGALoader();
+    virtual ~TGALoader();
 
-	virtual Image* load(CFile &file);
+    virtual Image* load(CFile& file);
+
 protected:
+#pragma pack(push, 1)
+    struct _TGAHEADER
+    {
+        unsigned char  IDField;
+        unsigned char  CMType;
+        unsigned char  IMGType;
+        unsigned short CMStart;
+        unsigned short CMLength;
+        unsigned char  CMBits;
+        unsigned short X;
+        unsigned short Y;
+        unsigned short Width;
+        unsigned short Height;
+        unsigned char  IMGPixSize;
+        unsigned char  IMGDescriptor;
+    } header;
+#pragma pack(pop)
 
-#pragma pack(push,1)
-struct _TGAHEADER
-{ 
-	unsigned char IDField;
-	unsigned char CMType;
-	unsigned char IMGType;
-	unsigned short CMStart;
-	unsigned short CMLength;
-	unsigned char CMBits;
-	unsigned short X;
-	unsigned short Y;
-	unsigned short Width;
-	unsigned short Height;
-	unsigned char IMGPixSize;
-	unsigned char IMGDescriptor;
-} header;
-#pragma pack (pop)
+    typedef void (TGALoader::*READBITMAP)(unsigned int PixelCount);
 
-typedef void(TGALoader::*READBITMAP)(unsigned int PixelCount);
+    void read_Uncompressed_RGB(unsigned int PixelCount);
+    void read_RLE_RGB(unsigned int PixelCount);
 
-	void	read_Uncompressed_RGB(unsigned int PixelCount);
-	void	read_RLE_RGB(unsigned int PixelCount);
+    READBITMAP readBitmap;
 
-	READBITMAP readBitmap;
+    unsigned char* texmem;
+    unsigned int   memPos;
+    unsigned int   memSize;
+    unsigned int   bytesperpixel;
 
-	unsigned char *texmem;
-	unsigned int memPos;
-	unsigned int memSize;
-	unsigned int bytesperpixel;
-
-	CFile *file;
+    CFile* file;
 };

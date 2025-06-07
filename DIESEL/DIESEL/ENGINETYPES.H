@@ -20,13 +20,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if !defined ENGINE_TYPES_INCLUDED
 #define ENGINE_TYPES_INCLUDED
 
-#include <math\Vector2.h>
-#include <math\Vector3.h>
-#include <math\Vector4.h>
+#include <geometry\AABB.h>
 #include <math\Matrix3.h>
 #include <math\Matrix4.h>
 #include <math\Plane.h>
-#include <geometry\AABB.h>
+#include <math\Vector2.h>
+#include <math\Vector3.h>
+#include <math\Vector4.h>
 #include "color.h"
 #include "features.h"
 //////////////////////////////////////////////////////////////////////
@@ -44,32 +44,27 @@ typedef unsigned short INDEX;
 #define GL_INDEX_ENUM GL_UNSIGNED_SHORT
 #define MAX_INDEX 0xFFFF
 
-class	CVertexBuffer;
-class	CShader;
+class CVertexBuffer;
+class CShader;
 
-#define	MAX_FEATURES		4
+#define MAX_FEATURES 4
 
 struct RENDERINFO
 {
-	unsigned int	sortkey;
-	CVertexBuffer	*vbuffer;
-	CShader			*shader;
-	int				num_features;
-	FEATURE			features[MAX_FEATURES];
-	
-	RENDERINFO()
-	{
-		ZeroMemory(this,sizeof(RENDERINFO));
-	}
+    unsigned int   sortkey;
+    CVertexBuffer* vbuffer;
+    CShader*       shader;
+    int            num_features;
+    FEATURE        features[MAX_FEATURES];
+
+    RENDERINFO() { ZeroMemory(this, sizeof(RENDERINFO)); }
 };
 
 /*////////////////////////////////////////////////////////////////////
 Function Prototypes
 ////////////////////////////////////////////////////////////////////*/
 
-
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////
-		Functions
+        Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 #endif
-

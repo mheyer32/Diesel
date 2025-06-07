@@ -20,250 +20,222 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "ConCmd.h"
 #include <defs.h>
-#include <iostream>
-#include <fstream>
 #include <cstring>
+#include <fstream>
+#include <iostream>
+#include "ConCmd.h"
 
 #include <memorytracker.h>
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
-ConCmd::COMMANDMAP* ConCmd::CommandList=NULL;
+ConCmd::COMMANDMAP* ConCmd::CommandList = NULL;
 
-ConCmd ConCmd::listcmd("list",ConCmd::ListCmd);
-ConCmd ConCmd::aliascmd("alias",ConCmd::AliasCmd);
-ConCmd ConCmd::echocmd("echo",ConCmd::EchoCmd);
-ConCmd ConCmd::saycmd("say",ConCmd::EchoCmd);
+ConCmd ConCmd::listcmd("list", ConCmd::ListCmd);
+ConCmd ConCmd::aliascmd("alias", ConCmd::AliasCmd);
+ConCmd ConCmd::echocmd("echo", ConCmd::EchoCmd);
+ConCmd ConCmd::saycmd("say", ConCmd::EchoCmd);
 
 using namespace std;
 
-bool ConCmd::myless::operator () (const std::string &s1, const std::string &s2) const
+bool ConCmd::myless::operator()(const std::string& s1, const std::string& s2) const
 {
-	std::string::size_type l1 = s1.size(), l2=s2.size();
-	return strnicmp(s1.c_str(),s2.c_str(), l2>l1 ? l2 : l1)<0;
+    std::string::size_type l1 = s1.size(), l2 = s2.size();
+    return _strnicmp(s1.c_str(), s2.c_str(), l2 > l1 ? l2 : l1) < 0;
 }
 
-ConCmd::ConCmd(const std::string &Command,ConCmd::CMDCALLBACKFUNC CallbackFunc)
+ConCmd::ConCmd(const std::string& Command, ConCmd::CMDCALLBACKFUNC CallbackFunc)
 {
-	setCommand(Command,CallbackFunc);
+    setCommand(Command, CallbackFunc);
 }
 
 ConCmd::~ConCmd()
 {
-	if (!CommandList) return;
+    if (!CommandList)
+        return;
 
-	COMMANDITERATOR c;
+    COMMANDITERATOR c;
 
-	if ((c=CommandList->find(command))!=CommandList->end())
-	{
-		 if ((*c).second==this)
-		 {
-			CommandList->erase(c);
-		 }
-		 else
-		 {
-			 std::cout<<"ConCmd::~ConCmd() command found but mapped to different object"<<std::endl;
-		 }
-	}
-	if (CommandList->empty()) KILLOBJECT(CommandList);
+    if ((c = CommandList->find(command)) != CommandList->end()) {
+        if ((*c).second == this) {
+            CommandList->erase(c);
+        } else {
+            std::cout << "ConCmd::~ConCmd() command found but mapped to different object" << std::endl;
+        }
+    }
+    if (CommandList->empty())
+        KILLOBJECT(CommandList);
 }
 
-ConCmd* ConCmd::findCommand(const std::string &Command)
+ConCmd* ConCmd::findCommand(const std::string& Command)
 {
-COMMANDITERATOR c;
+    COMMANDITERATOR c;
 
-	if ((c=CommandList->find(Command))!=CommandList->end())
-	{
-		return (*c).second;
-	}
+    if ((c = CommandList->find(Command)) != CommandList->end()) {
+        return (*c).second;
+    }
 
-	return NULL;
+    return NULL;
 }
 
-void ConCmd::setCommand(const std::string &Command, ConCmd::CMDCALLBACKFUNC CallbackFunc)
+void ConCmd::setCommand(const std::string& Command, ConCmd::CMDCALLBACKFUNC CallbackFunc)
 {
-	if (!CommandList) 
-		CommandList=new COMMANDMAP;
+    if (!CommandList)
+        CommandList = new COMMANDMAP;
 
-	command=Command;
-	(*CommandList)[command]=this;
-	callback=CallbackFunc;
+    command                 = Command;
+    (*CommandList)[command] = this;
+    callback                = CallbackFunc;
 }
 
 std::string ConCmd::getCommandName() const
 {
-	return command;
+    return command;
 }
 
-void ConCmd::execute(const std::string &Arg)
+void ConCmd::execute(const std::string& Arg)
 {
-	if (callback) (*callback)(*this,Arg);
+    if (callback)
+        (*callback)(*this, Arg);
 }
 
-
-void ConCmd::execute(const std::string &Command,const std::string &Arg)
+void ConCmd::execute(const std::string& Command, const std::string& Arg)
 {
-ConCmd *cobj;
+    ConCmd* cobj;
 
-	if (cobj=findCommand(Command)) cobj->execute(Arg);
-	else std::cout<<"no such command \""<<Command<<"\""<<endl;
+    if (cobj = findCommand(Command))
+        cobj->execute(Arg);
+    else
+        std::cout << "no such command \"" << Command << "\"" << endl;
 }
 
-
-void ConCmd::executeCommandLine(const std::string &CommandLine)
+void ConCmd::executeCommandLine(const std::string& CommandLine)
 {
-	// CLI parsen und rekursiv ausfuehren
-	char *cmdline,*temp,*temp4,*lineend;
-	char command[256],args[256],temp2[256],temp3[1024];
+    // CLI parsen und rekursiv ausfuehren
+    char *cmdline, *temp, *temp4, *lineend;
+    char  command[256], args[256], temp2[256], temp3[1024];
 
-	strcpy(temp3,CommandLine.c_str());
-	temp=cmdline=temp3;
-	lineend=cmdline+strlen(cmdline);
+    strcpy(temp3, CommandLine.c_str());
+    temp = cmdline = temp3;
+    lineend        = cmdline + strlen(cmdline);
 
-	do 
-	{
-		if (temp=strpbrk(cmdline,"\";"))
-		{
-			if (*temp=='\"')
-			{
-				*temp=' ';
-				if (!(temp=strchr(temp,'\"')))
-				{
-					std::cout<<"no closing \" found"<<std::endl;
-					return;
-				}
-				*temp=' ';
-			}
-			temp4=temp;
-			if (!(temp=strchr(temp,';'))) temp=temp4;
-		}
-		else
-		{
-			temp=cmdline+strlen(cmdline);
-		}
-		memcpy(temp2,cmdline,temp-cmdline);
-		temp2[temp-cmdline]=0;
+    do {
+        if (temp = strpbrk(cmdline, "\";")) {
+            if (*temp == '\"') {
+                *temp = ' ';
+                if (!(temp = strchr(temp, '\"'))) {
+                    std::cout << "no closing \" found" << std::endl;
+                    return;
+                }
+                *temp = ' ';
+            }
+            temp4 = temp;
+            if (!(temp = strchr(temp, ';')))
+                temp = temp4;
+        } else {
+            temp = cmdline + strlen(cmdline);
+        }
+        memcpy(temp2, cmdline, temp - cmdline);
+        temp2[temp - cmdline] = 0;
 
-		int num_args=sscanf(temp2,"%s %[^\n]s",command,args);
-		if (num_args<1)
-		{
-			//cout<<"could not parse commandline: "<<CommandLine<<endl;
-			return;
-		}
-		if (num_args==1)
-		{
-			ConCmd::execute(command,"");
-		}
-		else
-		{
-			ConCmd::execute(command,args);
-		}
+        int num_args = sscanf(temp2, "%s %[^\n]s", command, args);
+        if (num_args < 1) {
+            // cout<<"could not parse commandline: "<<CommandLine<<endl;
+            return;
+        }
+        if (num_args == 1) {
+            ConCmd::execute(command, "");
+        } else {
+            ConCmd::execute(command, args);
+        }
 
-		cmdline=temp+1;
+        cmdline = temp + 1;
 
-	} while (cmdline<lineend);
+    } while (cmdline < lineend);
 }
 
-void ConCmd::ListCmd(ConCmd &Command,const std::string &Arg)
+void ConCmd::ListCmd(ConCmd& Command, const std::string& Arg)
 {
-COMMANDITERATOR c;
-	for (c=CommandList->begin();c!=CommandList->end();c++)
-	{
-		cout<<(*c).second->command<<endl;
-	}
+    COMMANDITERATOR c;
+    for (c = CommandList->begin(); c != CommandList->end(); c++) {
+        cout << (*c).second->command << endl;
+    }
 }
 
-void ConCmd::AliasCmd(ConCmd &Command,const std::string &Arg)
+void ConCmd::AliasCmd(ConCmd& Command, const std::string& Arg)
 {
-	CAliasCmd *alias;
-	ConCmd *cmd;
-	char aliasname[256] ;
-	char cmdline[1024] ;
+    CAliasCmd* alias;
+    ConCmd*    cmd;
+    char       aliasname[256];
+    char       cmdline[1024];
 
-	if (Arg.empty())
-	{
-		COMMANDITERATOR c;
-		for (c=CommandList->begin();c!=CommandList->end();c++)
-		{
-			if (alias=dynamic_cast<CAliasCmd*>((*c).second))
-			{
-				std::cout<<alias->getCommandName()<<": "<<alias->getCommandline()<<std::endl;
-			}
-		}
-		return;
-	}
+    if (Arg.empty()) {
+        COMMANDITERATOR c;
+        for (c = CommandList->begin(); c != CommandList->end(); c++) {
+            if (alias = dynamic_cast<CAliasCmd*>((*c).second)) {
+                std::cout << alias->getCommandName() << ": " << alias->getCommandline() << std::endl;
+            }
+        }
+        return;
+    }
 
-	int num_args=sscanf(Arg.c_str(),"%s %[^\n]s",aliasname,cmdline);
-	if (num_args<2)
-	{
-		std::cout<<"too few arguments"<<std::endl;
-		return;
-	}
-	if (cmd=findCommand(aliasname))
-	{
-		if (!(alias=dynamic_cast<CAliasCmd*>(cmd)))
-		{
-			std::cout<<"aliasname is already used by non-alias"<<std::endl;
-			return;
-		}
-		alias->setCommandLine(cmdline);
-	}
-	else
-	{
-		alias=new CAliasCmd(aliasname,cmdline);
-	}
-
+    int num_args = sscanf(Arg.c_str(), "%s %[^\n]s", aliasname, cmdline);
+    if (num_args < 2) {
+        std::cout << "too few arguments" << std::endl;
+        return;
+    }
+    if (cmd = findCommand(aliasname)) {
+        if (!(alias = dynamic_cast<CAliasCmd*>(cmd))) {
+            std::cout << "aliasname is already used by non-alias" << std::endl;
+            return;
+        }
+        alias->setCommandLine(cmdline);
+    } else {
+        alias = new CAliasCmd(aliasname, cmdline);
+    }
 }
 
-void ConCmd::EchoCmd(ConCmd &Command,const std::string &Arg)
+void ConCmd::EchoCmd(ConCmd& Command, const std::string& Arg)
 {
-	std::cout<<Arg<<std::endl;
+    std::cout << Arg << std::endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CAliasCmd::CAliasCmd(const std::string &Alias,const std::string &Commandline): ConCmd(Alias,CAliasCmd::AliasCallback)
+CAliasCmd::CAliasCmd(const std::string& Alias, const std::string& Commandline)
+: ConCmd(Alias, CAliasCmd::AliasCallback)
 {
-	setCommandLine(Commandline);	
+    setCommandLine(Commandline);
 }
-
 
 CAliasCmd::~CAliasCmd()
 {
-
 }
 
-
-void CAliasCmd::setCommandLine(const std::string &Commandline)
+void CAliasCmd::setCommandLine(const std::string& Commandline)
 {
-	commandline=Commandline;
+    commandline = Commandline;
 }
-
 
 std::string CAliasCmd::getCommandline() const
 {
-	return commandline;
+    return commandline;
 }
 
-
-void CAliasCmd::AliasCallback(ConCmd &Command,const std::string &Arg)
+void CAliasCmd::AliasCallback(ConCmd& Command, const std::string& Arg)
 {
-	CAliasCmd *alias;
+    CAliasCmd* alias;
 
-	if (!(alias=dynamic_cast<CAliasCmd*>(&Command)))
-	{
-		std::cout<<"AliasCallback on a non-alias command"<<std::endl;
-	}
+    if (!(alias = dynamic_cast<CAliasCmd*>(&Command))) {
+        std::cout << "AliasCallback on a non-alias command" << std::endl;
+    }
 
-	ConCmd::executeCommandLine(alias->commandline+" "+Arg);
+    ConCmd::executeCommandLine(alias->commandline + " " + Arg);
 }
-
-
 
 const ConCmd::COMMANDMAP& ConCmd::getCommandList()
 {
-	return *CommandList;
+    return *CommandList;
 }

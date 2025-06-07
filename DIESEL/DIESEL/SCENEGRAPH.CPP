@@ -23,8 +23,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "SceneGraph.h"
 
-#include "Entity.h"
 #include "Engine.h"
+#include "Entity.h"
 #include "TNLStack.h"
 
 #include <cassert>
@@ -36,55 +36,52 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CSceneGraph::CSceneGraph()
 {
-	sceneroot=NULL;
-	initialize();
+    sceneroot = NULL;
+    initialize();
 }
 
 CSceneGraph::~CSceneGraph()
 {
-	if (sceneroot)
-	{
-		// should kill everything below
-		sceneroot->Release();
-	}	
+    if (sceneroot) {
+        // should kill everything below
+        sceneroot->Release();
+    }
 }
 
 void CSceneGraph::cullScene()
 {
-	sceneroot->cullEntity();
+    sceneroot->cullEntity();
 }
 
 void CSceneGraph::renderScene()
 {
-	g_TNLStack->execute();
-	g_TNLStack->clearStack();
+    g_TNLStack->execute();
+    g_TNLStack->clearStack();
 }
 
 bool CSceneGraph::initialize()
 {
-	if (sceneroot)
-	{
-		sceneroot->Release();
-	}
+    if (sceneroot) {
+        sceneroot->Release();
+    }
 
-	sceneroot=new CEntity();
-	sceneroot->AddRef();
-	sceneroot->setName("SceneRoot");
+    sceneroot = new CEntity();
+    sceneroot->AddRef();
+    sceneroot->setName("SceneRoot");
 
-	return true;
+    return true;
 }
 
-void CSceneGraph::addEntity(CEntity *newEntity)
+void CSceneGraph::addEntity(CEntity* newEntity)
 {
-	assert(sceneroot);
+    assert(sceneroot);
 
-	sceneroot->addChild(newEntity);
-
+    sceneroot->addChild(newEntity);
 }
 
-void CSceneGraph::addEntities(CEntity::ENTITYLIST &list)
+void CSceneGraph::addEntities(CEntity::ENTITYLIST& list)
 {
-	assert(sceneroot);
+    assert(sceneroot);
 
-	sceneroot->addChild(list);
+    sceneroot->addChild(list);
 }

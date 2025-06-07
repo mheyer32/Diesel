@@ -26,48 +26,45 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
+#pragma comment(lib, "Comctl32.lib")
 
-#pragma comment( lib, "Comctl32.lib" )
-
-#include "WndProc.h"
 #include <defs.h>
+#include "WndProc.h"
 
 #define MAXMODES 300
 
-class CScreenModeRequester : public CWndProc  
+class CScreenModeRequester : public CWndProc
 {
-friend CWndProc;
+    friend CWndProc;
 
 public:
+    CScreenModeRequester();
+    virtual ~CScreenModeRequester();
 
-	CScreenModeRequester();
-	virtual ~CScreenModeRequester();
-
-	bool SelectScreenMode(int &Mode, bool &fullscreen, int &FSAA);
-	void DisableWindowed();
-	void DisableFSAA();
-	void AddScreenMode(const char* ModeString);
+    bool SelectScreenMode(int& Mode, bool& fullscreen, int& FSAA);
+    void DisableWindowed();
+    void DisableFSAA();
+    void AddScreenMode(const char* ModeString);
 
 private:
+    char Modes[MAXMODES][256];
+    int  numModes, selMode;
+    bool Fullscreen;
+    int  FSAALevel;
+    int  maxFSAALevel;
 
-	char	Modes[MAXMODES][256]; 
-	int		numModes,selMode;
-	bool	Fullscreen;
-	int		FSAALevel;
-	int		maxFSAALevel;
+    bool WindowedEnabled;
+    bool FSAAEnabled;
+    HWND hDlg, Icon;
 
-	bool	WindowedEnabled;
-	bool	FSAAEnabled;
-	HWND	hDlg,Icon;
+    void OnInitDialog();
+    void OnSelectionChange();
+    void OnFullscreen();
+    void OnTrackbarChange();
 
-	void OnInitDialog();
-	void OnSelectionChange();
-	void OnFullscreen();
-	void OnTrackbarChange();
-
-	virtual LRESULT WindowProc(HWND hDialog, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual LRESULT WindowProc(HWND hDialog, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // !defined(AFX_SCREENMODEREQUESTER_H__957945E0_AD9D_11D3_BD8A_0000E85E86C1__INCLUDED_)
+#endif  // !defined(AFX_SCREENMODEREQUESTER_H__957945E0_AD9D_11D3_BD8A_0000E85E86C1__INCLUDED_)

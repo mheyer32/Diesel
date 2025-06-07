@@ -26,51 +26,48 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // for convenience this is put into the global namespace
 enum MEMTYPE
 {
-	MT_UNKNOWN,
-	MT_STATIC,
-	MT_DYNAMIC,
-	MT_SYSMEM
+    MT_UNKNOWN,
+    MT_STATIC,
+    MT_DYNAMIC,
+    MT_SYSMEM
 };
 enum MANAGEMODE
 {
-	MM_SYSONLY,
-	MM_VARANDSYS
+    MM_SYSONLY,
+    MM_VARANDSYS
 };
 
 class GeometryMemManager : public Singleton<GeometryMemManager>
 {
-DECLARE_SINGLETON (GeometryMemManager)
+    DECLARE_SINGLETON(GeometryMemManager)
 
 public:
+    bool initialize(MANAGEMODE mode, unsigned int staticMem, unsigned int dynamicMem, unsigned int sysMem);
 
-	bool initialize (MANAGEMODE mode, unsigned int staticMem,unsigned int dynamicMem,unsigned int sysMem);
+    /** try to allocate the given amount of memory (in bytes) */
+    void* alloc(MEMTYPE type, unsigned int size);
+    /** free the memory */
+    void free(void* pointer);
 
-	/** try to allocate the given amount of memory (in bytes) */
-	void* alloc(MEMTYPE type,unsigned int size);
-	/** free the memory */
-	void  free(void *pointer);
-
-	MEMTYPE	getType(void *pointer);
-	const MemoryManager*	getDynamicManager() const {return dynamicMMGR;};
-	const MemoryManager*	getStaticManager() const {return staticMMGR;};
-	const MemoryManager*	getSysManager() const {return sysMMGR;};
+    MEMTYPE              getType(void* pointer);
+    const MemoryManager* getDynamicManager() const { return dynamicMMGR; };
+    const MemoryManager* getStaticManager() const { return staticMMGR; };
+    const MemoryManager* getSysManager() const { return sysMMGR; };
 
 protected:
+    typedef std::map<void*, MEMTYPE> MTMAP;
+    typedef MTMAP::iterator          MTITERATOR;
 
-	typedef std::map<void*,MEMTYPE> MTMAP;
-	typedef MTMAP::iterator MTITERATOR;	
+    GeometryMemManager(void);  // hide constructor (Singleton)
+    virtual ~GeometryMemManager();
 
+    void cleanUp();
 
-	GeometryMemManager(void);	// hide constructor (Singleton)
-	virtual ~GeometryMemManager();
+    MemoryManager* staticMMGR;   // manages static geometry memory
+    MemoryManager* dynamicMMGR;  // manages dynamic geometry memory
+    MemoryManager* sysMMGR;      // manages geometry in system memory;
 
-	void cleanUp();
+    MTMAP mtmap;  // can assign a pointer to its memorymanager
 
-	MemoryManager	*staticMMGR;		// manages static geometry memory
-	MemoryManager	*dynamicMMGR;		// manages dynamic geometry memory
-	MemoryManager	*sysMMGR;			// manages geometry in system memory;
-	
-	MTMAP	mtmap;				// can assign a pointer to its memorymanager
-
-    MANAGEMODE	manageMode;		
+    MANAGEMODE manageMode;
 };

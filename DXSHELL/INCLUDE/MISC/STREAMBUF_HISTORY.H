@@ -26,28 +26,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-#include <strstream>
 #include <fstream>
 #include <string>
+#include <strstream>
 
 #include <misc/history.h>
 
 class streambuf_history : public std::strstreambuf, public CHistory<std::string>
 {
 public:
-	streambuf_history(int buflen=0);
-	virtual ~streambuf_history();
+    streambuf_history(int buflen = 0);
+    virtual ~streambuf_history();
 
-	void enableLogging(bool enable, const std::string &logfilename="logfile.log");
+    void enableLogging(bool enable, const std::string& logfilename = "logfile.log");
 
 protected:
+    virtual int sync();
 
-	virtual int sync();
-
-	std::ofstream logfile;
-	bool logging_enabled;
+    std::ofstream logfile;
+    bool          logging_enabled;
 };
 
-#endif // !defined(AFX_STREAMBUF_HISTORY_H__443C2561_1D7A_4349_AD2C_C76FAA97EFCD__INCLUDED_)
+#endif  // !defined(AFX_STREAMBUF_HISTORY_H__443C2561_1D7A_4349_AD2C_C76FAA97EFCD__INCLUDED_)

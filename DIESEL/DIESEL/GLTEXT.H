@@ -26,84 +26,82 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
 #include <Messaging/MessagingObject.h>
+
 #include "enginetypes.h"
 #include "vertexbuffer.h"
 
 class CShader;
 class Renderer;
 
-
 class CGLText : protected Msg::MessagingObject
 {
 
-
 public:
-	CGLText();
-	~CGLText();
-	
-	void SetBufsize(DWORD Columns, DWORD Rows);
-	void RenderBuffer();
-	void Print(LPCSTR Text);
-	void PrintAt(LPCSTR Text,DWORD x, DWORD y);
-    void TextOut(float x, float y,LPCSTR Text);
+    CGLText();
+    ~CGLText();
 
-	void SetBackgroundShader(CShader *Font);
-	void SetFontShader(CShader *Background);
-	void SetFontWidth(int Width);
-	void SetColor(const COLOR &col);
+    void SetBufsize(DWORD Columns, DWORD Rows);
+    void RenderBuffer();
+    void Print(LPCSTR Text);
+    void PrintAt(LPCSTR Text, DWORD x, DWORD y);
+    void TextOut(float x, float y, LPCSTR Text);
 
-	void AttachToWindow();
-	void SetDestRect(const RECT &DestRect);
-	void SetBorder(const RECT &Border);
+    void SetBackgroundShader(CShader* Font);
+    void SetFontShader(CShader* Background);
+    void SetFontWidth(int Width);
+    void SetColor(const COLOR& col);
 
-	inline void Clr()
-	{
-		memset(buffer,' ',bufferlen);
-		cursX=cursY=0;
-	}
-	inline void Locate(DWORD X,DWORD Y)
-	{
-		cursX=X;cursY=Y;
-	}
+    void AttachToWindow();
+    void SetDestRect(const RECT& DestRect);
+    void SetBorder(const RECT& Border);
 
-	int getNumColumns() const;
-	int getNumRows() const;
+    inline void Clr()
+    {
+        memset(buffer, ' ', bufferlen);
+        cursX = cursY = 0;
+    }
+    inline void Locate(DWORD X, DWORD Y)
+    {
+        cursX = X;
+        cursY = Y;
+    }
+
+    int getNumColumns() const;
+    int getNumRows() const;
 
 protected:
+    virtual Msg::MSGRVAL handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID msgId,
+                                       const Msg::Param& parameters = Msg::Param());
 
-		virtual	 Msg::MSGRVAL handleMessage(Msg::MessagingObject *sender, Msg::MESSAGEID msgId, const Msg::Param &parameters=Msg::Param());
+    void RenderChars(LPCSTR Text, DWORD texlen, float X, float Y);
+    void RenderBackground();
+    void BeginRender();
+    void EndRender();
+    void FlushVertexArrays();
 
+    DWORD cursX, cursY, cols, rows, bufferlen;
+    float charwidth, charheight;
+    char* buffer;
 
-		void RenderChars(LPCSTR Text,DWORD texlen,float X,float Y);
-		void RenderBackground();
-		void BeginRender();
-		void EndRender();
-		void FlushVertexArrays();
-		
-		DWORD cursX,cursY,cols,rows,bufferlen;
-		float charwidth,charheight;
-		char *buffer;
+    float TXCW;
+    RECT  destrect;
+    RECT  border;
+    bool  background;
 
-		float TXCW;
-		RECT destrect;
-		RECT border;
-		bool background;
+    CVertexBuffer* vbuffer;
+    CVertexBuffer* back_vbuffer;
 
+    int num_vertices;
 
-		CVertexBuffer	*vbuffer;
-		CVertexBuffer	*back_vbuffer;
+    COLOR textcolor;
 
-		int	num_vertices;
+    Renderer* renderer;
 
-		COLOR	textcolor;
-
-		Renderer *renderer;
-		
-		COLOR  colorcodes[9];
-		static COLOR  std_colorcodes[9];
+    COLOR        colorcodes[9];
+    static COLOR std_colorcodes[9];
 };
 
-#endif // !defined(AFX_GLTEXT_H__5F472055_77E8_4CF1_A911_654DA21F52AB__INCLUDED_)
+#endif  // !defined(AFX_GLTEXT_H__5F472055_77E8_4CF1_A911_654DA21F52AB__INCLUDED_)

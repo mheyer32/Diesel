@@ -20,24 +20,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "WinException.h"
 #include "WinErr.h"
+#include "WinException.h"
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
 //////////////////////////////////////////////////////////////////////
 
 CWinException::CWinException()
 {
-
 }
 
 CWinException::~CWinException()
 {
-
 }
 
 CWinException::CWinException(std::string errortext)
 {
-	errortext+=WinErrorToString();
-	addText(errortext);
+    errortext += WinErrorToString();
+    addText(errortext);
 }

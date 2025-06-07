@@ -19,42 +19,40 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #pragma once
 
-#include "videotexture.h"
 #include <file/path.h>
+#include "videotexture.h"
 
 #ifdef _MSC_VER
-extern "C"
-{            /* Assume C declarations for C++ */
-	#include "roqplayer/roq.h"
+extern "C" { /* Assume C declarations for C++ */
+#include "roqplayer/roq.h"
 }
 #else
-	#include "roqplayer/roq.h"
+#include "roqplayer/roq.h"
 #endif
 
-class CROQTexture :	public CVideoTexture
+class CROQTexture : public CVideoTexture
 {
 public:
-	CROQTexture(void);
-	virtual ~CROQTexture(void);
+    CROQTexture(void);
+    virtual ~CROQTexture(void);
 
-	virtual void bindTexture();
+    virtual void bindTexture();
 
-	virtual void play();
-	virtual void stop(); //fixme rewind, fforward etc missing
+    virtual void play();
+    virtual void stop();  // fixme rewind, fforward etc missing
 
-	virtual bool open(const std::string &filename);
-	virtual void close();
+    virtual bool open(const std::string& filename);
+    virtual void close();
 
 protected:
+    void grabFrame(int framenum);
 
-	void grabFrame(int framenum);
+    roq_info* rinfo;
 
-	roq_info	*rinfo;
+    float starttime;
+    bool  playing;
+    float fps;
+    int   frame;
 
-	float		starttime;
-	bool		playing;
-	float		fps;
-	int			frame;
-
-	unsigned char *framedata;
+    unsigned char* framedata;
 };

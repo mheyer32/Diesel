@@ -26,38 +26,35 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
-class CRefCount  
+class CRefCount
 {
 public:
-	virtual ~CRefCount(); // GAAAANZ _WiChTiG_, dass das virtual ist!!
-	CRefCount();
+    virtual ~CRefCount();  // GAAAANZ _WiChTiG_, dass das virtual ist!!
+    CRefCount();
 
-	inline void Release()
-	{
-		m_RefCount--;
-		if (m_RefCount==0) delete this;
-	}
+    inline void Release()
+    {
+        m_RefCount--;
+        if (m_RefCount == 0)
+            delete this;
+    }
 
-	inline void CRefCount::AddRef()
-	{
-		m_RefCount++;
-		return;
-	}
-	
-	int getRefCount() const
-	{
-		return m_RefCount;
-	}
+    inline void CRefCount::AddRef()
+    {
+        m_RefCount++;
+        return;
+    }
+
+    int getRefCount() const { return m_RefCount; }
 
 private:
-	
-	 // dont allow copies of reference count
-	CRefCount(const CRefCount&);
-	CRefCount& operator = (const CRefCount&);
+    // dont allow copies of reference count
+    CRefCount(const CRefCount&);
+    CRefCount& operator=(const CRefCount&);
 
-	int m_RefCount;
+    int m_RefCount;
 };
 
-#endif // !defined(AFX_REFCOUNT_H__A5FB04BE_72DA_44B7_83DF_E8A47431A21D__INCLUDED_)
+#endif  // !defined(AFX_REFCOUNT_H__A5FB04BE_72DA_44B7_83DF_E8A47431A21D__INCLUDED_)

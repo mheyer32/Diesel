@@ -26,58 +26,62 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  // _MSC_VER > 1000
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
-#include <misc/Lexer.h>
-#include <file/Path.h>
 #include <adt/ConVar.h>
+#include <file/Path.h>
+#include <misc/Lexer.h>
 
 #include "Shader.h"
 
-class CShaderLoader  
+class CShaderLoader
 {
 public:
-	CShaderLoader();
-	~CShaderLoader();
+    CShaderLoader();
+    ~CShaderLoader();
 
-	CShader* loadShader(const std::string &shadername);	
+    CShader* loadShader(const std::string& shadername);
 
-	// should be moved into texturemanager
-	void loadSkyTextures(const char *skybasename,CTexture **textures);
+    // should be moved into texturemanager
+    void loadSkyTextures(const char* skybasename, CTexture** textures);
 
-	static void clearShaderCache();
-	static void cacheDirectory(const CPath &directory);
-	static void cacheFile(const CPath &file);
+    static void clearShaderCache();
+    static void cacheDirectory(const CPath& directory);
+    static void cacheFile(const CPath& file);
 
 protected:
+    bool ParseShader(CShader* newshader);
+    bool ParsePass(CShader* newshader);
+    void ParseWaveForm(const char* func, const char* base, const char* amplitude, const char* phase, const char* freq,
+                       CWave& wavefunc);
 
-	bool ParseShader(CShader *newshader);
-	bool ParsePass(CShader *newshader);
-	void ParseWaveForm(const char *func,const char* base,const char* amplitude,const char* phase,const char* freq, CWave &wavefunc);
+    GLenum ParseBlendFunc(const char* string);
 
-	GLenum ParseBlendFunc(const char* string);
+    Lexer lex;
 
-	Lexer lex;
+    struct CACHEENTRY
+    {
+        int position;
+        int filenumber;
+        CACHEENTRY()
+        : position(-1)
+        , filenumber(-1) {};
+        CACHEENTRY(int p, int f)
+        : position(p)
+        , filenumber(f) {};
+    };
 
-	struct CACHEENTRY
-	{
-		int position;
-		int filenumber;
-		CACHEENTRY():position(-1),filenumber(-1) {};
-		CACHEENTRY(int p,int f) : position(p),filenumber(f) {};
-	};
+    typedef std::map<std::string, CACHEENTRY> SCRIPTCACHE;
+    typedef SCRIPTCACHE::iterator             SCRIPTITERATOR;
 
-	typedef std::map<std::string,CACHEENTRY> SCRIPTCACHE;
-	typedef SCRIPTCACHE::iterator SCRIPTITERATOR;
+    static SCRIPTCACHE              s_scriptcache;  // caches shadername and appropriate shaderfilename
+    static std::vector<std::string> s_scriptfiles;
 
-	static SCRIPTCACHE				s_scriptcache; // caches shadername and appropriate shaderfilename
-	static std::vector<std::string>	s_scriptfiles;
-
-	static ConVar r_compress_sky;	// use texture compression for skies
+    static ConVar r_compress_sky;  // use texture compression for skies
 };
 
-#endif // !defined(AFX_SHADERLOADER_H__C411CF09_BDD5_42FB_A3B1_2736AF640CCB__INCLUDED_)
+#endif  // !defined(AFX_SHADERLOADER_H__C411CF09_BDD5_42FB_A3B1_2736AF640CCB__INCLUDED_)
