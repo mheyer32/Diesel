@@ -29,13 +29,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <memorytracker.h>
 
-// #define AMD_MEMCOPY
-
-#ifdef AMD_MEMCOPY
-#include "memcpy.h"
-#define memcpy memcpy_amd
-#endif
-
 using namespace std;
 
 CVertexBuffer::CVertexBuffer()
