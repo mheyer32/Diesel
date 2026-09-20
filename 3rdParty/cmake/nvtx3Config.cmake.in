@@ -1,0 +1,21 @@
+@PACKAGE_INIT@
+
+if(NOT TARGET nvtx3::nvtx3-cpp)
+  add_library(nvtx3::nvtx3-c INTERFACE IMPORTED)
+  set_target_properties(
+    nvtx3::nvtx3-c
+    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PACKAGE_PREFIX_DIR}/include")
+
+  add_library(nvtx3::nvtx3-cpp INTERFACE IMPORTED)
+  set_target_properties(
+    nvtx3::nvtx3-cpp
+    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PACKAGE_PREFIX_DIR}/include"
+               INTERFACE_LINK_LIBRARIES "nvtx3::nvtx3-c")
+
+  if(UNIX AND NOT APPLE)
+    set_property(
+      TARGET nvtx3::nvtx3-c
+      APPEND
+      PROPERTY INTERFACE_LINK_LIBRARIES dl)
+  endif()
+endif()

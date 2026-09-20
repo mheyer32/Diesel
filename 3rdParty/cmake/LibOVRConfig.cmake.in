@@ -1,0 +1,44 @@
+@PACKAGE_INIT@
+
+if(NOT TARGET LibOVR::LibOVR)
+  add_library(LibOVR::LibOVR STATIC IMPORTED)
+
+  foreach(_cfg Debug RelWithDebInfo Release)
+    find_library(
+      _libovr_lib_${_cfg}
+      NAMES LibOVR libovr
+      PATHS "${PACKAGE_PREFIX_DIR}/lib/${_cfg}" "${PACKAGE_PREFIX_DIR}/lib"
+      NO_DEFAULT_PATH)
+  endforeach()
+
+  set(_libovr_lib "${_libovr_lib_RelWithDebInfo}")
+  if(NOT _libovr_lib)
+    set(_libovr_lib "${_libovr_lib_Release}")
+  endif()
+  if(NOT _libovr_lib)
+    set(_libovr_lib "${_libovr_lib_Debug}")
+  endif()
+  if(NOT _libovr_lib)
+    message(FATAL_ERROR "LibOVR: library not found under ${PACKAGE_PREFIX_DIR}/lib")
+  endif()
+
+  set_target_properties(
+    LibOVR::LibOVR
+    PROPERTIES IMPORTED_LOCATION "${_libovr_lib}"
+               INTERFACE_INCLUDE_DIRECTORIES
+               "${PACKAGE_PREFIX_DIR}/include/libovr")
+
+  if(_libovr_lib_Debug)
+    set_target_properties(LibOVR::LibOVR PROPERTIES IMPORTED_LOCATION_DEBUG
+                                                    "${_libovr_lib_Debug}")
+  endif()
+  if(_libovr_lib_RelWithDebInfo)
+    set_target_properties(
+      LibOVR::LibOVR PROPERTIES IMPORTED_LOCATION_RELWITHDEBINFO
+                                "${_libovr_lib_RelWithDebInfo}")
+  endif()
+  if(_libovr_lib_Release)
+    set_target_properties(LibOVR::LibOVR PROPERTIES IMPORTED_LOCATION_RELEASE
+                                                    "${_libovr_lib_Release}")
+  endif()
+endif()

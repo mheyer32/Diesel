@@ -1,0 +1,45 @@
+@PACKAGE_INIT@
+
+if(NOT TARGET OpenVR::OpenVR)
+  add_library(OpenVR::OpenVR STATIC IMPORTED)
+
+  foreach(_cfg Debug RelWithDebInfo Release)
+    find_library(
+      _openvr_lib_${_cfg}
+      NAMES openvr_api64 openvr_api
+      PATHS "${PACKAGE_PREFIX_DIR}/lib/${_cfg}" "${PACKAGE_PREFIX_DIR}/lib"
+      NO_DEFAULT_PATH)
+  endforeach()
+
+  set(_openvr_lib "${_openvr_lib_RelWithDebInfo}")
+  if(NOT _openvr_lib)
+    set(_openvr_lib "${_openvr_lib_Release}")
+  endif()
+  if(NOT _openvr_lib)
+    set(_openvr_lib "${_openvr_lib_Debug}")
+  endif()
+  if(NOT _openvr_lib)
+    message(FATAL_ERROR "OpenVR: library not found under ${PACKAGE_PREFIX_DIR}/lib")
+  endif()
+
+  set_target_properties(
+    OpenVR::OpenVR
+    PROPERTIES IMPORTED_LOCATION "${_openvr_lib}"
+               INTERFACE_INCLUDE_DIRECTORIES
+               "${PACKAGE_PREFIX_DIR}/include/openvr"
+               INTERFACE_COMPILE_DEFINITIONS "OPENVR_BUILD_STATIC")
+
+  if(_openvr_lib_Debug)
+    set_target_properties(OpenVR::OpenVR PROPERTIES IMPORTED_LOCATION_DEBUG
+                                                    "${_openvr_lib_Debug}")
+  endif()
+  if(_openvr_lib_RelWithDebInfo)
+    set_target_properties(
+      OpenVR::OpenVR PROPERTIES IMPORTED_LOCATION_RELWITHDEBINFO
+                                "${_openvr_lib_RelWithDebInfo}")
+  endif()
+  if(_openvr_lib_Release)
+    set_target_properties(OpenVR::OpenVR PROPERTIES IMPORTED_LOCATION_RELEASE
+                                                    "${_openvr_lib_Release}")
+  endif()
+endif()

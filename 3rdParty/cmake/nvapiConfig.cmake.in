@@ -1,0 +1,41 @@
+@PACKAGE_INIT@
+
+if(NOT TARGET nvapi::nvapi)
+  add_library(nvapi::nvapi STATIC IMPORTED)
+
+  set(_nvapi_dbg "${PACKAGE_PREFIX_DIR}/lib/Debug/nvapi64.lib")
+  set(_nvapi_rel "${PACKAGE_PREFIX_DIR}/lib/RelWithDebInfo/nvapi64.lib")
+  set(_nvapi_rls "${PACKAGE_PREFIX_DIR}/lib/Release/nvapi64.lib")
+  set(_nvapi_flat "${PACKAGE_PREFIX_DIR}/lib/nvapi64.lib")
+
+  set(_nvapi_lib "")
+  foreach(_c IN ITEMS "${_nvapi_rel}" "${_nvapi_rls}" "${_nvapi_dbg}"
+                      "${_nvapi_flat}")
+    if(EXISTS "${_c}")
+      set(_nvapi_lib "${_c}")
+      break()
+    endif()
+  endforeach()
+  if(NOT _nvapi_lib)
+    message(FATAL_ERROR "nvapi: nvapi64.lib not found under ${PACKAGE_PREFIX_DIR}/lib")
+  endif()
+
+  set_target_properties(
+    nvapi::nvapi
+    PROPERTIES IMPORTED_LOCATION "${_nvapi_lib}"
+               INTERFACE_INCLUDE_DIRECTORIES
+               "${PACKAGE_PREFIX_DIR}/include/nvapi")
+
+  if(EXISTS "${_nvapi_dbg}")
+    set_target_properties(nvapi::nvapi PROPERTIES IMPORTED_LOCATION_DEBUG
+                                                  "${_nvapi_dbg}")
+  endif()
+  if(EXISTS "${_nvapi_rel}")
+    set_target_properties(
+      nvapi::nvapi PROPERTIES IMPORTED_LOCATION_RELWITHDEBINFO "${_nvapi_rel}")
+  endif()
+  if(EXISTS "${_nvapi_rls}")
+    set_target_properties(nvapi::nvapi PROPERTIES IMPORTED_LOCATION_RELEASE
+                                                  "${_nvapi_rls}")
+  endif()
+endif()

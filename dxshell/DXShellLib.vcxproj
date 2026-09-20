@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectName>DXShellLib</ProjectName>
+    <ProjectGuid>{585AAF8E-1434-43F2-B910-92BF7B8832EB}</ProjectGuid>
+    <RootNamespace>DXShellLib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\propertysheets\ZLib.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\propertysheets\ZLib.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.35825.156</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\build\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\build\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>$(ADD_C_FLAGS) %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.\include ; $(ZLIB_INCDIR); $(JPG_INCDIR); ;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0407</Culture>
+      <ResourceOutputFileName>.\lib\DXShellLib.res</ResourceOutputFileName>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(ProjectName)D.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>$(ADD_C_FLAGS) %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include ; $(ZLIB_INCDIR); $(JPG_INCDIR); ;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ShowIncludes>false</ShowIncludes>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0407</Culture>
+      <ResourceOutputFileName>.\lib\DXShelllib.res</ResourceOutputFileName>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="include\adt\ChainedObject.cpp" />
+    <ClCompile Include="include\adt\Color.cpp" />
+    <ClCompile Include="include\adt\ConCmd.cpp" />
+    <ClCompile Include="include\adt\ConVar.cpp" />
+    <ClCompile Include="include\adt\NamedObject.cpp" />
+    <ClCompile Include="include\adt\RefCount.cpp" />
+    <ClCompile Include="include\d3d\Direct3D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="include\ddraw\DDErr.cpp" />
+    <ClCompile Include="include\ddraw\DDrawException.cpp" />
+    <ClCompile Include="include\ddraw\DDUtil.cpp" />
+    <ClCompile Include="include\ddraw\DirectDraw.cpp" />
+    <ClCompile Include="include\ddraw\Overlay.cpp" />
+    <ClCompile Include="include\ddraw\Palette.cpp" />
+    <ClCompile Include="include\ddraw\Surface.cpp" />
+    <ClCompile Include="include\ddraw\Surface16.cpp" />
+    <ClCompile Include="include\ddraw\Surface8.cpp" />
+    <ClCompile Include="include\ddraw\SurfaceMem.cpp" />
+    <ClCompile Include="include\dinput\DIErr.cpp" />
+    <ClCompile Include="include\dinput\DInputDevice.cpp" />
+    <ClCompile Include="include\dinput\DInputException.cpp" />
+    <ClCompile Include="include\dinput\DirectInput.cpp" />
+    <ClCompile Include="include\dinput\Joystick.cpp" />
+    <ClCompile Include="include\dinput\Keyboard.cpp" />
+    <ClCompile Include="include\dinput\Mouse.cpp" />
+    <ClCompile Include="include\dsound\DirectSound.cpp" />
+    <ClCompile Include="include\dsound\DSErr.cpp" />
+    <ClCompile Include="include\dsound\DSoundException.cpp" />
+    <ClCompile Include="include\dsound\SoundBuffer.cpp" />
+    <ClCompile Include="include\file\File.cpp" />
+    <ClCompile Include="include\file\FileManager.cpp" />
+    <ClCompile Include="include\file\Path.cpp" />
+    <ClCompile Include="include\file\RamFile.cpp" />
+    <ClCompile Include="include\file\ZipFile.cpp" />
+    <ClCompile Include="include\geometry\AABB.cpp" />
+    <ClCompile Include="include\math\MathLib.cpp" />
+    <ClCompile Include="include\math\Plane.cpp" />
+    <ClCompile Include="include\messaging\MessagingObject.cpp" />
+    <ClCompile Include="include\misc\Exception.cpp" />
+    <ClCompile Include="include\misc\Lexer.cpp" />
+    <ClCompile Include="include\misc\ParseHelper.cpp" />
+    <ClCompile Include="include\misc\streambuf_history.cpp" />
+    <ClCompile Include="include\misc\Timer.cpp" />
+    <ClCompile Include="include\opengl\OGLErrors.cpp" />
+    <ClCompile Include="include\opengl\OpenGL.cpp" />
+    <ClCompile Include="include\opengl\RenderTarget.cpp" />
+    <ClCompile Include="include\win\AppWindow.cpp" />
+    <ClCompile Include="include\win\Debug.cpp" />
+    <ClCompile Include="include\win\DriverSelector.cpp" />
+    <ClCompile Include="include\win\FileRequester.cpp" />
+    <ClCompile Include="include\win\ScreenmodeRequester.cpp" />
+    <ClCompile Include="include\win\Window.cpp" />
+    <ClCompile Include="include\win\WinErr.cpp" />
+    <ClCompile Include="include\win\WinException.cpp" />
+    <ClCompile Include="include\win\WinMain.cpp" />
+    <ClCompile Include="include\win\WndProc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\adt\ChainedObject.h" />
+    <ClInclude Include="include\adt\Color.h" />
+    <ClInclude Include="include\adt\ConCmd.h" />
+    <ClInclude Include="include\adt\ConVar.h" />
+    <ClInclude Include="include\adt\NamedObject.h" />
+    <ClInclude Include="include\adt\RefCount.h" />
+    <ClInclude Include="include\adt\Singleton.h" />
+    <ClInclude Include="include\adt\Singleton.hh" />
+    <ClInclude Include="include\adt\SmartPointer.h" />
+    <ClInclude Include="include\adt\StrideArray.h" />
+    <CustomBuild Include="include\d3d\Direct3D.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClInclude Include="include\ddraw\DDErr.h" />
+    <ClInclude Include="include\ddraw\DDrawException.h" />
+    <ClInclude Include="include\ddraw\DDUtil.h" />
+    <ClInclude Include="include\ddraw\DirectDraw.h" />
+    <ClInclude Include="include\ddraw\Overlay.h" />
+    <ClInclude Include="include\ddraw\Palette.h" />
+    <ClInclude Include="include\ddraw\Surface.h" />
+    <ClInclude Include="include\ddraw\Surface16.h" />
+    <ClInclude Include="include\ddraw\Surface8.h" />
+    <ClInclude Include="include\ddraw\SurfaceMem.h" />
+    <ClInclude Include="include\defs.h" />
+    <ClInclude Include="include\dinput\DIErr.h" />
+    <ClInclude Include="include\dinput\DInputDevice.h" />
+    <ClInclude Include="include\dinput\DInputException.h" />
+    <ClInclude Include="include\dinput\DirectInput.h" />
+    <ClInclude Include="include\dinput\Joystick.h" />
+    <ClInclude Include="include\dinput\Keyboard.h" />
+    <ClInclude Include="include\dinput\Mouse.h" />
+    <ClInclude Include="include\dsound\DirectSound.h" />
+    <ClInclude Include="include\dsound\DSErr.h" />
+    <ClInclude Include="include\dsound\DSoundException.h" />
+    <ClInclude Include="include\dsound\SoundBuffer.h" />
+    <ClInclude Include="include\DXShell.h" />
+    <ClInclude Include="include\file\DirTree.h" />
+    <ClInclude Include="include\file\DirTree.hh" />
+    <ClInclude Include="include\file\File.h" />
+    <ClInclude Include="include\file\FileManager.h" />
+    <ClInclude Include="include\file\Path.h" />
+    <ClInclude Include="include\file\RamFile.h" />
+    <ClInclude Include="include\file\ZipFile.h" />
+    <ClInclude Include="include\geometry\AABB.h" />
+    <ClInclude Include="include\gl\glATI.h" />
+    <ClInclude Include="include\gl\glext.h" />
+    <ClInclude Include="include\gl\NewExt.h" />
+    <ClInclude Include="include\gl\wglATI.h" />
+    <ClInclude Include="include\gl\wglext.h" />
+    <ClInclude Include="include\math\Mathdefs.h" />
+    <ClInclude Include="include\math\MathLib.h" />
+    <ClInclude Include="include\math\Matrix3.h" />
+    <ClInclude Include="include\math\Matrix3.hh" />
+    <ClInclude Include="include\math\Matrix34.h" />
+    <ClInclude Include="include\math\Matrix34.hh" />
+    <ClInclude Include="include\math\Matrix4.h" />
+    <ClInclude Include="include\math\Matrix4.hh" />
+    <ClInclude Include="include\math\Plane.h" />
+    <ClInclude Include="include\math\Vector2.h" />
+    <ClInclude Include="include\math\Vector2.hh" />
+    <ClInclude Include="include\math\Vector3.h" />
+    <ClInclude Include="include\math\Vector3.hh" />
+    <ClInclude Include="include\math\Vector4.h" />
+    <ClInclude Include="include\math\Vector4.hh" />
+    <ClInclude Include="include\messaging\Messages.h" />
+    <ClInclude Include="include\messaging\MessagingObject.h" />
+    <ClInclude Include="include\messaging\Param.h" />
+    <ClInclude Include="include\misc\Exception.h" />
+    <ClInclude Include="include\misc\History.h" />
+    <ClInclude Include="include\misc\History.hh" />
+    <ClInclude Include="include\misc\Lexer.h" />
+    <ClInclude Include="include\misc\ParseHelper.h" />
+    <ClInclude Include="include\misc\QSort.h" />
+    <ClInclude Include="include\misc\STLHelp.h" />
+    <ClInclude Include="include\misc\streambuf_history.h" />
+    <ClInclude Include="include\misc\Timer.h" />
+    <ClInclude Include="include\opengl\GLFuncs.h" />
+    <ClInclude Include="include\opengl\OGLErrors.h" />
+    <ClInclude Include="include\opengl\OpenGL.h" />
+    <ClInclude Include="include\opengl\RenderTarget.h" />
+    <ClInclude Include="include\win\AppWindow.h" />
+    <ClInclude Include="include\win\Debug.h" />
+    <ClInclude Include="include\win\DriverSelector.h" />
+    <ClInclude Include="include\win\FileRequester.h" />
+    <ClInclude Include="include\win\resource.h" />
+    <ClInclude Include="include\win\ScreenmodeRequester.h" />
+    <ClInclude Include="include\win\Window.h" />
+    <ClInclude Include="include\win\WinErr.h" />
+    <ClInclude Include="include\win\WinException.h" />
+    <ClInclude Include="include\win\WinMain.h" />
+    <ClInclude Include="include\win\WndProc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="include\win\appicon.ico" />
+    <Image Include="include\win\Audio.ico" />
+    <Image Include="include\win\Device2.ico" />
+    <Image Include="include\win\DirectX.ico" />
+    <Image Include="include\win\Screenmode.ico" />
+    <Image Include="include\win\SkullFace.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="include\win\DXShellLib.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VTune\DXShellLib.vpj" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

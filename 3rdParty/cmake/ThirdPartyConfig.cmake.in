@@ -1,0 +1,13 @@
+@PACKAGE_INIT@
+
+set(ThirdParty_MANIFEST_HASH "@THIRDPARTY_MANIFEST_HASH@")
+set(ThirdParty_COMPONENTS "@THIRDPARTY_COMPONENTS@")
+set(ThirdParty_FROM_SYSTEM "@THIRDPARTY_FROM_SYSTEM@")
+
+# Downstream find_package() calls resolve against this prefix first.
+# System packages listed in ThirdParty_FROM_SYSTEM are still found via the
+# normal CMake search (they were not installed here).
+list(PREPEND CMAKE_PREFIX_PATH "${PACKAGE_PREFIX_DIR}")
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+
+check_required_components(ThirdParty)

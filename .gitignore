@@ -1,2 +1,17 @@
 .vs/
 build/
+_build/
+_build-*/
+_bin/
+_install/
+_install-*/
+*/_build/
+*/_build-*/
+*/_src/
+*/_install/
+*/_install-*/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.db

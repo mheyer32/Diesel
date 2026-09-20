@@ -1,0 +1,55 @@
+@PACKAGE_INIT@
+
+# Static-only. zlib 1.3.1 always builds a DLL too; we do not install it.
+set(ZLIB_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/include")
+set(ZLIB_INCLUDE_DIRS "${ZLIB_INCLUDE_DIR}")
+
+if(NOT TARGET ZLIB::ZLIB)
+  add_library(ZLIB::ZLIB STATIC IMPORTED)
+  set_target_properties(
+    ZLIB::ZLIB PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${ZLIB_INCLUDE_DIR}")
+
+  foreach(_cfg Debug RelWithDebInfo Release MinSizeRel)
+    find_library(
+      _zlib_lib_${_cfg}
+      NAMES zlibstaticd zlibstatic z
+      PATHS "${PACKAGE_PREFIX_DIR}/lib/${_cfg}" "${PACKAGE_PREFIX_DIR}/lib"
+      NO_DEFAULT_PATH)
+  endforeach()
+
+  set(_zlib_lib "${_zlib_lib_RelWithDebInfo}")
+  if(NOT _zlib_lib)
+    set(_zlib_lib "${_zlib_lib_Release}")
+  endif()
+  if(NOT _zlib_lib)
+    set(_zlib_lib "${_zlib_lib_Debug}")
+  endif()
+  if(NOT _zlib_lib)
+    set(_zlib_lib "${_zlib_lib_MinSizeRel}")
+  endif()
+  if(NOT _zlib_lib)
+    message(FATAL_ERROR
+            "ZLIB: static library not found under ${PACKAGE_PREFIX_DIR}/lib")
+  endif()
+
+  set_target_properties(ZLIB::ZLIB PROPERTIES IMPORTED_LOCATION "${_zlib_lib}")
+  if(_zlib_lib_Debug)
+    set_target_properties(ZLIB::ZLIB PROPERTIES IMPORTED_LOCATION_DEBUG
+                                                "${_zlib_lib_Debug}")
+  endif()
+  if(_zlib_lib_RelWithDebInfo)
+    set_target_properties(
+      ZLIB::ZLIB PROPERTIES IMPORTED_LOCATION_RELWITHDEBINFO
+                            "${_zlib_lib_RelWithDebInfo}")
+  endif()
+  if(_zlib_lib_Release)
+    set_target_properties(ZLIB::ZLIB PROPERTIES IMPORTED_LOCATION_RELEASE
+                                                "${_zlib_lib_Release}")
+  endif()
+endif()
+
+set(ZLIB_LIBRARY ZLIB::ZLIB)
+set(ZLIB_LIBRARIES ZLIB::ZLIB)
+set(ZLIB_FOUND TRUE)
+
+check_required_components(ZLIB)
