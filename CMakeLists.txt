@@ -33,7 +33,7 @@ endif()
 
 include(UseThirdParty)
 thirdparty_map_debug_to_release()
-thirdparty_ensure(ZLIB JPEG)
+thirdparty_ensure(ZLIB JPEG OpenAL)
 
 # ##################################### Dependencies
 
@@ -51,6 +51,7 @@ if(NOT JPEG_FOUND
   find_package(JPEG REQUIRED)
 endif()
 find_package(OpenGL REQUIRED)
+find_package(OpenAL REQUIRED)
 
 if(TARGET ZLIB::ZLIB)
   set(_zlib ZLIB::ZLIB)
@@ -68,14 +69,10 @@ else()
   message(FATAL_ERROR "No JPEG imported target found")
 endif()
 
-set(FMOD_ROOT
-    "E:/NewProjects/Libraries/fmodapi375win/api"
-    CACHE PATH "FMOD 3.75 SDK root (contains inc/ and lib/)")
-if(NOT EXISTS "${FMOD_ROOT}/inc/fmoddyn.h")
-  message(
-    FATAL_ERROR
-      "FMOD headers not found (looked for ${FMOD_ROOT}/inc/fmoddyn.h). Set FMOD_ROOT."
-  )
+if(TARGET OpenAL::OpenAL)
+  set(_openal OpenAL::OpenAL)
+else()
+  set(_openal OpenAL)
 endif()
 
 function(FilesToFolders files)
@@ -105,6 +102,7 @@ file(
 filestofolders(DXShell_SOURCES)
 
 list(FILTER DXShell_SOURCES EXCLUDE REGEX "/d3d/")
+list(FILTER DXShell_SOURCES EXCLUDE REGEX "/dsound/")
 list(FILTER DXShell_SOURCES EXCLUDE REGEX "Messaging\\.cpp$")
 list(FILTER DXShell_SOURCES EXCLUDE REGEX "Param\\.cpp$")
 
@@ -113,7 +111,7 @@ target_include_directories(
   DXShell PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/dxshell/include")
 target_compile_definitions(DXShell PUBLIC _CRT_SECURE_NO_WARNINGS
                                           _CRT_SECURE_NO_DEPRECATE)
-target_link_libraries(DXShell PUBLIC OpenGL::GL ${_zlib} ${_jpeg})
+target_link_libraries(DXShell PUBLIC OpenGL::GL ${_zlib} ${_jpeg} ${_openal})
 if(WIN32)
   target_link_libraries(DXShell PUBLIC dxguid winmm)
 endif()
@@ -152,8 +150,7 @@ filestofolders(Diesel_SOURCES)
 add_executable(Diesel WIN32 ${Diesel_SOURCES} ${DXShell_RESOURCE}
                             ${Diesel_RESOURCE})
 
-target_include_directories(
-  Diesel PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/diesel" "${FMOD_ROOT}/inc")
+target_include_directories(Diesel PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/diesel")
 
 target_link_libraries(Diesel PRIVATE DXShell OpenGL::GL ${_zlib} ${_jpeg})
 if(TARGET OpenGL::GLU)

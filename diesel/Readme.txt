@@ -1,3 +1,5 @@
+[Build instructions for current CMake setups: see BUILDING.md]
+
 Diesel, a Quake3 Arena Map Viewer
 ==================================
 
@@ -23,6 +25,8 @@ You can add new searchpaths (and pk3-files inside them) at runtime using the "ad
 The Source
 ==========
 
+For current CMake build steps, see BUILDING.md.
+
 You will notice that the source is not very consistent in respect to design rules and styleguide.
 This is due to the long development time and also reflects my own learning process.
 Some parts of the code were not touched for a long period of time (especially the DirectDraw/Direct3D/
@@ -33,7 +37,7 @@ DXShell is a bunch of classes that were originally meant to wrap
 DirectX for easy (in my opinion) use. But it soon became some sort of small framework for my own projects.
 It still grows from time to time whenever I add a new class that I consider useful and reusable for future projects.
 I even put all initialization code, the mainloop and messagepump into it. So be aware of that if you try to link
-against DXShell, you´ll most probably get doubly defined symbols, missing symbols and the like.
+against DXShell, you'll most probably get doubly defined symbols, missing symbols and the like.
 In fact a new project only needs to define 3 functions,
 
 bool GameInit()		// called after creating the appwindow
@@ -43,8 +47,10 @@ void GameShutDown()	// called either when the appwindow gets closed, the mainloo
 
 and link to DXShell.lib in order to create a fully functional Win32 application with an open window.
 
-Since ZLib, JPEGLib and Paul Nettle´s Memory Manager are independend libraries that are distributed on their own
-I didn´t want to put their sourcefiles into my project directly but left them as separate projects. This way you could
+(These paragraphs describe the original VC6 / PropertySheets workflow.)
+
+Since ZLib, JPEGLib and Paul Nettle's Memory Manager are independend libraries that are distributed on their own
+I didn't want to put their sourcefiles into my project directly but left them as separate projects. This way you could
 (in theory) easily replace those libs with newer versions, but also means some more work for you if you want to get
 Diesel compiled.
 
@@ -58,10 +64,10 @@ PN_MMGR: make "PN_MMGR" a global include and library path. MMGR usually "works" 
 		static lib that gets linked in as needed. "MemoryTracker.h" was added by me to be able to influence the inclusion		of mmgr.h a bit better ( I never directly include mmgr.h, but memorytracker.h instead)
 FMOD:		download the FMOD SDK (http://www.fmod.org) first. Make FMOD/API/INCLUDE a global include directory and
 		FMOD/API/LIB a global library path.
-STLPort:	I recommend using STLport (http://www.stlport.org) together with VC6 (problems with std::auto_ptr). VC7 users don´t need STLPort,
+STLPort:	I recommend using STLport (http://www.stlport.org) together with VC6 (problems with std::auto_ptr). VC7 users don't need STLPort,
 		but it can significantly speed up MMGR , while writing out the list of memory leaks (there are plenty :-)
-		Built the lib-files as described in STLport´s documentation, make STLport-4.5.3/stlport a global include
-		path and STLport-4.5.3/lib a global library path. Be sure to place both paths above VC´s standard searchpaths.
+		Built the lib-files as described in STLport's documentation, make STLport-4.5.3/stlport a global include
+		path and STLport-4.5.3/lib a global library path. Be sure to place both paths above VC's standard searchpaths.
 
 dxshell:	make dxshell/include a global include path and add dxshell/lib to the library searchpaths
 
@@ -69,8 +75,8 @@ You also need the DirectX SDK (should go well with Version 6 and above).
 Additionally VC6 users either have to install the SP5 processor pack (VCPP5.exe)
 or have to remove "memcpy.cpp" from the project and comment-out "#define AMD_MEMCOPY" in VertexBuffer.cpp.
 
-You should now be able to compile Diesel.exe. I cannot promise there won´t be problems, but since you got all files needed,
-I´m sure you´ll fix it somehow :-) 
+You should now be able to compile Diesel.exe. I cannot promise there won't be problems, but since you got all files needed,
+I'm sure you'll fix it somehow :-) 
 
 
 Greets & Credits (in no particular order)
@@ -82,9 +88,10 @@ Credits go to:
 -the Aftershock project
 -Tim Ferguson for his ROQ Decoder
 -Paul Nettle for his great Memory Manager
--all guys working on FMOD, particulary Aaron 'Serac' Hill for his dynamic FMOD.dll loading code
--the guys working on ZLIB
--the Independent JPEG Group for their JPEG decoder
+-Jean-loup Gailly, Mark Adler, and Gilles Vollant (zlib / minizip)
+-the Independent JPEG Group and the libjpeg-turbo Project
+-Chris Robinson and contributors (OpenAL Soft)
+
 
 Greets go to:
 
@@ -102,4 +109,4 @@ ICQ 77402067
 
 
 
-Diesel (c) 2002,2003 by Mathias Heyer
+Diesel (c) 2002,2003-2026 by Mathias Heyer

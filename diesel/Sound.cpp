@@ -17,122 +17,99 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#define FMOD_DYN_IMPL
-#define FMOD_DYN_NOASSERT
+#include "Sound.h"
 
-#include <fmoddyn.h>
-
-#include <defs.h>
-#include <file/FileManager.h>
-#include <iostream>
-
-#include <adt/ConVar.h>
 #include <adt/ConCmd.h>
+#include <adt/ConVar.h>
+#include <sound/SampleBuffer.h>
+#include <sound/SoundDevice.h>
+#include <sound/SoundSource.h>
+#include <sound/WavLoader.h>
 
-#include <MemoryTracker.h>
-
-#define FMOD_DYN_GUARD if (instance) {
-#define FMOD_DYN_UNGUARD                                                                                               \
-    }                                                                                                                  \
-    ;
+#include <iostream>
+#include <memory>
 
 void cb_s_musicvolume(ConVar& cvar);
 void music(ConCmd& command, const std::string& args);
 
-FMOD_INSTANCE* instance = NULL;
-FSOUND_SAMPLE* bgmusic  = NULL;
-int            bgmusic_channel;
-ConVar         s_musicvolume("s_musicvolume", "0.5", 0, cb_s_musicvolume);
-ConCmd         cmd_music("music", music);
+static std::unique_ptr<SoundDevice> g_soundDevice;
+static SampleBufferPtr              g_bgmusicBuffer;
+static SoundSourcePtr               g_bgmusicSource;
+
+ConVar s_musicvolume("s_musicvolume", "0.5", 0, cb_s_musicvolume);
+ConCmd cmd_music("music", music);
 
 using namespace std;
 
+SoundDevice* getSoundDevice()
+{
+    return g_soundDevice.get();
+}
+
 void freeBGMusic()
 {
-    FMOD_DYN_GUARD
-    if (bgmusic) {
-        if (bgmusic_channel != -1) {
-            instance->FSOUND_StopSound(bgmusic_channel);
-        }
-        instance->FSOUND_Sample_Free(bgmusic);
-        bgmusic = NULL;
+    if (g_bgmusicSource) {
+        g_bgmusicSource->stop();
+        g_bgmusicSource->setBuffer(SampleBufferPtr());
+        g_bgmusicSource.reset();
     }
-    FMOD_DYN_UNGUARD
+    g_bgmusicBuffer.reset();
 }
 
 bool initSoundSystem()
 {
     cout << endl << "======== initSoundSystem() ========" << endl << endl;
-    // it once was using serac´s code, but then dynamic loading became a feature of fmod
-    // cout<<"FMOD runtime dynamic loading by:\nAaron 'Serac' Hill <serac@hillvisions.com> "<<endl;
-    ;
-    if (instance = FMOD_CreateInstance("fmod.dll")) {
-        cout << "fmod.dll successfully loaded, sound enabled" << endl;
-        return (bool)instance->FSOUND_Init(44100, 16, 0);
-    } else {
-        cout << "WARNING: fmod.dll not found, you can get it at 'www.fmod.org'\nmaybe you just have an outdated version"
-             << endl;
-        return true;
+
+    try {
+        g_soundDevice.reset(new SoundDevice());
+        cout << "OpenAL sound enabled" << endl;
+    } catch (CException& e) {
+        cout << "WARNING: OpenAL init failed, sound disabled: " << e.getCompleteText() << endl;
+        g_soundDevice.reset();
     }
+
     cout << "====================================" << endl << endl;
-    ;
+    return true;
 }
 
 void shutdownSoundSystem()
 {
-    FMOD_DYN_GUARD
-
-    instance->FSOUND_StopSound(FSOUND_ALL);
     freeBGMusic();
-    instance->FSOUND_Close();
-
-    FMOD_FreeInstance(instance);
-    FMOD_DYN_UNGUARD
+    g_soundDevice.reset();
 }
 
 void setMusicVolume(float volume)
 {
-    FMOD_DYN_GUARD
-    instance->FSOUND_SetVolume(bgmusic_channel, (int)(255.0f * volume));
-    FMOD_DYN_UNGUARD
+    if (g_bgmusicSource)
+        g_bgmusicSource->set(AL_GAIN, volume);
 }
 
 void setBGMusic(const std::string& filename)
 {
-    FMOD_DYN_GUARD
+    if (!g_soundDevice)
+        return;
+
     freeBGMusic();
 
-    CFileManager* fman = CFileManager::Instance();
-    CFile*        file;
-    if (!(file = fman->open(filename))) {
-        cout << "setBackgroundMusic() could not open file " << filename << endl;
+    g_bgmusicBuffer = loadWAV(*g_soundDevice, filename);
+    if (!g_bgmusicBuffer) {
+        cout << "setBGMusic() could not load " << filename << endl;
         return;
     }
 
-    int   filesize = file->getSize();
-    char* buffer   = new char[filesize];
-
-    file->readVOID(buffer, filesize);
-    file->close();
-    delete file;
-
-    bgmusic = instance->FSOUND_Sample_Load(0, buffer, FSOUND_LOADMEMORY | FSOUND_LOOP_NORMAL | FSOUND_2D, 0, filesize);
-
-    if (bgmusic) {
-        bgmusic_channel = instance->FSOUND_PlaySound(FSOUND_FREE, bgmusic);
-        if (bgmusic_channel == -1) {
-            std::cout << "setBGMusic()->FSOUND_PlaySound()  failed" << std::endl;
-            freeBGMusic();
-            return;
-        }
-    } else {
-        cout << "FSOUND_Sample_Load() returned NULL" << endl;
-    }
-
+    g_bgmusicSource = g_soundDevice->createSource();
+    g_bgmusicSource->setBuffer(g_bgmusicBuffer);
+    g_bgmusicSource->setLooping(true);
+    g_bgmusicSource->set(AL_SOURCE_RELATIVE, AL_TRUE);
+    g_bgmusicSource->set(AL_POSITION, VECTOR3(0.0f, 0.0f, 0.0f));
     setMusicVolume((float)s_musicvolume);
+    g_bgmusicSource->play();
+}
 
-    KILLARRAY(buffer);
-    FMOD_DYN_UNGUARD
+void updateSoundListener(const MATRIX4& cameraMatrix)
+{
+    if (g_soundDevice)
+        g_soundDevice->setListenerPosition(cameraMatrix);
 }
 
 void cb_s_musicvolume(ConVar& cvar)

@@ -20,12 +20,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef SOUND_H
 #define SOUND_H
 
+#include <math/Matrix4.h>
+
 #include <string>
 
-extern bool initSoundSystem();
-extern void shutdownSoundSystem();
+class SoundDevice;
+
+extern bool         initSoundSystem();
+extern void         shutdownSoundSystem();
+extern SoundDevice* getSoundDevice();
 
 extern void setBGMusic(const std::string& filename);
 extern void freeBGMusic();
+extern void updateSoundListener(const MATRIX4& cameraMatrix);
 
 #endif
