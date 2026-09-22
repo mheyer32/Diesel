@@ -65,7 +65,7 @@ enum RGBGENFUNC
     RGBGEN_FLARE,
     RGBGEN_FOG,
     RGBGEN_CONST,
-    RGBGEN_MATERIAL  // take diffuse colour (and alpha) from (texture)-material, don´t change it
+    RGBGEN_MATERIAL  // take diffuse colour (and alpha) from (texture)-material, donÂ´t change it
 };
 
 /* Alpha Gen functions */

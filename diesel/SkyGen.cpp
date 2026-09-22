@@ -35,7 +35,7 @@ void genSkyVerts(VECTOR3 forward, VECTOR3 up, VECTOR3 right, int tess, float sky
     for (int y = 0; y < tess; ++y) {
         VECTOR3 vert = origin;
         for (int x = 0; x < tess; ++x) {
-            *(vertices++) = (VECTOR3)vert;
+            *(vertices++) = vert;
             vert += right;
         }
         origin += up;

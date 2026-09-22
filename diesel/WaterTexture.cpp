@@ -82,7 +82,7 @@ bool CWaterTexture::setImage(Image* newimage, int Options)
     }
 
     int format = newimage->getDestinationFormat();
-    format     = chooseInternalFormat(format, 0);  // don´t compress
+    format     = chooseInternalFormat(format, 0);  // donÂ´t compress
 
     if (!reserveTexture(width, height, format)) {
         std::cout << "CWaterTexture::setImage() could not reserve texture" << endl;

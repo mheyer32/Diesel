@@ -96,7 +96,7 @@ bool C3DSLoader::Load3DS(const CPath& Filename, CEntity::ENTITYLIST& entlist)
     };
 
     EnterSubChunk();
-    ReadChunk();  // und zum ersten SubChunk vorrücken
+    ReadChunk();  // und zum ersten SubChunk vorrÃ¼cken
 
     if (SeekChunk(EDIT3DS) != TRUE) {
         // FIXME: exception needed ?
@@ -128,7 +128,7 @@ BOOL C3DSLoader::EditorChunk()
 {
     CEntity* newEntity;
     EnterSubChunk();
-    ReadChunk();  // und zum ersten SubChunk vorrücken
+    ReadChunk();  // und zum ersten SubChunk vorrÃ¼cken
 
     while (SeekChunk(EDIT_MATERIAL) == TRUE) {
         MaterialChunk();
@@ -174,7 +174,7 @@ CMesh* C3DSLoader::MeshChunks(CEntity* newEntity)
     CMesh* newMesh = new CMesh();
 
     EnterSubChunk();
-    ReadChunk();  // und zum ersten SubChunk vorrücken
+    ReadChunk();  // und zum ersten SubChunk vorrÃ¼cken
     PushChunk();
     if (SeekChunk(TRI_VERTEXL) == TRUE) {
         VertexChunk();
@@ -295,7 +295,7 @@ void C3DSLoader::FaceListChunks(CMesh* Mesh)
             i3 = file->readWORD();
             file->readWORD();  // Kanten-Optionen skippen
 
-            // Fläche aufnehmen
+            // FlÃ¤che aufnehmen
             vb->indices[index++] = (INDEX)i1;
             vb->indices[index++] = (INDEX)i2;
             vb->indices[index++] = (INDEX)i3;
@@ -348,8 +348,8 @@ void C3DSLoader::FaceMaterialChunks(CVertexBuffer& face)
     shader = CShader::findShader(name);
 
     if (shader != NULL) {
-        // num_Faces=ReadWord();  // Anzahl der Flächen mit diesem material
-        // face=ReadWord(); //gefolgt von den Indizes der betroffenen Flächen, brauche ich nicht
+        // num_Faces=ReadWord();  // Anzahl der FlÃ¤chen mit diesem material
+        // face=ReadWord(); //gefolgt von den Indizes der betroffenen FlÃ¤chen, brauche ich nicht
         face.setShader(shader);
     } else {
         std::cout << "C3DSLoader::FaceMaterialChunks() shader '" << name << "' not found, using default shader"
@@ -419,7 +419,7 @@ void C3DSLoader::HierarchyChunks()
         //		throw CException("KEYF ObjectDescription erreicht");
 
         EnterSubChunk();
-        ReadChunk();  // und zum ersten SubChunk vorrücken
+        ReadChunk();  // und zum ersten SubChunk vorrÃ¼cken
 
         if (SeekChunk(KEYF_OBJHIERARCH) == TRUE) {
             file->readSTRING(name);  // Name des Objekts einlesen
@@ -480,7 +480,7 @@ void C3DSLoader::HierarchyChunks()
     return;
 }
 
-// Weltkoordinaten wieder zurück in Objektkoordinaten überführen.
+// Weltkoordinaten wieder zurÃ¼ck in Objektkoordinaten Ã¼berfÃ¼hren.
 // es sind bereits alle Objekte eingelesen und in der richtigen Hierarchie im baum gespeichert
 
 void C3DSLoader::CorrectEntity(CEntity* entity, const MATRIX4& m)
@@ -517,7 +517,7 @@ void C3DSLoader::MaterialChunk()
     CHARLINE  name;
 
     EnterSubChunk();
-    ReadChunk();  // und zum ersten SubChunk vorrücken
+    ReadChunk();  // und zum ersten SubChunk vorrÃ¼cken
     PushChunk();
 
     if (Chunk.CName == MAT_NAME01) {
@@ -622,7 +622,7 @@ BOOL C3DSLoader::SeekChunk(CHUNKNAME Name)
     }
     if (Chunk.CName == Name) {
 
-        ChunkStack.pop_front();  // nur oberstes Element löschen, nicht aber Chunk überschreiben
+        ChunkStack.pop_front();  // nur oberstes Element lÃ¶schen, nicht aber Chunk Ã¼berschreiben
         return TRUE;
     }
     return FALSE;
@@ -686,7 +686,7 @@ void C3DSLoader::EnterSubChunk()
 void C3DSLoader::ExitSubChunk()
 {
     PopChunk();   // wieder an den Anfang des Parent-Chunks
-    SkipChunk();  // und gesamten Chunk überspringen
+    SkipChunk();  // und gesamten Chunk Ã¼berspringen
 }
 
 void C3DSLoader::PushChunk()

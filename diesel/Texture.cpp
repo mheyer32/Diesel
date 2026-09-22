@@ -241,9 +241,9 @@ bool CTexture::uploadMipmaps(Image* srcimage, int texturetarget)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-// setzt die Texture Parameter, es werden nur die Optionen geändert, deren Bits in Optmask
+// setzt die Texture Parameter, es werden nur die Optionen geÃ¤ndert, deren Bits in Optmask
 // auf 1 gesetzt enthalten sind
-// erlaubt Ändern nur eines Paramteters ohne Kenntnis bereits gesetzter Parameter
+// erlaubt Ã„ndern nur eines Paramteters ohne Kenntnis bereits gesetzter Parameter
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CTexture::setTexParameter(DWORD Options, DWORD OptMask)
@@ -547,7 +547,7 @@ void CTexture::cb_r_texture_anisotropy(ConVar& var)
 
     for (; tIt != texlist.end(); ++tIt) {
         (*tIt)->bindTexture();
-        // I won´t make this into a member-function, best kept here
+        // I wonÂ´t make this into a member-function, best kept here
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, (float)var);
     }
 }

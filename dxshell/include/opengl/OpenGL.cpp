@@ -185,7 +185,7 @@ bool COpenGL::InitOpenGL(CWindow* window, int width, int height, bool fullscreen
 
     if ((strstr(getRenderer(), "Voodoo2") || strstr(getRenderer(), "VoodooGraphics")) && !m_run_fullscreen) {
         // FIXME: I never tested the code in a V3+, but I assume just checking for "Voodoo"
-        //  will fail with it, forcing it to fullscreen although it doesn´t need to
+        //  will fail with it, forcing it to fullscreen although it doesnÂ´t need to
         std::cout << "COpenGL::InitOpenGL() warning: Voodoo card detected, enforcing fullscreen..." << endl;
         // chop format to an acceptable value
         m_screenwidth              = 640;
@@ -261,7 +261,7 @@ bool COpenGL::InitOpenGL(CWindow* window, GLPIXELFORMAT format)
     AALevel = 4;  // give maximum
     if (SMR.SelectScreenMode(selMode, FS, AALevel)) {
         format.colorbits    = Modes[selMode].dmBitsPerPel;
-        format.multisamples = AALevel;  // don´t know if this is right
+        format.multisamples = AALevel;  // donÂ´t know if this is right
         format.hertz        = Modes[selMode].dmDisplayFrequency;
         return InitOpenGL(window, Modes[selMode].dmPelsWidth, Modes[selMode].dmPelsHeight, FS ? true : false, format);
     }
@@ -444,7 +444,7 @@ bool COpenGL::setStandardPixelFormat(const GLPIXELFORMAT& format)
          << " Z: " << (int)pfd.cDepthBits << endl
          << endl;
 
-    // adapt pixelformat to real format, you´ll never know, what you get
+    // adapt pixelformat to real format, youÂ´ll never know, what you get
     m_pixelformat.colorbits = r_colorbits = pfd.cColorBits;
     m_pixelformat.stencilbits = r_stencilbits = pfd.cStencilBits;
     m_pixelformat.alphabits                   = pfd.cAlphaBits;

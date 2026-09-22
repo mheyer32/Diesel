@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// VertexBuffer.h: Schnittstelle für die Klasse CVertexBuffer.
+// VertexBuffer.h: Schnittstelle fÃ¼r die Klasse CVertexBuffer.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -144,8 +144,8 @@ public:
     inline int getMaxNumIndices() const { return max_num_indices; };
 
     /* left public for fast access
-       don´t mess with it! Never replace any arrays that were previously allocated with
-       "AllocArrays()" but weren´t given free with "FreeArrays()"
+       donÂ´t mess with it! Never replace any arrays that were previously allocated with
+       "AllocArrays()" but werenÂ´t given free with "FreeArrays()"
        FIXME: still need for public access? introduce accessors ? */
     int mode;  // indexd tris, quads, or whatever
 
@@ -162,7 +162,7 @@ public:
 
 protected:
     // only allow destruction via refcounting, later there will be shared vertexbuffer
-    virtual ~CVertexBuffer();  // virtual is very important, because of RefCount´ing
+    virtual ~CVertexBuffer();  // virtual is very important, because of RefCountÂ´ing
 
     // hide copy operator
     // FIXME: also hide copy constructor ? (applies to some other classes, too)

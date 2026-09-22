@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Task.h: Schnittstelle für die Klasse CTask.
+// Task.h: Schnittstelle fÃ¼r die Klasse CTask.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -47,7 +47,7 @@ public:
     }
 
     /** whenever runTask() gets called by the kernel, you are obliged to set a new point in time
-        you expect to be called again. otherwise runTask() won´t be called again. A negative value will
+        you expect to be called again. otherwise runTask() wonÂ´t be called again. A negative value will
         also prevent another call to runTask() until a new valid time is given*/
     void setNextThink(float time);
 

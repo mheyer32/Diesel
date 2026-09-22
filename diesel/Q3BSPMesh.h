@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// q3bspmesh.h: Schnittstelle für die Klasse Q3BSPMesh.
+// q3bspmesh.h: Schnittstelle fÃ¼r die Klasse Q3BSPMesh.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -72,8 +72,8 @@ public:
         int  marknode;
         int  plane;  // index der planes im plane-array
         int  last_earlyout;
-        int  front, back;  // darunterliegende Teilbäume als Indizes im Nodes-Array;
-        BBOX bbox;         // BBox für Boundingbox
+        int  front, back;  // darunterliegende TeilbÃ¤ume als Indizes im Nodes-Array;
+        BBOX bbox;         // BBox fÃ¼r Boundingbox
 
         BSPNODE() { front = back = last_earlyout = marknode = 0; }
     };
@@ -159,7 +159,7 @@ public:
     Q3BSPMesh();
     virtual ~Q3BSPMesh();
 
-    /** render the bsp from g_Camera´s position, render all subentities*/
+    /** render the bsp from g_CameraÂ´s position, render all subentities*/
     void Render();
 
     /** get the leaf index for the given position */
@@ -203,7 +203,7 @@ public:
     }
 
     /** return face-index
-    leafface is  n´th face of the leaf
+    leafface is  nÂ´th face of the leaf
     */
     inline int getFaceNum(unsigned int leafnum, unsigned int leafface) const
     {

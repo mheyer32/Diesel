@@ -74,7 +74,7 @@ int ParseHelper::FindBracketPair(const char* String, char*& BracketStart, char*&
     }
 
     if (num_brackets == 0) {
-        BracketEnd--;    // die beiden Klammern nicht mitz‰hlen!
+        BracketEnd--;    // die beiden Klammern nicht mitz√§hlen!
         BracketStart++;  // erste Klammer skippen
         return BracketEnd - BracketStart;
     };
@@ -132,7 +132,7 @@ inline char ParseHelper::tolower(char c)
 int ParseHelper::strcmp(const char* string1, const char* string2, unsigned int size)
 {
     int count = 0;
-    while ((*string1 == *string2) && (*string1 != 0) && count < size)  //&&(*string2!=0) shouldn¥t be needed
+    while ((*string1 == *string2) && (*string1 != 0) && count < size)  //&&(*string2!=0) shouldn¬¥t be needed
     {
         string1++;
         string2++;

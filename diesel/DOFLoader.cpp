@@ -365,7 +365,7 @@ CShader* DOFLoader::readMaterial()
 
     topChunk();
     if (seekChunk(MTEX)) {
-        int num_textures = file->readDWORD();  // I´ll support only 1 texture instead
+        int num_textures = file->readDWORD();  // IÂ´ll support only 1 texture instead
         if (num_textures) {
             std::string texname = readString();
             CTextureManager::Instance()->loadTexture(material, texname, TEX_FLIPY);
@@ -451,7 +451,7 @@ bool DOFLoader::seekChunk(int chunkname)
         return false;
     }
     if (chunk.name == chunkname) {
-        chunkstack.pop_front();  // nur oberstes Element löschen, nicht aber Chunk überschreiben
+        chunkstack.pop_front();  // nur oberstes Element lÃ¶schen, nicht aber Chunk Ã¼berschreiben
         return true;
     }
     return false;  // never should come here

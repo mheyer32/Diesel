@@ -37,7 +37,7 @@ CConKeyMap::CConKeyMap()
     cmd_unbind    = new ConCmd("unbind", bind);
     cmd_unbindall = new ConCmd("unbindall", bind);
 
-    // this table would be used if I´d not use windows´  WM_CHAR
+    // this table would be used if IÂ´d not use windowsÂ´  WM_CHAR
     dx2ascii[DIK_A]         = 'a';
     dx2ascii[DIK_B]         = 'b';
     dx2ascii[DIK_C]         = 'c';
@@ -93,7 +93,7 @@ CConKeyMap::CConKeyMap()
 CConKeyMap::~CConKeyMap()
 {
     SwitchKeymap(KEYMAP1);
-    UnbindAllUserKey();  // damit die gespeicherten userdata-Commandozeilen gelöscht werden
+    UnbindAllUserKey();  // damit die gespeicherten userdata-Commandozeilen gelÃ¶scht werden
 
     KILLOBJECT(cmd_bind)
     KILLOBJECT(cmd_unbind)

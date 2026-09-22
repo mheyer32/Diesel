@@ -74,7 +74,7 @@ void CEntity::cullEntity(int testplanes)
             MATRIX4 m;
             g_TNLStack->getMatrix(m);
             const VECTOR3& dist = (VECTOR3&)m.a[3];
-            // quick¥n dirty lod based on distance
+            // quick¬¥n dirty lod based on distance
             // looks quite good  though
             int num_lods = m_meshes.size();
             lod          = (int)fabsf(dist.z / 200.0f);
@@ -132,7 +132,7 @@ void CEntity::addChild(CEntity::ENTITYLIST& m_children)
 void CEntity::removeChild(CEntity* child)
 {
     m_children.remove(child);
-    // FIXME: need to check if it really was this¥ child ?
+    // FIXME: need to check if it really was this¬¥ child ?
     child->m_parent = NULL;
 }
 
@@ -164,7 +164,7 @@ const BBOX& CEntity::getBoundingBox(int Frame, int lod)
     // FIXME: introduce caching for the bounding box
     if (m_meshes.size() || m_children.size()) {
         resetBBox(m_bbox);
-        // sollten keine Children vorhanden sein, wird m_bbox nicht angr¸hrt
+        // sollten keine Children vorhanden sein, wird m_bbox nicht angr√ºhrt
         SMARTPTRLIST::const_iterator e = m_children.begin();
         for (; e != m_children.end(); ++e) {
             m_bbox |= (*e)->getBoundingBox(Frame, lod);
@@ -220,7 +220,7 @@ void CEntity::collapseChildren(VECTOR3 t)
         }
         for (int l = 0; l < num_lods; l++) {
             if ((*e)->m_meshes[l] != NULL) {
-                *m_meshes[l] += *((*e)->m_meshes[l]);  // ==NULL sollte NIE eintreten (vˆllig leeres Entity??)
+                *m_meshes[l] += *((*e)->m_meshes[l]);  // ==NULL sollte NIE eintreten (v√∂llig leeres Entity??)
             }
         }
     }

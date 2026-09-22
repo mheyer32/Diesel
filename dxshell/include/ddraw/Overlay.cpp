@@ -102,7 +102,7 @@ HRESULT COverlay::create(DWORD w, DWORD h, DWORD bc, DWORD caps, DDPIXELFORMAT* 
             ddsd.ddpfPixelFormat.dwBBitMask=BMask;
             */
 
-        std::cout << "trying to use primary surface´s pixelformat... ";
+        std::cout << "trying to use primary surfaceÂ´s pixelformat... ";
         Primary->getPixelFormat(ddsd.ddpfPixelFormat);
         ddrval = CSurface::create(w, h, bc, caps);
 
@@ -231,7 +231,7 @@ HRESULT COverlay::GetOverlayCaps()
         if (ddcaps.dwMaxOverlayStretch != 0)
             maxStretch = ddcaps.dwMaxOverlayStretch;
         else
-            maxStretch = 5000;  // Soll Stretchen können, aber keine Min/Max-Werte angegeben?
+            maxStretch = 5000;  // Soll Stretchen kÃ¶nnen, aber keine Min/Max-Werte angegeben?
     } else {
         minStretch = 1000;
         maxStretch = 1000;
@@ -305,8 +305,8 @@ SetAspect:
         }
     }
 
-    // Clipping auf Ränder der Primary-Surface, wenn es nicht
-    // durch Hardware unterstützt wird.
+    // Clipping auf RÃ¤nder der Primary-Surface, wenn es nicht
+    // durch Hardware unterstÃ¼tzt wird.
     if (ddcaps.dwCaps & DDCAPS_OVERLAYCANTCLIP) {
         int height = Primary->getHeight();
         int width  = Primary->getWidth();

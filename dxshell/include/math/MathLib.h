@@ -68,7 +68,7 @@ inline float InvSqrt(float x)
     return x;
 }
 
-// lat and lng obey Quakes lat/lng system
+// lat and lng obey QuakeÂs lat/lng system
 inline void getVecFromLatLong(float lat, float lng, VECTOR3& vec)
 {
     float sinlng, coslng;

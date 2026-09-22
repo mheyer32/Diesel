@@ -138,7 +138,7 @@ void CZipFile::getFileList(PATHLIST& filelist, const CPath& directory, const std
             if (rval == UNZ_OK) {
                 _strlwr(filename);
                 if (ParseHelper::strcmp(filename, searchdir) ==
-                    searchdirlen)  // stimmt pfad(-anfang) mit gegebener Directory überein?
+                    searchdirlen)  // stimmt pfad(-anfang) mit gegebener Directory Ã¼berein?
                 {
                     // FIXME: should pure directorynames be contained inside the filellist?
                     // since we are looking for files mainly, subdirectories are usually not needed
@@ -146,7 +146,7 @@ void CZipFile::getFileList(PATHLIST& filelist, const CPath& directory, const std
                     // useful if the user can at lest see subdireytories
                     // if (filename[searchdirlen]=='/' && filename[searchdirlen+1]!=0)
                     {
-                        // if the found filename isn´t just the directory we look for, its
+                        // if the found filename isnÂ´t just the directory we look for, its
                         // a file inside it, so add it to filelist
                         filelist.push_back(filename + searchdirlen + 1);
                     }

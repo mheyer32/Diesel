@@ -79,13 +79,13 @@ bool CFile::open(const CPath& File, MODE Mode)
 
         m_pFile = fopen(File.getString().c_str(), "rb");
         if (!m_pFile) {
-            // std::cout<<"CFile::Open() Konnte File nicht öffnen - READ:\n"<<m_filename<<std::endl;
+            // std::cout<<"CFile::Open() Konnte File nicht Ã¶ffnen - READ:\n"<<m_filename<<std::endl;
             return false;
         }
         break;
     case WRITE:
         m_pFile = fopen(File.getString().c_str(), "wb");
-        if (!m_pFile)  // FIXME: Nachfragen, ob überschrieben werden soll
+        if (!m_pFile)  // FIXME: Nachfragen, ob Ã¼berschrieben werden soll
         {
             std::cout << "CFile::Open() File already exists - WRITE\n" << m_filename << std::endl;
             return false;
@@ -218,7 +218,7 @@ void CFile::getFileList(PATHLIST& filelist, const CPath& startdirectory, std::st
     GetCurrentDirectory(MAX_PATH, current_dir);
 
     if ((!startdirectory.getString().empty()) && SetCurrentDirectory(startdirectory.getString().c_str()) == FALSE) {
-        // can´t change into the directory
+        // canÂ´t change into the directory
         return;
     };
 
@@ -246,7 +246,7 @@ void CFile::getFileList_r(PATHLIST& filelist, const CPath& startdirectory, std::
         do {
 
             if ((find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                if (!EQ(find.cFileName, ".") && !EQ(find.cFileName, ".."))  // we don´t want these
+                if (!EQ(find.cFileName, ".") && !EQ(find.cFileName, ".."))  // we donÂ´t want these
                 {
                     newfile = startdirectory;
                     newfile /= find.cFileName;

@@ -28,7 +28,7 @@ else()
 endif()
 
 if(MSVC)
-  add_compile_options(/MP /Oy- /Oi /fp:fast)
+  add_compile_options(/MP /Oy- /Oi /fp:fast /utf-8)
 endif()
 
 include(UseThirdParty)

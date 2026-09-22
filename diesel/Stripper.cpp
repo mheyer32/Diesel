@@ -108,7 +108,7 @@ inline int findEdgeNum(const TRIADJ& adj, const EDGE& edge)
 
 void makeEdges(const INDEX* indices, EDGE* edges, int num_indices)
 {
-    // Trifaces ist Indexliste für Dreiecke, abc abc abc abc...
+    // Trifaces ist Indexliste fÃ¼r Dreiecke, abc abc abc abc...
     // num_Indizes ist die Anzahl aller Indizes (3 pro Dreieck)
     int e = 0, i = 0;
     int a, b, temp;
@@ -169,7 +169,7 @@ void buildTriAdj(const INDEX* indices, TRIADJ* adj, int num_indices)
 
     sortForAdjacency(edges, num_indices);
 
-    // Vertex-Referenzen aus Indexliste übernehmen
+    // Vertex-Referenzen aus Indexliste Ã¼bernehmen
     int i = 0;
     for (int t = 0; t < num_indices / 3; t++) {
         adj[t].vref[0] = indices[i];
@@ -178,7 +178,7 @@ void buildTriAdj(const INDEX* indices, TRIADJ* adj, int num_indices)
         i += 3;
     }
 
-    // vorsortierte Edge-List ist nötig!!,
+    // vorsortierte Edge-List ist nÃ¶tig!!,
     // durch Sortierung stehen zwei gleiche Kanten
     // hintereinander in der Edge-List -> benachbarte Dreiecke
     int e = 0, tri1, tri2, num1, num2;
@@ -205,7 +205,7 @@ void buildTriAdj(const INDEX* indices, TRIADJ* adj, int num_indices)
     KILLARRAY(edges);
 }
 
-// ermittelt die entstehende striplänge ausgehend von Dreieck tri1 aus AdjenzensListe triadj
+// ermittelt die entstehende striplÃ¤nge ausgehend von Dreieck tri1 aus AdjenzensListe triadj
 // in Richtung e1; die Indizes (innerhalb von triadj) der gestrippten Dreicke verbunden
 // mit der eingehenden Kante (in den oberen 8 Bit) (siehe EDGE) landen in stripbuffer
 
@@ -245,7 +245,7 @@ int getStriplen(TRIADJ* triadj, int tri1, int e1, int* stripbuffer)
         if (tri1 == 0xFFFFFFFF)
             break;
 
-        e1 = GETEDGE(tri1);  // über diese Kante komme ich herein
+        e1 = GETEDGE(tri1);  // Ã¼ber diese Kante komme ich herein
         switch (e1)          // ausgehende Kante suchen
         {
         case 0:
@@ -283,7 +283,7 @@ int doStrip(INDEX* indices, int& index, TRIADJ* triadj, int triangle, int edge) 
     bool mode     = false;
     int  striplen = 0;
 
-    switch (edge)  // tue so, als kämen wir aus einem vorherigen dreieck (erleichtert untere schleife)
+    switch (edge)  // tue so, als kÃ¤men wir aus einem vorherigen dreieck (erleichtert untere schleife)
     {
     case 0:
         edge = 1;
@@ -357,7 +357,7 @@ int doStrip(INDEX* indices, int& index, TRIADJ* triadj, int triangle, int edge) 
         striplen++;
 
         lasttri = triangle;
-        // in vorgesehener Richtung zum nächsten Strip-Nachbar
+        // in vorgesehener Richtung zum nÃ¤chsten Strip-Nachbar
         triangle = adj->adjtri[edge];
 
         // legaler Nachbar?

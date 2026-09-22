@@ -85,7 +85,7 @@ inline QUATERNION QUATERNION::operator-(const QUATERNION& r) const
     return QUATERNION(q.x - r.q.x, q.y - r.q.y, q.z - r.q.z, qw - r.qw);
 }
 
-inline QUATERNION QUATERNION::operator-() const  // FIXME this doesn´t look right
+inline QUATERNION QUATERNION::operator-() const  // FIXME this doesnÂ´t look right
 {
     return QUATERNION(-q.x, -q.y, -q.z, qw);
 }

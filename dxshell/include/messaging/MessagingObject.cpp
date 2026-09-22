@@ -113,7 +113,7 @@ void MessagingObject::sendMessage(MESSAGEID msgId, const Param& parameters)
     for (; lIt != lItend;) {
         const MSGLISTENERENTRY& listenerentry = *lIt;
         if (!exists(listenerentry.m_msgobject)) {
-            std::cout << "WARNING: MessagingObject::sendMessage() listener unknown, probably didn´t unregister "
+            std::cout << "WARNING: MessagingObject::sendMessage() listener unknown, probably didnÂ´t unregister "
                          "properly. unregistering listener automatically."
                       << std::endl;
             lIt = listeners.erase(lIt);

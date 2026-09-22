@@ -281,7 +281,7 @@ int GameUpdate()
         static int   addr=33*16;
         static float fps=30;
         static float lasttime=0;
-        // zeit für neuen tropfen?
+        // zeit fÃ¼r neuen tropfen?
         float timepassed=(g_Time-lasttime)*fps;
         if (timepassed>=1.0f)
         {
@@ -318,7 +318,7 @@ int GameUpdate()
 
 void GameShutDown()
 {
-    // don´t shutdown twice FIXME: automate this somehow
+    // donÂ´t shutdown twice FIXME: automate this somehow
     if (!game_initialized)
         return;
 
@@ -543,7 +543,7 @@ void Water(VECTOR3* current_buffer, VECTOR3* old_buffer, int width_shift)
                            0.5f) -
                           old_buffer[ax].y);
 
-            // dämpfung
+            // dÃ¤mpfung
             temp -= temp * 0.002f;
 
             old_buffer[ax].y = temp;

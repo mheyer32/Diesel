@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// SurfaceMem.h: Schnittstelle für die Klasse SurfaceMem.
+// SurfaceMem.h: Schnittstelle fÃ¼r die Klasse SurfaceMem.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -68,13 +68,13 @@ public:
             (_P*)surface->getPointer())[((y & surface->getYMask()) << surface->getShift()) + (x & surface->getXMask())];
     }
 
-    /** set a point, don´t check for boundaries */
+    /** set a point, donÂ´t check for boundaries */
     inline void setPixel3(const unsigned int x, const unsigned int y, const _P& color) const
     {
         ((_P*)surface->getPointer())[y * surface->getPitch() + x] = color;
     }
 
-    /** get a Pixel, but don´t check for boundaries */
+    /** get a Pixel, but donÂ´t check for boundaries */
     inline _P getPixel3(const unsigned int x, const unsigned int y) const
     {
         return ((_P*)surface->getPointer())[y * surface->getPitch() + x];

@@ -36,7 +36,7 @@ const char* WinErrorToString(int errornum)
                   errornum, 0, (char*)&textptr, 0, 0);
     if (textptr) {
         strcpy(errortext, textptr);
-        LocalFree(textptr);  // so we don´t get leaks
+        LocalFree(textptr);  // so we donÂ´t get leaks
     } else {
         strcpy(errortext, "no error text: WinErrorToString(): FormatMessage() returned NULL");
     }

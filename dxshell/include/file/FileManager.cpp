@@ -224,7 +224,7 @@ void CFileManager::getFileList(PATHLIST& filelist, const CPath& directory, const
         }
     }
 
-    // I assume the pakfiles won´t change during execution, so I take the directory from the cache, which is
+    // I assume the pakfiles wonÂ´t change during execution, so I take the directory from the cache, which is
     // much faster either
     //	cout<<"searching in pakcache:"<<endl;
 

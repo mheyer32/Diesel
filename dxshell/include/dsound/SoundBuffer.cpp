@@ -94,7 +94,7 @@ CSoundbuffer::~CSoundbuffer()
 void CSoundbuffer::initVars()
 {
     DXINITSTRUCT(dsbdesc);
-    dsbdesc.lpwfxFormat = &wfxFormat;  // NULL für Primary Soundbuffer
+    dsbdesc.lpwfxFormat = &wfxFormat;  // NULL fÃ¼r Primary Soundbuffer
 
     wfxFormat.cbSize = 0;
 

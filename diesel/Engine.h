@@ -52,9 +52,9 @@ extern int   g_FrameCounter;
 extern float g_SecsPerFrame;  //
 extern float g_FPS;
 
-extern CTimer Timer1;  // miﬂt die Zeit seit Start
-extern CTimer Timer2;  // miﬂt 1 Frame;
-extern CTimer Timer3;  // miﬂt die FPS
+extern CTimer Timer1;  // mi√üt die Zeit seit Start
+extern CTimer Timer2;  // mi√üt 1 Frame;
+extern CTimer Timer3;  // mi√üt die FPS
 
 extern CTimer Timer4;  // extra timers
 extern CTimer Timer5;

@@ -79,7 +79,7 @@ void CShaderLoader::cacheDirectory(const CPath& directory)
             temp = *fIt;
         }
 
-        // FIXME: Filter doesn´t work for pk3-contained files yet
+        // FIXME: Filter doesnÂ´t work for pk3-contained files yet
         // so do it here
         if (temp.getExtension() == "shader") {
             cacheFile(temp);
@@ -302,7 +302,7 @@ bool CShaderLoader::ParseShader(CShader* newshader)
         newshader->setSort(SORT_ADDITIVE - SORT_ONE);
     }
     if (newshader->getFlags() & SHADER_SKY) {
-        newshader->setUsedArrays(VERTEXARRAY | INDEXARRAY);  // don´t need more for skysahded faces
+        newshader->setUsedArrays(VERTEXARRAY | INDEXARRAY);  // donÂ´t need more for skysahded faces
         newshader->setSort(SORT_SKY);                        // overwrite any sortkey that may have been set
         for (int p = 0; p < newshader->getNumPasses(); ++p) {
             newshader->getPass(p).setDepthWrite(false);

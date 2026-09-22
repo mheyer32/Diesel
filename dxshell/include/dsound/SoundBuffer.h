@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Soundbuffer.h: Schnittstelle für die Klasse CSoundbuffer.
+// Soundbuffer.h: Schnittstelle fÃ¼r die Klasse CSoundbuffer.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -104,7 +104,7 @@ protected:
     DSBUFFERDESC dsbdesc;
     WAVEFORMATEX wfxFormat;
 
-    LPVOID AudioPtr1, AudioPtr2;  // Für Lock
+    LPVOID AudioPtr1, AudioPtr2;  // FÃ¼r Lock
     DWORD  AudioBytes1, AudioBytes2;
 
     HANDLE     StreamThread;

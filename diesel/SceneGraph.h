@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// SceneGraph.h: Schnittstelle für die Klasse CSceneGraph.
+// SceneGraph.h: Schnittstelle fÃ¼r die Klasse CSceneGraph.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ public:
     CSceneGraph();
     virtual ~CSceneGraph();
 
-    // fulfill CBaseScene´s abstract interface
+    // fulfill CBaseSceneÂ´s abstract interface
     virtual void cullScene();
     virtual void renderScene();
     virtual void addEntity(CEntity* newEntity);

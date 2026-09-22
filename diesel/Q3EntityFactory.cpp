@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // #include "Sound.h"
 #include "Q3Entity.h"
 #include "Shader.h"
+#include "Sound.h"
 
 #include <MemoryTracker.h>
 
@@ -912,7 +913,7 @@ void Q3EntityFactory::ProcessWorldSpawn(Q3BSPMesh* worldmodel)
     std::string music;
     getValue("music", music);
     if (getValue("music", music)) {
-        //	setBGMusic(music);
+        setBGMusic(music);
     }
     float gridsize[3];
     if (getValue("gridsize", gridsize)) {

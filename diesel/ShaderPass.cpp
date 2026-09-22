@@ -68,7 +68,7 @@ void CShaderPass::setFPS(float fps)
 
 void CShaderPass::setBlendFunc(int src, int dest)
 {
-    passflags &= ~(PASS_DEPTHWRITE | PASS_TEXENV);  // blended passes usually don´t write zvalues
+    passflags &= ~(PASS_DEPTHWRITE | PASS_TEXENV);  // blended passes usually donÂ´t write zvalues
     passflags |= PASS_BLENDFUNC;
     texenv = -1;
 

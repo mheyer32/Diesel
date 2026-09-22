@@ -94,7 +94,7 @@ void CSurface::createFromFile(const std::string& File)
     registerForMessage(CAppWindow::Instance(), Msg::RESTORE_SURFACES, 16786);
 }
 
-// Diese Surface wird Backbuffer von der übergebenen Surface
+// Diese Surface wird Backbuffer von der Ã¼bergebenen Surface
 
 void CSurface::createAsBackbuffer(CSurface& From)
 {
@@ -110,7 +110,7 @@ void CSurface::createAsBackbuffer(CSurface& From)
 
 HRESULT CSurface::create(DWORD w, DWORD h, DWORD bc, DWORD caps, LPDDPIXELFORMAT lpDDPixFmt)
 {
-    // ein gwünschtes PixelFormat  wurde übergeben
+    // ein gwÃ¼nschtes PixelFormat  wurde Ã¼bergeben
     if (lpDDPixFmt != NULL) {
         ddsd.ddpfPixelFormat = *lpDDPixFmt;
     }
@@ -153,8 +153,8 @@ HRESULT CSurface::create(DWORD w, DWORD h, DWORD bc, DWORD caps, LPDDPIXELFORMAT
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 // belegt die ddsd.ddsCaps und ddsd.dwFlags entsprechend der angeforderten Caps und Flags
-// mit sinnvollen Werten und/oder fügt weitere caps hinzu, je nachdem, was nötig ist
-// bzw in Abhängigkeit steht
+// mit sinnvollen Werten und/oder fÃ¼gt weitere caps hinzu, je nachdem, was nÃ¶tig ist
+// bzw in AbhÃ¤ngigkeit steht
 /////////////////////////////////////////////////////////////////////////////////////////
 void CSurface::fillSurfaceDesc(DWORD w, DWORD h, DWORD bc, DWORD caps)
 {
@@ -222,7 +222,7 @@ void CSurface::storeSurfaceData()
     while (temp > 0) {
         temp >>= 1;
         Shift++;
-    }  // Shift,XMask,YMask ist nur für quadratische 2^x Surfaces nützlich
+    }  // Shift,XMask,YMask ist nur fÃ¼r quadratische 2^x Surfaces nÃ¼tzlich
 
     Surface->GetPixelFormat(&ddsd.ddpfPixelFormat);
 
@@ -250,7 +250,7 @@ HRESULT CSurface::createClipper(HWND hwnd)
     return ddrval;
 }
 
-// Bitmap in Surface laden, wird automatisch auf Surface-Größe angepasst
+// Bitmap in Surface laden, wird automatisch auf Surface-GrÃ¶ÃŸe angepasst
 void CSurface::loadBitmap(const std::string& File)
 {
     Filename     = File;

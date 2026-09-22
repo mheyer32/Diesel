@@ -81,7 +81,7 @@ void MS3DModel::accumulateBoneMatrices()
 
 void MS3DModel::verticesToBonespace()
 {
-    // transform the vertices, given in objectspace into the bone´s space they belong to
+    // transform the vertices, given in objectspace into the boneÂ´s space they belong to
     for (int j = 0; j < m_num_joints; ++j) {
         m_jointmatrices[j] = m_joints[j].local;
     }

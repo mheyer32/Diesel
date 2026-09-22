@@ -137,7 +137,7 @@ bool CDirectDraw::InitDisplay(DWORD Width, DWORD Height, DWORD Depth, bool FS)
 
 void CDirectDraw::InitMisc()
 {
-    // Messages, die abgefangen werden müssen
+    // Messages, die abgefangen werden mÃ¼ssen
     if (run_fullscreen) {
         std::cout << "registering for window messages" << std::endl;
         registerForMessage(appwindow, Msg::GAME_ACTIVATED);

@@ -155,7 +155,7 @@ FILE_FOUND:
     if (ext == "tga" || ext == "bmp") {
         options ^= TEX_FLIPY;
     }
-    bool rval = texture->setImage(image, options);  // hope, this doesn´t go wrong;
+    bool rval = texture->setImage(image, options);  // hope, this doesnÂ´t go wrong;
 
     delete loader;
 

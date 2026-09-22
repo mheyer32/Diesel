@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// TNLStack.h: Schnittstelle für die Klasse TNLStack.
+// TNLStack.h: Schnittstelle fÃ¼r die Klasse TNLStack.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -205,7 +205,7 @@ public:
 
     void setCamera(const CCamera& ncamera);
 
-    CCamera& getCamera()  // I really don´t know if this is the right way...
+    CCamera& getCamera()  // I really donÂ´t know if this is the right way...
     {
         return camera;
     }
@@ -325,10 +325,10 @@ protected:
     bool       enable_override;
 
     Renderer* renderer;
-    CCamera   camera;  // this´ cameras settings will be restored when executing the stack
+    CCamera   camera;  // thisÂ´ cameras settings will be restored when executing the stack
 
     static int            activelights;
-    static CVertexBuffer* bvbuffer;  // this will be the rendering vertexbuffer, that collects multiple vb´s of same
+    static CVertexBuffer* bvbuffer;  // this will be the rendering vertexbuffer, that collects multiple vbÂ´s of same
                                      // shader,lightmap, transform...
 
     static ConVar r_maxpolys;

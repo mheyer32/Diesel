@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Kernel.h: Schnittstelle für die Klasse CKernel.
+// Kernel.h: Schnittstelle fÃ¼r die Klasse CKernel.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class CTask;
 
 /** intended to be used as cooperative micro-kernel,
-maybe I´m gonna using it some day :-)
+maybe IÂ´m gonna using it some day :-)
 */
 
 class CKernel : public Singleton<CKernel>

@@ -125,7 +125,7 @@ void Q3BSPMesh::Render()
 
         if ((new_eyecluster != eyecluster) && (!(int)r_lockpvs)) {
             // FIXME: visdata will point into invalid memory for invalid eyeclusters
-            //  but in this case, PVS-lookups aren´t used anyway;
+            //  but in this case, PVS-lookups arenÂ´t used anyway;
             eyecluster  = new_eyecluster;
             visdata_eye = visdata + ints_per_cluster * eyecluster;
             markLeaves();
@@ -139,7 +139,7 @@ void Q3BSPMesh::Render()
 
     RenderNode(0, ALLPLANES);
 
-    // dynamically adjusting zfar to the last leaf rendered (doesn´t work flawlessly)
+    // dynamically adjusting zfar to the last leaf rendered (doesnÂ´t work flawlessly)
     // g_Camera->SetupFrustum(g_Camera->FOV,g_Camera->Aspect,g_Camera->NearZ,1000+Length(faces[leaffaces[leafs[farleaf].startface]].vbuffer->vertices[0][0]-g_Camera->Position));
 }
 
@@ -169,8 +169,8 @@ bool Q3BSPMesh::RenderNode(int node, int planemask)
         return RenderNodeNoFrustumCulling(node);  // bbox completely contained in frustum
     }
 
-    // this test would not be neccessary if I´d regret the front-to-back traversal
-    // the faces won´t be rendered in front-to-back-order either, because quick-sorting (done in TNLStack) them
+    // this test would not be neccessary if IÂ´d regret the front-to-back traversal
+    // the faces wonÂ´t be rendered in front-to-back-order either, because quick-sorting (done in TNLStack) them
     // is not a stable sorting algo
     bool rval = false;
     //	if (PointDistance(g_Camera->getTransformation().getTranslation(),planes[pnode.plane])>=PLANE_EPSILON)
@@ -705,7 +705,7 @@ bool Q3BSPMesh::BrushRayTest(int brushnum, const VECTOR3& p1, const VECTOR3& p2,
         t1 = PointDistance(p1, planes[brushsides[bs].plane]) - trace.bevel;
         t2 = PointDistance(p2, planes[brushsides[bs].plane]) - trace.bevel;
 
-        if ((t1 < 0.0f) && (t2 < 0.0f))  // beide dahinter, es könnte noch eine andere brushside geben, die
+        if ((t1 < 0.0f) && (t2 < 0.0f))  // beide dahinter, es kÃ¶nnte noch eine andere brushside geben, die
         {                                // ein anderes Ergebnis liefert
             continue;
         }
@@ -718,7 +718,7 @@ bool Q3BSPMesh::BrushRayTest(int brushnum, const VECTOR3& p1, const VECTOR3& p2,
         if (t1 >= 0)            // startpunkt auf Vorderseite des Brushes
         {
             startsolid = false;
-            if (frac >= tfar)  // ist vorderseiten-abstand grösser rückseiten-abstand, ging der strahl am Brush vorbei
+            if (frac >= tfar)  // ist vorderseiten-abstand grÃ¶sser rÃ¼ckseiten-abstand, ging der strahl am Brush vorbei
             {
                 // side=FRONTSIDE;
                 // break;
@@ -804,7 +804,7 @@ bool Q3BSPMesh::LeafRayTest(int leaf, const VECTOR3& p1, const VECTOR3& p2, TRAC
 bool Q3BSPMesh::RayTest(const VECTOR3& p1, const VECTOR3& p2, TRACE& trace)
 {
     if (!brushsides)
-        return true;  // nicht kollidiert, da nicht getestet, Kandidat für exception
+        return true;  // nicht kollidiert, da nicht getestet, Kandidat fÃ¼r exception
 
     ++checkcount;
 
@@ -821,7 +821,7 @@ bool Q3BSPMesh::RayTest(const VECTOR3& p1, const VECTOR3& p2, TRACE& trace)
         result = RecursiveRayTest(0, p1, p2, p1, p2, trace);
     }
 
-    // since I don´t know, if the clip-ray-against-bloated-bsp method works already
+    // since I donÂ´t know, if the clip-ray-against-bloated-bsp method works already
     // this will just test every brush
     /*	result=true;
         for (int b=0;b<num_brushes;++b)

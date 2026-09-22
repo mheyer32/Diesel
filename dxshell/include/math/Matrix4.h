@@ -46,7 +46,7 @@ union MATRIX4
 
     inline MATRIX4();
     inline MATRIX4(float* m2);
-    inline MATRIX4(bool dontinitialize) {};  ///< this constructor  doesn´t initialize the members, use with care
+    inline MATRIX4(bool dontinitialize) {};  ///< this constructor  doesnÂ´t initialize the members, use with care
 
     inline float    operator[](const int aik) const;
     inline float&   operator[](const int aik);

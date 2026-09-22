@@ -252,7 +252,7 @@ CVertexBuffer* ASELoader::buildVBuffer(VECTOR3* verts, VECTOR2* tverts, INDEX* f
     }
 
     num_finalverts = indexmap.size();
-    // now we know how many vertices we´ll need
+    // now we know how many vertices weÂ´ll need
     assert(_CrtCheckMemory());
     CVertexBuffer* vbuffer =
         new CVertexBuffer(MT_STATIC, VERTEXARRAY | INDEXARRAY | TEXCOORDARRAY, num_finalverts, num_faces * 3);

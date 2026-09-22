@@ -61,7 +61,7 @@ CVertexBuffer* MD3Loader::loadMD3Mesh()
     file->readVOID(&meshheader, sizeof(meshheader));
     file->setPosition(pos + meshheader.HeaderSize);
 
-    // bisher keine Multiskin Unterstützung, lade aber trotzdem alle Shader
+    // bisher keine Multiskin UnterstÃ¼tzung, lade aber trotzdem alle Shader
     if (meshheader.Skin_num) {
         shaders = new CShader*[meshheader.Skin_num];
         for (int s = 0; s < meshheader.Skin_num; ++s) {
@@ -78,7 +78,7 @@ CVertexBuffer* MD3Loader::loadMD3Mesh()
     CVertexBuffer* vbuffer = new CVertexBuffer;
 
     if (shaders && shaders[0]) {
-        vbuffer->setShader(shaders[0]);  // wie kann CMesh multiskin unterstützen? enthält MD3 überhaupt multiskins?
+        vbuffer->setShader(shaders[0]);  // wie kann CMesh multiskin unterstÃ¼tzen? enthÃ¤lt MD3 Ã¼berhaupt multiskins?
     } else {
         vbuffer->setShader(CShader::DefaultShader);
     }
@@ -109,7 +109,7 @@ CVertexBuffer* MD3Loader::loadMD3Mesh()
         vbuffer->indices[s]     = indices[s + 2];
     }
 
-    // Hilfsarrary löschen
+    // Hilfsarrary lÃ¶schen
     KILLARRAY(indices)
 
     // TexturKoordinaten einlesen
@@ -363,7 +363,7 @@ CShader* MD3Loader::findOrLoadShader(char* shadername)
     {
         shader = CShader::DefaultShader;
     } else {
-        // angenommen, der shader wurde generiert FIXME: nötig ?
+        // angenommen, der shader wurde generiert FIXME: nÃ¶tig ?
         if (shader->getFlags() & SHADER_TAGGED) {
             shader->getPass(0).setRGBGen(RGBGEN_LIGHTINGDIFFUSE);
             shader->validate();

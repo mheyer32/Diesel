@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Mesh.h: Schnittstelle für die Klasse CMesh.
+// Mesh.h: Schnittstelle fÃ¼r die Klasse CMesh.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@ protected:
     static MESHLIST MeshList;
 
 private:
-    /** currently undefined  - should vbuffers be cloned or AddRef´d ? */
+    /** currently undefined  - should vbuffers be cloned or AddRefÂ´d ? */
     CMesh& operator=(const CMesh& m2);
 };
 

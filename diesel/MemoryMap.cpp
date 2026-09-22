@@ -67,7 +67,7 @@ unsigned int MemoryMap::getIndex(const unsigned int num_elems)
 {
     BLOCK* free     = freeblocks;
     BLOCK* lastfree = NULL;
-    // Finde block mit genügend Platz
+    // Finde block mit genÃ¼gend Platz
     while (free && free->num_elements < num_elems) {
         lastfree = free;
         free     = free->next;
@@ -76,7 +76,7 @@ unsigned int MemoryMap::getIndex(const unsigned int num_elems)
     if (!free)
         return -1;
 
-    // der neue Block wird vom Anfang des freien Stücks weggenommen
+    // der neue Block wird vom Anfang des freien StÃ¼cks weggenommen
     unsigned int idx = free->start;
     free->num_elements -= num_elems;
     free->start += num_elems;
@@ -97,31 +97,31 @@ void MemoryMap::freeIndex(unsigned int index, const unsigned int num_elems)
 {
     BLOCK* free     = freeblocks;
     BLOCK* lastfree = NULL;
-    // der erste freie Block, dessen Start grösser ist als index
+    // der erste freie Block, dessen Start grÃ¶sser ist als index
     // und lastfree begrenzen den belegten Bereich, wo das freizugebende Element liegt
     while (free && free->start < index) {
         lastfree = free;
         free     = free->next;
     }
     bool createnew = true;
-    if (free && free->start == (index + num_elems))  // freizugebender Block schliesst sich an nächsten freien block an
+    if (free && free->start == (index + num_elems))  // freizugebender Block schliesst sich an nÃ¤chsten freien block an
     {
         free->start = index;
         free->num_elements += num_elems;
         createnew = false;
     }
-    if (lastfree)  // index liegt zwischen zwei freien Blöcken, nicht am start
+    if (lastfree)  // index liegt zwischen zwei freien BlÃ¶cken, nicht am start
     {
         if (lastfree->start + lastfree->num_elements ==
             index)  // freizugebender Block beginnt am Ende des letzten freien Blocks
         {
-            if (createnew)  // wurde Block nicht mit nächstem verbunden?
+            if (createnew)  // wurde Block nicht mit nÃ¤chstem verbunden?
             {
                 // verbinde in mit letztem
                 lastfree->num_elements += num_elems;
                 return;
             } else {
-                // verbinde diesen und nächsten Block
+                // verbinde diesen und nÃ¤chsten Block
                 lastfree->next = free->next;
                 lastfree->num_elements += free->num_elements;
                 delete free;

@@ -177,7 +177,7 @@ void LWOLoader::enterChunk()
 void LWOLoader::exitChunk()
 {
     popChunk();   // wieder an den Anfang des Parent-Chunks
-    skipChunk();  // und gesamten Chunk überspringen
+    skipChunk();  // und gesamten Chunk Ã¼berspringen
 }
 
 void LWOLoader::pushChunk()
@@ -227,7 +227,7 @@ bool LWOLoader::seekChunk(int Name)
         return false;
     }
     if (current_chunk.id == Name) {
-        chunkstack.pop();  // nur oberstes Element löschen, nicht aber current_chunk überschreiben
+        chunkstack.pop();  // nur oberstes Element lÃ¶schen, nicht aber current_chunk Ã¼berschreiben
         return true;
     }
     return false;

@@ -98,7 +98,7 @@ void Q3Entity::setTarget(Q3Entity* newTarget)
 void Q3Entity::setWorldModel(Q3BSPMesh* model)
 {
     worldmodel = model;
-    if (getNumChildren())  // don´t link if this entity has no visible models
+    if (getNumChildren())  // donÂ´t link if this entity has no visible models
     {
         worldmodel->linkEntity(this);
     }
@@ -226,7 +226,7 @@ void Q3Entity::RenderPortal(PORTALINFO& portalinfo)
         MATRIX4 portalCamLookat;
 
         if (!target->target) {
-            // the camera doesn´t point at a special entity
+            // the camera doesnÂ´t point at a special entity
             // I never checked this code, so it may be wrong
             /*	RotationMatrix4Y(R,RAD(target->angles[1]));
                 Rotate4X(R,RAD(target->angles[0]));
@@ -423,7 +423,7 @@ void Q3Entity::setPortalFace()
     Q3BSPMesh::INDEXITERATOR lIt = leafs.begin();
 
     resetBBox(bbox);
-    // now examine each face of each leaf and look if it´s a portal-surface
+    // now examine each face of each leaf and look if itÂ´s a portal-surface
     // in rare cases this is still the wrong method
     // cout<<"leafs:";
     for (; lIt != leafs.end(); ++lIt) {

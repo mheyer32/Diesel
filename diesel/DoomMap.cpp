@@ -113,7 +113,7 @@ void DoomMap::renderArea_r(int areanum, const Frustum& frustum, int depth)
     AREA& area = areas[areanum];
 
     if (area.markframe != g_FrameCounter) {
-        area.markframe = g_FrameCounter;  // we may visit the area twice, but won´t render it twice
+        area.markframe = g_FrameCounter;  // we may visit the area twice, but wonÂ´t render it twice
         area.areamodel->batchFaces();
 
         drawnnodes++;
@@ -137,7 +137,7 @@ void DoomMap::renderArea_r(int areanum, const Frustum& frustum, int depth)
         PORTAL& portal    = portals[portalnum];
 
         if (portal.markportal)
-            continue;  // don´t walk this portal twice on the current path through the area-portal-area graph
+            continue;  // donÂ´t walk this portal twice on the current path through the area-portal-area graph
 
         int otherside = 1;
         if (areanum == portal.areas[1]) {
@@ -176,7 +176,7 @@ void DoomMap::renderArea_r(int areanum, const Frustum& frustum, int depth)
             }
         }
 
-        portal.markportal = 1;  // we walk this portal from current area, but don´t do this twice
+        portal.markportal = 1;  // we walk this portal from current area, but donÂ´t do this twice
 
         if ((int)r_showportals)
             showportal(inverts, num_inverts);

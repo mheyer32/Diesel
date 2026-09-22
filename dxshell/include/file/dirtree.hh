@@ -111,7 +111,7 @@ void CDirTree<T>::add_r(char* file,const T &data, LINK node)
 
 		// try to find the subdirectory in the current node
 		DIRNODEITERATOR fIt=dirnodes[node].find(std::string(file));
-		if (fIt==dirnodes[node].end()) // subdir isn´t known already
+		if (fIt==dirnodes[node].end()) // subdir isnÂ´t known already
 		{
 			// create a new node and recurse
 			LINK newnode=getNewNode();
@@ -251,7 +251,7 @@ bool CDirTree<T>::findnode(const CPath &filename, LINK &node)
 		{
 			node=newnode;
 			// otherwise the found node was a leaf, containing information about the directory itself
-			// we´d have to continue inside the same node
+			// weÂ´d have to continue inside the same node
 		}
 		// found a subdirectory as path-part
 		file=subdir+1; // continue with next parts of the path

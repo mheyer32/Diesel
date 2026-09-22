@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// MESHLoader.h: Schnittstelle für die Klasse MESHLoader.
+// MESHLoader.h: Schnittstelle fÃ¼r die Klasse MESHLoader.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <math/Vector2.h>
 #include <math/Vector3.h>
 
-#include "Color.h"  // Hinzugefügt von der Klassenansicht
+#include "Color.h"  // HinzugefÃ¼gt von der Klassenansicht
 
 #include <vector>
 

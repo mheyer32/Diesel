@@ -142,7 +142,7 @@ inline float det3x3(float a1, float a2, float a3, float b1, float b2, float b3, 
 inline void FullInverse4(const MATRIX4& M, MATRIX4& Inv)
 {
 
-    assert(&M != &Inv);  // must be different matrices or you´ll get bogus results
+    assert(&M != &Inv);  // must be different matrices or youÂ´ll get bogus results
 
     float det, oodet;
 
@@ -177,7 +177,7 @@ inline void FullInverse4(const MATRIX4& M, MATRIX4& Inv)
 
 inline void FullInverse3(const MATRIX3& m, MATRIX3& inv)
 {
-    assert(&m != &inv);  // must be different matrices or you´ll get bogus results
+    assert(&m != &inv);  // must be different matrices or youÂ´ll get bogus results
 
     inv.m00 = det2x2(m.m11, m.m12, m.m21, m.m22);
     inv.m10 = -det2x2(m.m01, m.m02, m.m21, m.m22);

@@ -47,7 +47,6 @@ ConVar::ConVar(const std::string& Command, const std::string& InitVal, int Flags
 
 ConVar::~ConVar()
 {
-    std::cout << "blah";
 }
 ConVar& ConVar::operator=(const int i)
 {
@@ -137,7 +136,7 @@ void ConVar::set(ConCmd& Command, const std::string& Arg)
     ConVar* cvar = 0;
 
     if (cmd) {
-        // the variable´s name is found
+        // the variableÂ´s name is found
         if (!(cvar = dynamic_cast<ConVar*>(cmd))) {
             // the found command is not a variable
             std::cout << "'" << var << "' is already defined as non-variable statement." << std::endl;

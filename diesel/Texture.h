@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Texture.h: Schnittstelle für die Klasse CTexture.
+// Texture.h: Schnittstelle fÃ¼r die Klasse CTexture.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     (1 << 3)                       // keep the image object, can be used for recreating the texture
                                    // memory will be freed when deleting the texture or calling FreeTexture()
 #define TEX_FLIPY (1 << 4)         // flip bitmap in vertical direction before using it
-#define TEX_DONTCOMPRESS (1 << 5)  // don´t use texture compression
+#define TEX_DONTCOMPRESS (1 << 5)  // donÂ´t use texture compression
 #define TEX_USEMATERIAL (1 << 6)   // texture uses material
 // these are internal	settings that cannot be used as option while loading a texture
 #define TEX_GENMIPMAP (1 << 31)
@@ -82,7 +82,7 @@ public:
     virtual bool setImage(Image* image, int Options);
 
     /** sets one ore more of the textures parameters
-    Options and OptMask uses one ore more or´ed TEX_xx values
+    Options and OptMask uses one ore more orÂ´ed TEX_xx values
     Mask will contain set bits at the option that is to be changed
     so if you want to change texture repeating to "CLAMP", call
     "setTexParameter(TEX_CLAMP,TEX_CLAMP)", to turn off clamping,
@@ -166,7 +166,7 @@ protected:
      */
     void flipY(Image* flipimage);
 
-    Image* image;  // enthält breite,höhe,format, anz. der komponenten und zeiger auf Textur in Sysmem
+    Image* image;  // enthÃ¤lt breite,hÃ¶he,format, anz. der komponenten und zeiger auf Textur in Sysmem
 
     int         height;
     int         width;

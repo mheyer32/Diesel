@@ -310,7 +310,7 @@ void CPalette::CreateConvertTableRGB(LPDDSURFACE DestSurface)
     rmask                       = ddpf.dwRBitMask;
     gmask                       = ddpf.dwGBitMask;
     bmask                       = ddpf.dwBBitMask;
-    while (!(rmask & 1)) {  // Nullen zählen
+    while (!(rmask & 1)) {  // Nullen zÃ¤hlen
         rmask >>= 1;
         rshift++;
     }
@@ -324,7 +324,7 @@ void CPalette::CreateConvertTableRGB(LPDDSURFACE DestSurface)
         bmask >>= 1;
         bshift++;
     }
-    while (rmask) {  // Einsen zählen
+    while (rmask) {  // Einsen zÃ¤hlen
         rmask >>= 1;
         rshift2--;
     }

@@ -81,7 +81,7 @@ void CDInputDevice::releaseDevice()
 bool CDInputDevice::InitDevice(REFGUID DeviceGUID, DIDATAFORMAT* DataFormat, DWORD Cooplevel)
 {
     HRESULT dirval;
-    // DInput-Device  öffnen
+    // DInput-Device  Ã¶ffnen
 
     std::cout << std::endl << "======== CDInputDevice::InitDevice() ========" << std::endl << std::endl;
 

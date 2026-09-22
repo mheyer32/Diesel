@@ -123,8 +123,8 @@ LRESULT CAppWindow::WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l)
     msg.lParam  = l;
 
     // spread message to all listeners
-    // yeah, I know, this casts unknown message ID´s, but the windows Id´s are always
-    // below WM_APP, so ambigous message IDs won´t be created
+    // yeah, I know, this casts unknown message IDÂ´s, but the windows IdÂ´s are always
+    // below WM_APP, so ambigous message IDs wonÂ´t be created
     sendMessage((Msg::MESSAGEID)msg.message, Msg::WINDOWMESSAGE_PARAM(msg));
 
     return 0;

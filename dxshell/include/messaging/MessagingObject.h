@@ -18,7 +18,7 @@
 #include "Param.h"
 
 // MSGx macros will produce typdefs that define a type names "msgname_TYPE" that reflect the type of the
-// message´s parameter object
+// messageÂ´s parameter object
 #define MSG0(msgname)                                                                                                  \
     namespace Msg                                                                                                      \
     {                                                                                                                  \
@@ -58,7 +58,7 @@
 
 // use this inside your handleMessage() function to cast the given parameter object down
 // to its real type.
-// parameterobject is the const reference you´ll get through the function call
+// parameterobject is the const reference youÂ´ll get through the function call
 // localobject is the name of a reference that will be created locally which has the right type for
 // the message
 #define MSG_PARAMCAST(msgname, parameterobject, localobject)                                                           \

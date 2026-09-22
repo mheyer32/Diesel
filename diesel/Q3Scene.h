@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Q3Scene.h: Schnittstelle für die Klasse Q3Scene.
+// Q3Scene.h: Schnittstelle fÃ¼r die Klasse Q3Scene.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ class Q3Scene : public CBaseScene, public CRefCount
 public:
     Q3Scene();
 
-    // fulfill CBaseScene´s abstract interface
+    // fulfill CBaseSceneÂ´s abstract interface
     virtual void cullScene();
     virtual void renderScene();
     virtual void addEntity(CEntity* newEntity);

@@ -13,5 +13,5 @@ TODO:
 - fix FIXMEs
 - remove support for more than one portal at once (never worked well anyway)
 - turn dlight-test into real dlight support
-- autosprite2 code doesn´t work in all cases
+- autosprite2 code doesnÂ´t work in all cases
 - autosprite faces sometimes have wrong texture coordinates and are falsly oriented in rare cases

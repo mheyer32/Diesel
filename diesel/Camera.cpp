@@ -230,7 +230,7 @@ void CCamera::calculateClipPlanes()
 bool CCamera::BoxInFrustum(const BBOX& Box, int& Planemask)
 {
     // wenn es eine ClipPlane gibt, wo die Box KOMPLETT dahinter ist (Planes zeigen nach innen)
-    // kann die Box unmöglich im Frustum liegen
+    // kann die Box unmÃ¶glich im Frustum liegen
 
     if ((Planemask & CAMERAPOINT) && PointInBox(m_transform.getTranslation(), Box)) {
         return true;
@@ -239,8 +239,8 @@ bool CCamera::BoxInFrustum(const BBOX& Box, int& Planemask)
     Planemask &= ~CAMERAPOINT;  // wenn der Kamerapunkt einmal ausserhalb der BBox ist, so ist er es auch fuer alle
                                 // Kinder dieser Box
 
-    // Planemask nicht verändern, wenn Box ausserhalb des Frustum sollte weiteres Testen
-    // sowieso aufhören
+    // Planemask nicht verÃ¤ndern, wenn Box ausserhalb des Frustum sollte weiteres Testen
+    // sowieso aufhÃ¶ren
     if ((Planemask & NEARPLANE) && BoxBehind(Box, m_frustum.m_planes[CLIP_NEAR]))
         return false;
     if ((Planemask & LEFTPLANE) && BoxBehind(Box, m_frustum.m_planes[CLIP_LEFT]))
@@ -273,8 +273,8 @@ bool CCamera::BoxInFrustum(const BBOX& Box, int& Planemask, int& early_out)
     Planemask &= ~CAMERAPOINT;  // wenn der Kamerapunkt einmal ausserhalb der BBox ist, so ist er es auch fuer alle
                                 // Kinder dieser Box
 
-    // Planemask nicht verändern, wenn Box ausserhalb des Frustum sollte weiteres Testen
-    // sowieso aufhören
+    // Planemask nicht verÃ¤ndern, wenn Box ausserhalb des Frustum sollte weiteres Testen
+    // sowieso aufhÃ¶ren
 
     const CLIPPLANE* series = s_planeseries[early_out];
     int              plane;

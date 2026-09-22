@@ -60,7 +60,7 @@ TNLStack::TNLStack()
 
 TNLStack::~TNLStack()
 {
-    // FIXME: if the last tnlstack was destroyed, bvbuffer will be released but the pointer won´t be set to NULL
+    // FIXME: if the last tnlstack was destroyed, bvbuffer will be released but the pointer wonÂ´t be set to NULL
     if (bvbuffer)
         bvbuffer->Release();
 }
@@ -159,7 +159,7 @@ void TNLStack::execute()
     ::glPushMatrix();
 
     CCamera* savedcam = g_Camera;  // save global g_Camera
-    g_Camera          = &camera;   // use the stack´s own camera
+    g_Camera          = &camera;   // use the stackÂ´s own camera
 
     g_Camera->setupFrustum();  // clipplanes had to be set before TNLStack::setCamera() was called
 

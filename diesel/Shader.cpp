@@ -158,7 +158,7 @@ CShader* CShader::genShaderFromTexture(CTexture* texture, bool genLightmapStage)
     }
 
     else {
-        // falls sich hier was ändert, muss auch Load3DS::MaterialChunk() angepasst werden!!
+        // falls sich hier was Ã¤ndert, muss auch Load3DS::MaterialChunk() angepasst werden!!
 
         CShaderPass diffpass;
 

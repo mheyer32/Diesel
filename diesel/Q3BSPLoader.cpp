@@ -414,7 +414,7 @@ void Q3BSPLoader::ReadSurfaces()
                 VBServices::reverseIndices(*facebuffer);
             }
             //		facebuffer->OptimizeVBuffer();
-            // FIXME: vorher auf SHADERFLAG_DEFORMV prüfen
+            // FIXME: vorher auf SHADERFLAG_DEFORMV prÃ¼fen
             CShader* shader = facebuffer->getShader();
             for (int d = 0; d < shader->getNumVertexDeform(); ++d) {
                 if (shader->getVertexDeform(d) == VDEF_AUTOSPRITE) {
@@ -522,7 +522,7 @@ void Q3BSPLoader::ReadModels()
     worldmodel->bbox = QBBox(models[0].mins, models[0].maxs);
 
     char name[64] = "*";  // solid models have name *x
-    // für Kollisionserkennung braucht es eine meshklasse, die brushes unterstützt
+    // fÃ¼r Kollisionserkennung braucht es eine meshklasse, die brushes unterstÃ¼tzt
     for (int m = 1; m < num_models; m++) {
         _itoa(m, name + 1, 10);
 
@@ -608,7 +608,7 @@ void Q3BSPLoader::evaluatePatch(const Q3BSPLoader::Q3SURFACE& face, Q3BSPMesh::B
 
     for (int cp_y = 0; cp_y < num_cpy - 1; cp_y += 2) {
         for (int cp_x = 0; cp_x < num_cpx - 1; cp_x += 2) {
-            // Krümmung der Fläche in s und t Richtung abschätzen
+            // KrÃ¼mmung der FlÃ¤che in s und t Richtung abschÃ¤tzen
             int index;
             index = cp_y * num_cpx + cp_x;
             flatx = __max(flatx, Bezier::flatnessTest(r_curvefactor, cps[index], cps[index + 1], cps[index + 2]));
@@ -653,7 +653,7 @@ void Q3BSPLoader::evaluatePatch(const Q3BSPLoader::Q3SURFACE& face, Q3BSPMesh::B
     }
 
     if (arrays & NORMALARRAY) {
-        // this one is using quake´s delivered normals and interpolates them
+        // this one is using quakeÂ´s delivered normals and interpolates them
         Bezier::evalQuadricBezierPatch(norms, num_cpx, num_cpy, vb.normals[0], tess_x, tess_y);
         // this would analytically determine the normals (more expensive)
         // Bezier::evalQuadricBezierPatchNormals(cps,num_cpx,num_cpy,vb.normals[0],tess_x,tess_y);

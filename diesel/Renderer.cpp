@@ -175,7 +175,7 @@ void Renderer::Render(const RENDERINFO& Info)
         } else {
             Render_Generic(0,
                            __min(info.shader->num_passes,
-                                 (int)r_maxPasses));  // do not make use of singlepass-multitexturing, just use GL´s
+                                 (int)r_maxPasses));  // do not make use of singlepass-multitexturing, just use GLÂ´s
                                                       // plain BlendFunc
         }
     } else {
@@ -409,7 +409,7 @@ void Renderer::DeformVerts()
                 // M4 is the system as it should be to let the billboard look at the camera
                 // it should be M4=M3*M, where M is the matrix that is neccessary to rotate the billboard from M3 to M4
                 // so M=M3^-1*M4, _but_
-                // the geometry is given in world-coordinates (but it´s centre moved to the origin), so it first has to
+                // the geometry is given in world-coordinates (but itÂ´s centre moved to the origin), so it first has to
                 // be converted back to the billboards local system (thereby aligning the y-Axis with the axis the
                 // billboard should rotate around), then transformed with M and then transformed back into the
                 // world-coordinate system.
@@ -567,7 +567,7 @@ void Renderer::Render_MTex(int passnum, int num_passes)
                     glActiveTextureARB(GL_TEXTURE0_ARB + texunit);
                     glDisable(GL_TEXTURE_2D);
                 } else
-                    break;  // if the current unitis not enabled, upper units won´t be enabled either
+                    break;  // if the current unitis not enabled, upper units wonÂ´t be enabled either
             }
 
             (this->*flushfunc)();
@@ -727,7 +727,7 @@ Renderer::PASS_RVAL Renderer::SetupPass(CShaderPass& pass)
     }
 
     if (diff_glflags & GLSTATE_DEPTHFUNC) {
-        // we won´t change the current setting in upper texture units
+        // we wonÂ´t change the current setting in upper texture units
         if (texunit) {
             return RVAL_FIRSTUNIT;
         }
@@ -934,7 +934,7 @@ Renderer::PASS_RVAL Renderer::SetupBlendingGenericMtex(CShaderPass& pass)
         if (pass.passflags & PASS_BLENDFUNC) {
             if (texunit) {
                 return RVAL_FIRSTUNIT;
-            }  // Blendfunc nur für erste TexUnit
+            }  // Blendfunc nur fÃ¼r erste TexUnit
 
             if (tustate[0].blendsrc != pass.blendsrc || tustate[0].blenddest != pass.blenddest) {
                 tustate[0].blendsrc  = pass.blendsrc;
@@ -978,7 +978,7 @@ Renderer::PASS_RVAL Renderer::SetupBlendingCombine4(CShaderPass& pass)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, pass.texenv);
                 break;
             case GL_DECAL:
-                // mimics Alpha-Blending in upper texture stage, but instead of multiplying the alpha-channel, they´re
+                // mimics Alpha-Blending in upper texture stage, but instead of multiplying the alpha-channel, theyÂ´re
                 // added this way it can be possible to use GL_DECAL in both texture-units, while still looking good
                 // normal mutlitexturing would multiply the alpha-channel which looks ugly
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
@@ -1004,7 +1004,7 @@ Renderer::PASS_RVAL Renderer::SetupBlendingCombine4(CShaderPass& pass)
             return RVAL_OK;
 
         } else {
-            // mimics ogl´s full blendfunc in upper texture unit
+            // mimics oglÂ´s full blendfunc in upper texture unit
             // since you cannot know, how this blending interacts with previous blendmodes
             // it can only be used if currently no blending is enabled
             if (glstate & GLSTATE_BLENDING)
@@ -1144,7 +1144,7 @@ Renderer::PASS_RVAL Renderer::SetupBlendingCombine4(CShaderPass& pass)
     if (pass.passflags & PASS_BLENDFUNC) {
         if (texunit) {
             return RVAL_FIRSTUNIT;
-        }  // Blendfunc nur für erste TexUnit
+        }  // Blendfunc nur fÃ¼r erste TexUnit
         if (tustate[0].blendsrc != pass.blendsrc || tustate[0].blenddest != pass.blenddest) {
             tustate[0].blendsrc  = pass.blendsrc;
             tustate[0].blenddest = pass.blenddest;
@@ -1335,7 +1335,7 @@ void Renderer::ALPHAGEN_Vertex()
             Colors[v].alpha = org_arrays.colors[v].alpha;
         }
     }
-    // if info.colors==originalinfo.colors then we don´t need to do anything
+    // if info.colors==originalinfo.colors then we donÂ´t need to do anything
 }
 void Renderer::ALPHAGEN_OneMinusVertex()
 {
@@ -1441,7 +1441,7 @@ void Renderer::ALPHAGEN_Wave(const CWave& wave)
 
     float t1 = wave(g_Time);
     if (t1 < 0)
-        t1 = 0.0f;  // man könnte hier auf PASS_SKIP entscheiden....
+        t1 = 0.0f;  // man kÃ¶nnte hier auf PASS_SKIP entscheiden....
     else if (t1 > 1.0f)
         t1 = 1.0f;
 
@@ -1454,7 +1454,7 @@ void Renderer::ALPHAGEN_Wave(const CWave& wave)
 // 3rd FOG-approach:
 // use an alpha-texture that contains "translucy dependend on distance", were "distance" is represented as texture
 // coodinates scaling from [0.0, fogdistance] to [0.0, 1.0] is done with glScale() This seems to be the best approach,
-// since I´m able to do more complex calculations, were glTexGen cannot help out There´s no conversion to byte, no
+// since IÂ´m able to do more complex calculations, were glTexGen cannot help out ThereÂ´s no conversion to byte, no
 // clamping, just pure floating-point calculations the second texture-coordinate is set to the distance of the vertex to
 // the fog-plane.
 //
@@ -1965,7 +1965,7 @@ void Renderer::Render_DLight2(const DLIGHTFEATURE& dlightfeature)
                           // return;
     }
     if (distance > 1.0f) {
-        distance = 1.0f;  // don´light if too far away
+        distance = 1.0f;  // donÂ´light if too far away
                           //-> this face should not have been equipped with  FEATURE_DLIGHT
         return;
     }
@@ -2092,7 +2092,7 @@ void Renderer::determineMinMax(VECTOR3* verts, int num_verts)
     }
 }
 
-// this is actually taken from Q2 source, it clips the "skypolygons" in a way they that don´t span two or more skysides
+// this is actually taken from Q2 source, it clips the "skypolygons" in a way they that donÂ´t span two or more skysides
 
 void Renderer::clipSkyPolygon(VECTOR3* verts, int num_verts, int planenumber)
 {
@@ -2313,7 +2313,7 @@ void Renderer::Render_Sky()
         } else {
             Render_Generic(0,
                            __min(info.shader->num_passes,
-                                 (int)r_maxPasses));  // do not make use of singlepass-multitexturing, just use GL´s
+                                 (int)r_maxPasses));  // do not make use of singlepass-multitexturing, just use GLÂ´s
                                                       // plain BlendFunc
         }
     }

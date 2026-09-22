@@ -267,7 +267,7 @@ bool Lexer::matchAndSkip(const char* text)
 {
     maxint temp = m_pos;
     try {
-        while ((*text != 0) && ((*text) == (m_input[m_pos])))  //&&(*string2!=0) shouldn´t be needed
+        while ((*text != 0) && ((*text) == (m_input[m_pos])))  //&&(*string2!=0) shouldnÂ´t be needed
         {
             ++text;
             ++m_pos;
@@ -345,7 +345,7 @@ int Lexer::readUnquotedString(char* dest)
             ++m_pos;
         }
     } catch (LexException&) {
-    };  // don´t read beyond end of block
+    };  // donÂ´t read beyond end of block
 
     dest[count] = 0;
     return count;
@@ -396,7 +396,7 @@ int Lexer::readIdentifier(char* dest)
             }
         }
     } catch (LexException&) {
-    };  // don´t read beyond end of block
+    };  // donÂ´t read beyond end of block
 
     dest[count] = 0;
     return count;
@@ -416,7 +416,7 @@ int Lexer::readFilename(char* dest)
             ++m_pos;
         }
     } catch (LexException&) {
-    };  // don´t read beyond end of block
+    };  // donÂ´t read beyond end of block
 
     BREAKIF(count > 256);
 
@@ -483,7 +483,7 @@ int Lexer::readInteger()
         while (matchDigit())
             ++m_pos;
     } catch (LexException&) {
-    };  // don´t read beyond end of block
+    };  // donÂ´t read beyond end of block
 
     int value = atoi(m_input.getBuffer() + startpos);
     return value;
@@ -521,7 +521,7 @@ int Lexer::readLine(char* dest)
             dest[count++] = m_input[m_pos++];
         }
     } catch (LexException&) {
-    };  // don´t read beyond end of block
+    };  // donÂ´t read beyond end of block
 
     dest[count] = 0;
     return count;
@@ -553,7 +553,7 @@ int Lexer::getEndOfNextBlock(char open, char close)
             } else if (match(close)) {
                 --num_pairs;
             } else if (matchAndSkip('\"')) {
-                // don´t look for brackets inside strings
+                // donÂ´t look for brackets inside strings
                 while (!match('\"')) {
                     ++m_pos;
                 }

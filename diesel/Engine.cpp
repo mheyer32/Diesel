@@ -56,9 +56,9 @@ float g_SecsPerFrame;
 float g_Time;
 int   g_FrameCounter = 0;
 
-CTimer Timer1;  // miﬂt die Zeit seit Start
-CTimer Timer2;  // miﬂt 1 Frame;
-CTimer Timer3;  // miﬂt die g_FPS
+CTimer Timer1;  // mi√üt die Zeit seit Start
+CTimer Timer2;  // mi√üt 1 Frame;
+CTimer Timer3;  // mi√üt die g_FPS
 CTimer Timer4;  // traversing scenegraph, collecting all visible faces, doing all the fancy culling stuff
 CTimer Timer5;  // rendering g_TNLStack
 CTimer Timer6;  // sorting the g_TNLStack for shadersort,shaderref,lightmap,lighting and transformation (in that order)

@@ -157,7 +157,7 @@ int MainEventLoop()
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-            // Situation kann sich durch die Messages geändert haben
+            // Situation kann sich durch die Messages geÃ¤ndert haben
             if (appwindow->isActive() && appwindow->isReady())
                 GameUpdate();
         } else {

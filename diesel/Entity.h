@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Entity.h: Schnittstelle für die Klasse CEntity.
+// Entity.h: Schnittstelle fÃ¼r die Klasse CEntity.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -82,7 +82,7 @@ public:
 
     int isEntityInFrustum(int& testplanes);
 
-    // don´t allow simple copying!
+    // donÂ´t allow simple copying!
     CEntity& operator=(const CEntity& E);
 
     static CEntity*          findEntity(const std::string& Name);
