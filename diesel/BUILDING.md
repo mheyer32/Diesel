@@ -40,6 +40,9 @@ Matching build trees live in `3rdparty/_build-<arch>/`. Sources cache in `3rdpar
 
 Sound uses OpenAL Soft (static, via 3rdParty). No runtime `fmod.dll` or `OpenAL32.dll` is required for the CMake build. WAV music/SFX are loaded through DXShell's VFS (`CFileManager` / pk3).
 
+## Third-party attributions
+
+See [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) and the [`licenses/`](../licenses/) directory for zlib, libjpeg-turbo, OpenAL Soft, and related notices (including the required Independent JPEG Group statement).
 
 ## Running
 

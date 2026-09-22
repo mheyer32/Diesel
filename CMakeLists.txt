@@ -167,3 +167,10 @@ endif()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT
                                                             Diesel)
+
+install(TARGETS Diesel RUNTIME DESTINATION .)
+install(
+  FILES "${CMAKE_CURRENT_SOURCE_DIR}/THIRD_PARTY_NOTICES.md"
+  DESTINATION .)
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/licenses" DESTINATION .)
+

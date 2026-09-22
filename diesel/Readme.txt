@@ -92,6 +92,8 @@ Credits go to:
 -the Independent JPEG Group and the libjpeg-turbo Project
 -Chris Robinson and contributors (OpenAL Soft)
 
+Full third-party license texts and required notices: THIRD_PARTY_NOTICES.md
+and the licenses/ directory.
 
 Greets go to:
 
