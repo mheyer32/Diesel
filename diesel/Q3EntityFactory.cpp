@@ -30,10 +30,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Entity.h"
 #include "MD3Loader.h"
 #include "Q3BSPMesh.h"
-// #include "Sound.h"
 #include "Q3Entity.h"
 #include "Shader.h"
 #include "Sound.h"
+#include "SpeakerEmitter.h"
 
 #include <MemoryTracker.h>
 
@@ -801,7 +801,7 @@ Q3EntityFactory::SPAWN Q3EntityFactory::spawns[] = {
     //	{"target_give", SP_target_give},
     //	{"target_remove_powerups", SP_target_remove_powerups},
     //	{"target_delay", SP_target_delay},
-    {"target_speaker", &Q3EntityFactory::spawnGeneral},
+    {"target_speaker", &Q3EntityFactory::spawnTargetSpeaker},
     //	{"target_print", SP_target_print},
     //	{"target_laser", SP_target_laser},
     //	{"target_score", SP_target_score},
@@ -900,6 +900,9 @@ void Q3EntityFactory::processEntities(char* entity_descriptions, Q3Scene* scene)
         }
         ++eIt;
     }
+
+    closeStartClosedMoverPortals(scene);
+    linkMapSpeakers(scene->getWorldModel());
 }
 
 void Q3EntityFactory::ProcessWorldSpawn(Q3BSPMesh* worldmodel)
@@ -1212,4 +1215,91 @@ bool Q3EntityFactory::spawnPathCorner(Q3Entity& Entity)
     getValue("wait", Entity.wait);
     Entity.getTransformation().setTranslation(Entity.origin);
     return true;
+}
+
+bool Q3EntityFactory::spawnTargetSpeaker(Q3Entity& Entity)
+{
+    spawnGeneral(Entity);
+    Entity.type = Q3Entity::ET_SPEAKER;
+    Entity.getTransformation().setTranslation(Entity.origin);
+
+    // Q3 spawnflags: LOOPED_ON=1 LOOPED_OFF=2 GLOBAL=4 ACTIVATOR=8
+    if (Entity.spawnflags & 8)
+        return true;  // activator-only; nothing to play in a viewer
+
+    std::string noise;
+    if (!getValue("noise", noise) || noise.empty()) {
+        cout << "target_speaker without noise" << endl;
+        return true;
+    }
+    if (noise.find(".wav") == std::string::npos)
+        noise += ".wav";
+
+    SampleBufferPtr buffer = findOrLoadSample(noise);
+    if (!buffer)
+        return true;
+
+    SpeakerEmitterPtr emitter(new SpeakerEmitter());
+    emitter->setPosition(Entity.origin);
+    emitter->setBuffer(buffer);
+
+    unsigned flags = 0;
+    if (Entity.spawnflags & (1 | 2))
+        flags |= SpeakerEmitter::LOOPING;
+    if (Entity.spawnflags & 4)
+        flags |= SpeakerEmitter::GLOBAL;
+    emitter->setFlags(flags);
+
+    if (Entity.spawnflags & 1)
+        emitter->play();
+    else if (!(Entity.spawnflags & 2))
+        emitter->play();  // one-shot: play once on spawn (viewer has no trigger)
+
+    addSpeakerEmitter(emitter);
+    return true;
+}
+
+void Q3EntityFactory::closeStartClosedMoverPortals(Q3Scene* scene)
+{
+    Q3BSPMesh* world = scene->getWorldModel();
+    if (!world)
+        return;
+
+    const Q3Entity::SMARTPTRLIST& ents = scene->getEntityList();
+    for (Q3Entity::SMARTPTRLIST::const_iterator eIt = ents.begin(); eIt != ents.end(); ++eIt) {
+        Q3Entity* ent = *eIt;
+        if (ent->classname != "func_door" && ent->classname != "func_plat")
+            continue;
+        if (ent->spawnflags & 1)
+            continue;  // START_OPEN
+
+        for (int c = 0; c < ent->getNumChildren(); ++c) {
+            CEntity* child = ent->getChild(c);
+            if (!child)
+                continue;
+            CMesh* mesh = child->getMesh();
+            if (!mesh)
+                continue;
+            const std::string& name = mesh->getName();
+            if (!name.empty() && name[0] == '*') {
+                int modelIndex = atoi(name.c_str() + 1);
+                if (modelIndex > 0 && modelIndex < world->getNumModels()) {
+                    const Q3BSPMesh::BSPMODEL& model = world->getModel(modelIndex);
+                    for (int b = 0; b < model.num_brushes; ++b)
+                        world->setAreaPortalBrushState(model.firstbrush + b, false);
+                }
+            }
+        }
+
+        BBOX box = ent->getBoundingBox();
+        box.min.x -= 16.0f;
+        box.min.y -= 16.0f;
+        box.min.z -= 16.0f;
+        box.max.x += 16.0f;
+        box.max.y += 16.0f;
+        box.max.z += 16.0f;
+        world->closePortalsTouchingBox(box);
+    }
+
+    world->floodAreaConnections();
 }

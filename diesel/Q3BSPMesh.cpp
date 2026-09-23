@@ -24,6 +24,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Q3BSPMesh.h"
 
 #include <cassert>
+#include <cstring>
+#include <iostream>
+#include <set>
 
 #include <math/MathLib.h>
 #include <opengl/OpenGL.h>
@@ -33,6 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Mesh.h"
 #include "Q3Entity.h"
 #include "Shader.h"
+#include "SpeakerEmitter.h"
 #include "TNLStack.h"
 
 #include <MemoryTracker.h>
@@ -55,6 +59,9 @@ Q3BSPMesh::Q3BSPMesh()
     num_surfaceinfos = 0;
     num_planes       = 0;
     num_fogs         = 0;
+    num_models       = 0;
+    num_areas        = 0;
+    num_areaportals  = 0;
 
     nodes        = NULL;
     leafs        = NULL;
@@ -67,6 +74,12 @@ Q3BSPMesh::Q3BSPMesh()
     surfaceinfos = NULL;
     planes       = NULL;
     fogfeatures  = NULL;
+    models       = NULL;
+    areas        = NULL;
+    areaportals  = NULL;
+    areaConnect  = NULL;
+    unusedAreaSounds = NULL;
+    floodvalid       = 0;
 
     lightvols       = NULL;
     num_lightvols   = 0;
@@ -84,6 +97,13 @@ Q3BSPMesh::Q3BSPMesh()
 
 Q3BSPMesh::~Q3BSPMesh()
 {
+    unlinkAllSounds();
+    while (unusedAreaSounds) {
+        AreaSoundLink* next = unusedAreaSounds->nextInArea;
+        delete unusedAreaSounds;
+        unusedAreaSounds = next;
+    }
+
     KILLARRAY(nodes);
     KILLARRAY(leafs);
     KILLARRAY(visdata);
@@ -96,6 +116,10 @@ Q3BSPMesh::~Q3BSPMesh()
     KILLARRAY(surfaceinfos);
     KILLARRAY(planes);
     KILLARRAY(fogfeatures);
+    KILLARRAY(models);
+    KILLARRAY(areas);
+    KILLARRAY(areaportals);
+    KILLARRAY(areaConnect);
 }
 
 void Q3BSPMesh::Render()
@@ -324,6 +348,14 @@ int Q3BSPMesh::getCluster(const VECTOR3& pos, int startnode) const
     if (cluster != -1)
         cluster = leafs[cluster].cluster;
     return cluster;
+}
+
+int Q3BSPMesh::getArea(const VECTOR3& pos, int startnode) const
+{
+    int leafnum = getLeafNum(pos, startnode);
+    if (leafnum < 0 || leafnum >= num_leafs)
+        return -1;
+    return leafs[leafnum].area;
 }
 
 inline int Q3BSPMesh::ClusterVisible(const unsigned int fromCluster, const unsigned int toCluster) const
@@ -954,5 +986,285 @@ void Q3BSPMesh::markLeaves()
         if ((leafs[l].cluster != -1) && ClusterVisibleToEye(leafs[l].cluster)) {
             leafs[l].marknode = eyecluster;
         }
+    }
+}
+
+static bool bboxOverlaps(const BBOX& a, const BBOX& b)
+{
+    return a.min.x <= b.max.x && a.max.x >= b.min.x && a.min.y <= b.max.y && a.max.y >= b.min.y && a.min.z <= b.max.z &&
+           a.max.z >= b.min.z;
+}
+
+void Q3BSPMesh::buildAreas()
+{
+    KILLARRAY(areas);
+    KILLARRAY(areaportals);
+    KILLARRAY(areaConnect);
+    num_areas       = 0;
+    num_areaportals = 0;
+    areaConnect     = NULL;
+    unusedAreaSounds = NULL;
+    floodvalid       = 0;
+
+    int maxArea = -1;
+    for (int l = 0; l < num_leafs; ++l) {
+        if (leafs[l].area > maxArea)
+            maxArea = leafs[l].area;
+    }
+    if (maxArea < 0)
+        return;
+
+    num_areas = maxArea + 1;
+    areas     = new AREA[num_areas];
+
+    // gather areaportal brushes and the areas they touch via leafbrushes
+    std::vector<AREAPORTAL> portals;
+    for (int b = 0; b < num_brushes; ++b) {
+        if (!(surfaceinfos[brushes[b].surfaceinfo].contents & CONTENTS_AREAPORTAL))
+            continue;
+
+        std::set<int> touched;
+        BBOX          pbbox;
+        bool          haveBox = false;
+
+        for (int l = 0; l < num_leafs; ++l) {
+            if (leafs[l].area < 0)
+                continue;
+            int end = leafs[l].startleafbrush + leafs[l].num_leafbrushes;
+            for (int lb = leafs[l].startleafbrush; lb < end; ++lb) {
+                if (leafbrushes[lb] != b)
+                    continue;
+                touched.insert(leafs[l].area);
+                if (!haveBox) {
+                    pbbox   = leafs[l].bbox;
+                    haveBox = true;
+                } else {
+                    pbbox |= leafs[l].bbox;
+                }
+            }
+        }
+
+        if (touched.size() < 2)
+            continue;
+
+        std::set<int>::const_iterator it = touched.begin();
+        int                           a0 = *it++;
+        int                           a1 = *it;
+
+        AREAPORTAL portal;
+        portal.areas[0] = a0;
+        portal.areas[1] = a1;
+        portal.brushnum = b;
+        portal.bbox     = pbbox;
+        portal.open     = true;
+        portals.push_back(portal);
+    }
+
+    num_areaportals = (int)portals.size();
+    if (num_areaportals) {
+        areaportals = new AREAPORTAL[num_areaportals];
+        for (int p = 0; p < num_areaportals; ++p) {
+            areaportals[p] = portals[p];
+            areas[areaportals[p].areas[0]].portalIndices.push_back(p);
+            areas[areaportals[p].areas[1]].portalIndices.push_back(p);
+        }
+    }
+
+    areaConnect = new int[num_areas * num_areas];
+    floodAreaConnections();
+
+    std::cout << "Q3BSPMesh::buildAreas(): " << num_areas << " areas, " << num_areaportals << " areaportals"
+              << std::endl;
+}
+
+void Q3BSPMesh::floodArea_r(int areaNum, int floodnum)
+{
+    AREA& area = areas[areaNum];
+    if (area.floodvalid == floodvalid)
+        return;
+    area.floodvalid = floodvalid;
+    area.floodnum   = floodnum;
+
+    for (size_t i = 0; i < area.portalIndices.size(); ++i) {
+        AREAPORTAL& portal = areaportals[area.portalIndices[i]];
+        if (!portal.open)
+            continue;
+        int other = (portal.areas[0] == areaNum) ? portal.areas[1] : portal.areas[0];
+        floodArea_r(other, floodnum);
+    }
+}
+
+void Q3BSPMesh::floodAreaConnections()
+{
+    if (!areas || !areaConnect || num_areas <= 0)
+        return;
+
+    ++floodvalid;
+    int floodnum = 0;
+    for (int a = 0; a < num_areas; ++a) {
+        if (areas[a].floodvalid == floodvalid)
+            continue;
+        floodArea_r(a, floodnum++);
+    }
+
+    for (int a = 0; a < num_areas; ++a) {
+        for (int b = 0; b < num_areas; ++b)
+            areaConnect[a * num_areas + b] = (areas[a].floodnum == areas[b].floodnum) ? 1 : 0;
+    }
+}
+
+bool Q3BSPMesh::areasConnected(int area1, int area2) const
+{
+    if (area1 < 0 || area2 < 0 || area1 >= num_areas || area2 >= num_areas || !areaConnect)
+        return false;
+    if (area1 == area2)
+        return true;
+    return areaConnect[area1 * num_areas + area2] != 0;
+}
+
+void Q3BSPMesh::setAreaPortalState(int portalnum, bool open)
+{
+    if (portalnum < 0 || portalnum >= num_areaportals)
+        return;
+    areaportals[portalnum].open = open;
+}
+
+void Q3BSPMesh::setAreaPortalBrushState(int brushnum, bool open)
+{
+    for (int p = 0; p < num_areaportals; ++p) {
+        if (areaportals[p].brushnum == brushnum)
+            areaportals[p].open = open;
+    }
+}
+
+void Q3BSPMesh::closePortalsTouchingBox(const BBOX& box)
+{
+    for (int p = 0; p < num_areaportals; ++p) {
+        if (areaportals[p].open && bboxOverlaps(areaportals[p].bbox, box))
+            areaportals[p].open = false;
+    }
+}
+
+Q3BSPMesh::AreaSoundLink* Q3BSPMesh::createAreaSound(SpeakerEmitter* speaker, int areaNum)
+{
+    AreaSoundLink* link = unusedAreaSounds;
+    if (link)
+        unusedAreaSounds = link->nextInArea;
+    else
+        link = new AreaSoundLink;
+
+    link->speaker       = speaker;
+    link->area          = areaNum;
+    link->nextInArea    = areas[areaNum].sounds;
+    areas[areaNum].sounds = link;
+    link->nextForSpeaker = (AreaSoundLink*)speaker->getAreaLinks();
+    speaker->setAreaLinks(link);
+    return link;
+}
+
+void Q3BSPMesh::freeAreaSound(AreaSoundLink* link)
+{
+    AreaSoundLink** prev = &areas[link->area].sounds;
+    while (*prev && *prev != link)
+        prev = &(*prev)->nextInArea;
+    if (*prev == link)
+        *prev = link->nextInArea;
+
+    AreaSoundLink* head = (AreaSoundLink*)link->speaker->getAreaLinks();
+    if (head == link) {
+        link->speaker->setAreaLinks(link->nextForSpeaker);
+    } else {
+        AreaSoundLink* cur = head;
+        while (cur && cur->nextForSpeaker != link)
+            cur = cur->nextForSpeaker;
+        if (cur)
+            cur->nextForSpeaker = link->nextForSpeaker;
+    }
+
+    link->nextInArea     = unusedAreaSounds;
+    unusedAreaSounds     = link;
+    link->speaker        = NULL;
+    link->nextForSpeaker = NULL;
+}
+
+void Q3BSPMesh::unlinkSound(SpeakerEmitter* speaker)
+{
+    if (!speaker)
+        return;
+    while (AreaSoundLink* link = (AreaSoundLink*)speaker->getAreaLinks())
+        freeAreaSound(link);
+}
+
+void Q3BSPMesh::unlinkAllSounds()
+{
+    for (int a = 0; a < num_areas; ++a) {
+        while (areas && areas[a].sounds)
+            freeAreaSound(areas[a].sounds);
+    }
+}
+
+void Q3BSPMesh::linkSound_r(int areaNum, SpeakerEmitter* speaker)
+{
+    AREA& area = areas[areaNum];
+    if (area.floodvalid == floodvalid)
+        return;
+    area.floodvalid = floodvalid;
+
+    createAreaSound(speaker, areaNum);
+
+    for (size_t i = 0; i < area.portalIndices.size(); ++i) {
+        AREAPORTAL& portal = areaportals[area.portalIndices[i]];
+        if (!portal.open)
+            continue;
+        int other = (portal.areas[0] == areaNum) ? portal.areas[1] : portal.areas[0];
+        linkSound_r(other, speaker);
+    }
+}
+
+void Q3BSPMesh::linkSound(SpeakerEmitter* speaker)
+{
+    if (!speaker || !areas || num_areas <= 0)
+        return;
+
+    unlinkSound(speaker);
+
+    if (speaker->getFlags() & SpeakerEmitter::GLOBAL) {
+        for (int a = 0; a < num_areas; ++a)
+            createAreaSound(speaker, a);
+        return;
+    }
+
+    int startArea = getArea(speaker->getPosition());
+    if (startArea < 0 || startArea >= num_areas) {
+        std::cout << "WARNING: speaker outside areas, linking to all connected from area 0" << std::endl;
+        if (num_areas > 0) {
+            ++floodvalid;
+            linkSound_r(0, speaker);
+        }
+        return;
+    }
+
+    ++floodvalid;
+    linkSound_r(startArea, speaker);
+}
+
+void Q3BSPMesh::cullSounds(const VECTOR3& listenerPos, int cullFrame, std::vector<SpeakerEmitter*>& audible)
+{
+    audible.clear();
+
+    int listenerArea = (areas && num_areas > 0) ? getArea(listenerPos) : -1;
+    if (listenerArea < 0 || listenerArea >= num_areas || !areas) {
+        // no area data — distance-only cull of every linked speaker is handled by Sound.cpp fallback
+        return;
+    }
+
+    for (AreaSoundLink* link = areas[listenerArea].sounds; link; link = link->nextInArea) {
+        SpeakerEmitter* speaker = link->speaker;
+        if (!speaker || speaker->getCullFrame() == cullFrame)
+            continue;
+        if (!speaker->isAudible(listenerPos))
+            continue;
+        speaker->setCullFrame(cullFrame);
+        audible.push_back(speaker);
     }
 }

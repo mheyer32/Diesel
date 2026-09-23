@@ -179,6 +179,9 @@ protected:
     bool spawnInfoPlayerDeathMatch(Q3Entity& Entity);
     bool spawnTarget(Q3Entity& Entity);
     bool spawnPathCorner(Q3Entity& Entity);
+    bool spawnTargetSpeaker(Q3Entity& Entity);
+
+    void closeStartClosedMoverPortals(Q3Scene* scene);
 
     static gitem_t bg_itemlist[];
     static SPAWN   spawns[];

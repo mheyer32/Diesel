@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Q3EntityFactory.h"
 #include "QuadricBezierPatch.h"
 #include "Shader.h"
+#include "Sound.h"
 #include "Texture.h"
 #include "VBServices.h"
 
@@ -156,6 +157,7 @@ Q3Scene* Q3BSPLoader::LoadQ3BSP(std::string Filename)
     //	cout<<"fogs..."<<endl;
     ReadModels();
     //	cout<<"models..."<<endl;
+    worldmodel->buildAreas();
     ReadEntities();
     //	cout<<"entities..."<<endl;
     ReadLightgrid();
@@ -486,6 +488,7 @@ void Q3BSPLoader::ReadNodesAndLeafs()
     for (int l = 0; l < worldmodel->num_leafs; ++l) {
         worldmodel->leafs[l].bbox            = QBBox(q3leafs[l].mins, q3leafs[l].maxs);
         worldmodel->leafs[l].cluster         = q3leafs[l].cluster;
+        worldmodel->leafs[l].area            = q3leafs[l].area;
         worldmodel->leafs[l].startface       = q3leafs[l].firstleafsurface;
         worldmodel->leafs[l].num_faces       = q3leafs[l].num_leafsurfaces;
         worldmodel->leafs[l].startleafbrush  = q3leafs[l].firstleafbrush;
@@ -504,20 +507,13 @@ void Q3BSPLoader::ReadModels()
     Q3MODEL* models = new Q3MODEL[num_models];
     file->readVOID(models, num_models * sizeof(Q3MODEL));
 
-    /*	if (models[0].num_surfaces)
-            worldmodel->num_faces=models[0].num_surfaces;
-        else
-            worldmodel->num_faces=num_surfaces; //FIXME: is this needed ?
-    */
-    /*
-    worldmodel->faces=new Q3BSPMesh::BSPFACE[worldmodel->num_faces];
-
-    for (unsigned int f=0;f<worldmodel->num_faces;++f)
-    {
-        worldmodel->faces[f]=faces[f];
-        worldmodel->faces[f].vbuffer->AddRef();
+    worldmodel->num_models = num_models;
+    worldmodel->models     = new Q3BSPMesh::BSPMODEL[num_models];
+    for (int m = 0; m < num_models; ++m) {
+        worldmodel->models[m].firstbrush  = models[m].firstbrush;
+        worldmodel->models[m].num_brushes = models[m].num_brushes;
+        worldmodel->models[m].bbox        = QBBox(models[m].mins, models[m].maxs);
     }
-*/
 
     worldmodel->bbox = QBBox(models[0].mins, models[0].maxs);
 
@@ -555,6 +551,8 @@ void Q3BSPLoader::ReadEntities()
     char* entdesc = new char[length + 1];
     file->readVOID(entdesc, length);
     entdesc[length] = 0;
+
+    clearMapSounds();
 
     Q3EntityFactory factory;
 

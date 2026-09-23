@@ -31,6 +31,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <vector>
+
 #include <adt/ConVar.h>
 #include <misc/Exception.h>
 #include "EngineTypes.h"
@@ -40,6 +42,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Q3Entity.h"
 
 #include "SurfaceFlags.h"
+
+class SpeakerEmitter;
 
 class Q3BSPMesh
 {
@@ -82,6 +86,7 @@ public:
     {
         int  marknode;
         int  cluster;
+        int  area;
         BBOX bbox;
         int  last_earlyout;
         int  startface;
@@ -96,6 +101,52 @@ public:
             startface = num_faces = 0;
             startleafbrush = num_leafbrushes = last_earlyout = 0;
             cluster                                          = -1;
+            area                                             = -1;
+        }
+    };
+
+    struct BSPMODEL
+    {
+        int  firstbrush;
+        int  num_brushes;
+        BBOX bbox;
+    };
+
+    struct AREAPORTAL
+    {
+        int  areas[2];
+        int  brushnum;
+        BBOX bbox;
+        bool open;
+
+        AREAPORTAL()
+        : brushnum(-1)
+        , open(true)
+        {
+            areas[0] = areas[1] = -1;
+        }
+    };
+
+    struct AreaSoundLink
+    {
+        class SpeakerEmitter* speaker;
+        AreaSoundLink*        nextInArea;
+        AreaSoundLink*        nextForSpeaker;
+        int                   area;
+    };
+
+    struct AREA
+    {
+        std::vector<int> portalIndices;
+        AreaSoundLink*   sounds;
+        int              floodnum;
+        int              floodvalid;
+
+        AREA()
+        : sounds(NULL)
+        , floodnum(0)
+        , floodvalid(0)
+        {
         }
     };
 
@@ -168,8 +219,30 @@ public:
     /** get the cluster index for the given position */
     int getCluster(const VECTOR3& pos, int startnode = 0) const;
 
+    /** get the area index for the given position (-1 if solid/invalid) */
+    int getArea(const VECTOR3& pos, int startnode = 0) const;
+
     /** can fromCluster and toCluster possibly see each other ? */
     int ClusterVisible(const unsigned int fromCluster, const unsigned int toCluster) const;
+
+    /** build area graph from leaf.area + CONTENTS_AREAPORTAL brushes */
+    void buildAreas();
+    void floodAreaConnections();
+    bool areasConnected(int area1, int area2) const;
+    void setAreaPortalState(int portalnum, bool open);
+    void setAreaPortalBrushState(int brushnum, bool open);
+    void closePortalsTouchingBox(const BBOX& box);
+
+    void linkSound(class SpeakerEmitter* speaker);
+    void unlinkSound(class SpeakerEmitter* speaker);
+    void unlinkAllSounds();
+    void cullSounds(const VECTOR3& listenerPos, int cullFrame, std::vector<class SpeakerEmitter*>& audible);
+
+    int               getNumAreas() const { return num_areas; }
+    int               getNumAreaPortals() const { return num_areaportals; }
+    const AREAPORTAL& getAreaPortal(int i) const { return areaportals[i]; }
+    int               getNumModels() const { return num_models; }
+    const BSPMODEL&   getModel(int i) const { return models[i]; }
 
     /** returns the contents for a given position
         the content-flags are inside "surfaceflags.h"
@@ -290,6 +363,11 @@ protected:
 
     void drawBrush(int brushnum, float bevel = 0.0f);
 
+    void floodArea_r(int areaNum, int floodnum);
+    void linkSound_r(int areaNum, SpeakerEmitter* speaker);
+    AreaSoundLink* createAreaSound(SpeakerEmitter* speaker, int areaNum);
+    void           freeAreaSound(AreaSoundLink* link);
+
     float testcos;
     int   checkcount;
 
@@ -305,6 +383,13 @@ protected:
     FOGFEATURE*  fogfeatures;
     PLANE*       planes;
     VECTOR3      gridsize;
+
+    BSPMODEL*   models;
+    AREA*       areas;
+    AREAPORTAL* areaportals;
+    int*        areaConnect;  // num_areas * num_areas flood connectivity
+    AreaSoundLink* unusedAreaSounds;
+    int            floodvalid;
 
     int num_lightvols_x;
     int num_lightvols_y;
@@ -323,6 +408,9 @@ protected:
     int num_clusters;
     int ints_per_cluster;
     int num_fogs;
+    int num_models;
+    int num_areas;
+    int num_areaportals;
 
     BBOX bbox;
 

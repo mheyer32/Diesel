@@ -21,10 +21,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define SOUND_H
 
 #include <math/Matrix4.h>
+#include <math/Vector3.h>
+#include <sound/SoundDevice.h>
 
 #include <string>
 
-class SoundDevice;
+class Q3BSPMesh;
+class SpeakerEmitter;
+
+#include "SpeakerEmitter.h"
 
 extern bool         initSoundSystem();
 extern void         shutdownSoundSystem();
@@ -33,5 +38,11 @@ extern SoundDevice* getSoundDevice();
 extern void setBGMusic(const std::string& filename);
 extern void freeBGMusic();
 extern void updateSoundListener(const MATRIX4& cameraMatrix);
+
+extern void              clearMapSounds();
+extern SampleBufferPtr   findOrLoadSample(const std::string& path);
+extern SpeakerEmitterPtr addSpeakerEmitter(const SpeakerEmitterPtr& emitter);
+extern void              linkMapSpeakers(Q3BSPMesh* worldmodel);
+extern void              updateMapSounds(const VECTOR3& listenerPos, Q3BSPMesh* worldmodel = 0);
 
 #endif

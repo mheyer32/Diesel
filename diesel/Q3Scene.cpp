@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Engine.h"  //for g_TNLStack and g_Scene
 #include "GLText.h"
 #include "MD3Loader.h"
+#include "Sound.h"
 #include "TNLStack.h"
 
 #include <MemoryTracker.h>
@@ -50,6 +51,8 @@ Q3Scene::Q3Scene()
 
 Q3Scene::~Q3Scene()
 {
+    clearMapSounds();
+
     for (int p = 0; p < MAX_NUM_PORTALS; ++p) {
         KILLOBJECT(g_PortalStacks[p]);
     }

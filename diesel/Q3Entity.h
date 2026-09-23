@@ -82,7 +82,8 @@ public:
         ET_FUNCPENDULUM,
         ET_FUNCTRAIN,
         ET_PORTAL,
-        ET_PORTALCAMERA
+        ET_PORTALCAMERA,
+        ET_SPEAKER
     };
     // gitem_t->type
     typedef enum

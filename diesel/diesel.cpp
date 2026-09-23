@@ -250,6 +250,7 @@ int GameUpdate()
     g_Camera->setupCamera();
     g_TNLStack->setCamera(*g_Camera);
     updateSoundListener(g_Camera->getTransformation().getMatrix());
+    updateMapSounds(g_Camera->getTransformation().getTranslation(), 0);
 
     if ((int)r_lighting) {
         // setup a directional headlight
