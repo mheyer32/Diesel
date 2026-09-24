@@ -1,7 +1,7 @@
 
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -156,10 +156,3 @@ void CZipFile::getFileList(PATHLIST& filelist, const CPath& directory, const std
         }
     }
 }
-
-// extern "C"
-//{
-#define ASMV
-#define ASMINF
-#include "contrib/minizip/unzip.c"
-//};
