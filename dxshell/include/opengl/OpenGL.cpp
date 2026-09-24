@@ -1,7 +1,7 @@
 
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ ConVar COpenGL::r_customwidth("r_customwidth", "640");
 ConVar COpenGL::r_customheight("r_customheight", "480");
 ConVar COpenGL::r_overBrightBits("r_overBrightBits", "0", 0, COpenGL::changegamma);
 ConVar COpenGL::r_gamma("r_gamma", "1.2125", 0, COpenGL::changegamma);
+ConVar COpenGL::r_ignorehwgamma("r_ignorehwgamma", "0", 0, COpenGL::changegamma);
 ConVar COpenGL::r_FSAA("r_FSAA", "0", 0, COpenGL::changeFSAA);
 ConVar COpenGL::r_ignore("r_ignore", "1");
 
@@ -793,9 +794,13 @@ void COpenGL::setGamma(double gamma, int overbrightbits)
 {
     r_overBrightBits = overbrightbits;
     r_gamma          = (float)gamma;
-    double div       = (double)(1 << overbrightbits) / 255.0;
+    // when HW gamma is ignored, overbright is recovered via fullscreen blend
+    int ob = (int)r_ignorehwgamma ? 0 : overbrightbits;
+    if (ob < 0)
+        ob = 0;
+    double div = (double)(1 << ob) / 255.0;
     WORD   value;
-    gamma = 1.0 / gamma;
+    gamma      = 1.0 / gamma;
     for (int i = 0; i < 256; i++) {
         value                = (WORD)std::min(65535.0, std::max(0.0, pow((double)i * div, gamma) * 65535.0));
         m_gammaramp[i]       = value;
@@ -809,9 +814,101 @@ void COpenGL::setGamma(double gamma, int overbrightbits)
 void COpenGL::changegamma(ConVar& cvar)
 {
     //	std::cout<<"COpenGL::changegamma()"<<std::endl;
+    if (!COpenGL::Instance()->m_hDC)
+        return;
     double gamma      = (float)r_gamma;
     int    overbright = (int)r_overBrightBits;
     COpenGL::Instance()->setGamma(gamma, overbright);
+}
+
+bool COpenGL::probeHwGamma()
+{
+    WORD original[3 * 256];
+    WORD test[3 * 256];
+    WORD readback[3 * 256];
+
+    if (!m_hDC)
+        return false;
+
+    if (wglGetDeviceGammaRamp3DFX) {
+        if (!wglGetDeviceGammaRamp3DFX(m_hDC, original))
+            return false;
+    } else if (!GetDeviceGammaRamp(m_hDC, original)) {
+        return false;
+    }
+
+    for (int i = 0; i < 256; i++) {
+        WORD v               = (WORD)(i * 128);
+        test[i]              = v;
+        test[i + 256]        = v;
+        test[i + 512]        = v;
+    }
+
+    BOOL setok;
+    if (wglSetDeviceGammaRamp3DFX)
+        setok = wglSetDeviceGammaRamp3DFX(m_hDC, test);
+    else
+        setok = SetDeviceGammaRamp(m_hDC, test);
+
+    if (!setok) {
+        if (wglSetDeviceGammaRamp3DFX)
+            wglSetDeviceGammaRamp3DFX(m_hDC, original);
+        else
+            SetDeviceGammaRamp(m_hDC, original);
+        return false;
+    }
+
+    BOOL getok;
+    if (wglGetDeviceGammaRamp3DFX)
+        getok = wglGetDeviceGammaRamp3DFX(m_hDC, readback);
+    else
+        getok = GetDeviceGammaRamp(m_hDC, readback);
+
+    if (wglSetDeviceGammaRamp3DFX)
+        wglSetDeviceGammaRamp3DFX(m_hDC, original);
+    else
+        SetDeviceGammaRamp(m_hDC, original);
+
+    if (!getok)
+        return false;
+
+    for (int i = 0; i < 3 * 256; i++) {
+        int d = (int)readback[i] - (int)test[i];
+        if (d < -256 || d > 256)
+            return false;
+    }
+
+    // Set/Get often succeed under DWM while the ramp has no visible effect
+    BOOL     composition = FALSE;
+    HMODULE  dwmapi      = LoadLibraryA("dwmapi.dll");
+    if (dwmapi) {
+        typedef HRESULT(WINAPI * DwmIsCompositionEnabledProc)(BOOL*);
+        DwmIsCompositionEnabledProc pDwmIsCompositionEnabled =
+            (DwmIsCompositionEnabledProc)GetProcAddress(dwmapi, "DwmIsCompositionEnabled");
+        if (pDwmIsCompositionEnabled)
+            pDwmIsCompositionEnabled(&composition);
+        FreeLibrary(dwmapi);
+    }
+    if (composition)
+        return false;
+
+    return true;
+}
+
+void COpenGL::resolveIgnoreHwGamma()
+{
+    // stock q3config is seta 0 ("use hw gamma"). Probe that; on failure switch to -1
+    // so blend overbright is used. Non-zero values are left alone (already decided).
+    if ((int)r_ignorehwgamma != 0)
+        return;
+
+    if (probeHwGamma()) {
+        std::cout << "r_ignorehwgamma: 0 (hw gamma)" << std::endl;
+        return;
+    }
+
+    r_ignorehwgamma = -1;
+    std::cout << "r_ignorehwgamma: -1 (blend overbright; hw gamma unusable)" << std::endl;
 }
 
 void COpenGL::restoreGamma()

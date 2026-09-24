@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -1661,6 +1661,79 @@ void Renderer::ShowNormals()
     glPopAttrib();
 }
 
+void Renderer::updateIdentityLighting()
+{
+    int bits = (int)COpenGL::r_overBrightBits;
+    if (bits < 0)
+        bits = 0;
+    float scale         = 1.0f / (float)(1 << bits);
+    identitylighting[0] = identitylighting[1] = identitylighting[2] = scale;
+    identitylighting[3] = 1.0f;
+}
+
+void Renderer::applyOverBright()
+{
+    updateIdentityLighting();
+
+    int bits = (int)COpenGL::r_overBrightBits;
+    if (bits < 0)
+        bits = 0;
+
+    if (bits == 0)
+        return;
+    if (!(int)COpenGL::r_ignorehwgamma)
+        return;
+
+    disableMTex();
+    if (tustate[0].flags & TEXUNIT_ENABLED) {
+        glDisable(GL_TEXTURE_2D);
+        tustate[0].flags &= ~TEXUNIT_ENABLED;
+    }
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_DST_COLOR, GL_ONE);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+    for (int i = 0; i < bits; ++i) {
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-1.0f, -1.0f);
+        glVertex2f(3.0f, -1.0f);
+        glVertex2f(-1.0f, 3.0f);
+        glEnd();
+    }
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
+    glDepthFunc(GL_LEQUAL);
+
+    glstate &= ~(GLSTATE_BLENDING | GLSTATE_ALPHATEST | GLSTATE_NODEPTHTEST | GLSTATE_NOCULL | GLSTATE_CULLFRONT |
+                 GLSTATE_LIGHTING | GLSTATE_FOG | GLSTATE_DEPTHFUNC);
+    glstate |= GLSTATE_DEPTHWRITE;
+    tustate[0].blendsrc  = GL_DST_COLOR;
+    tustate[0].blenddest = GL_ONE;
+}
+
 void Renderer::getIdentityLighting(float il[4])
 {
     for (int i = 0; i < 4; ++i)
@@ -1861,9 +1934,7 @@ void Renderer::initialize()
     tustate[0].texenv = GL_MODULATE;
     tustate[0].flags  = TEXUNIT_ENABLED;
 
-    // fixme: set to real overbrightsetting
-    identitylighting[0] = identitylighting[1] = identitylighting[2] = 0.5f;
-    identitylighting[3]                                             = 1.0f;
+    updateIdentityLighting();
 
     createWhitemap();
     prepareDLight();

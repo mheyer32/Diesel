@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -174,7 +174,7 @@ BOOL InitEngine()
     g_Text = new CGLText();
     g_Text->SetBufsize(64, 32);
     g_Text->AttachToWindow();
-    g_Text->SetColor(COLOR(128, 128, 140, 196));
+    g_Text->SetColor(COLOR(255, 255, 248, 196));
 
     Console = CGLConsole::Instance();
 
@@ -182,6 +182,9 @@ BOOL InitEngine()
 
     ConCmd::executeCommandLine("exec q3config.cfg");
     ConCmd::executeCommandLine("exec autoexec.cfg");
+
+    COpenGL::Instance()->resolveIgnoreHwGamma();
+    COpenGL::Instance()->setGamma((float)COpenGL::r_gamma, (int)COpenGL::r_overBrightBits);
 
     return true;
 }
@@ -256,6 +259,8 @@ void BeginFrame()
     glClear(mask);
     glPopAttrib();
 
+    Renderer::Instance()->updateIdentityLighting();
+
     ++g_FrameCounter;
 }
 void EndFrame()
@@ -280,6 +285,8 @@ void EndFrame()
     g_Text->PrintAt(text, 0, 30);
 
     g_Text->RenderBuffer();
+
+    Renderer::Instance()->applyOverBright();
 
     already_updating = false;
 }

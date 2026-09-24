@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -97,6 +97,7 @@ protected:
     int num_vertices;
 
     COLOR textcolor;
+    COLOR base_textcolor;
 
     Renderer* renderer;
 

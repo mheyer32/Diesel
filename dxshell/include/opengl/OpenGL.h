@@ -1,7 +1,7 @@
 
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -146,8 +146,13 @@ public:
 
     static ConVar r_overBrightBits;
     static ConVar r_gamma;
+    static ConVar r_ignorehwgamma;
     static ConVar r_FSAA;
     static ConVar r_ignore;
+
+    // 0 = probe (stock q3config); stays 0 if HW works, becomes -1 if not.
+    // -1 or 1 = blend overbright (skip probe).
+    void resolveIgnoreHwGamma();
 
 private:
     COpenGL();
@@ -170,6 +175,7 @@ private:
     void getCurrentScreenMode();
     void saveCurrentGamma();
     void restoreGamma();
+    bool probeHwGamma();
 
     static void vid_restartCB(ConCmd& Command, const std::string& Arg);
     static void changegamma(ConVar& cvar);

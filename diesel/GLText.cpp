@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -65,18 +65,8 @@ CGLText::CGLText()
 
     renderer = Renderer::Instance();
 
-    float il[4];
-
-    renderer->getIdentityLighting(il);
-
-    for (int c = 0; c < 9; ++c) {
-        colorcodes[c].r     = (float)std_colorcodes[c].r * il[0];
-        colorcodes[c].g     = (float)std_colorcodes[c].g * il[1];
-        colorcodes[c].b     = (float)std_colorcodes[c].b * il[2];
-        colorcodes[c].alpha = 255;
-    }
-
-    textcolor = colorcodes[8];
+    base_textcolor = std_colorcodes[8];
+    textcolor      = base_textcolor;
 
     SetBufsize(40, 30);
     SetFontWidth(16);
@@ -113,6 +103,19 @@ void CGLText::BeginRender()
     // FIXME: make this cleaner, border-calculations are spreaded everywhere
     charwidth  = (float)((destrect.right - border.right) - (destrect.left + border.left));
     charheight = (float)((destrect.bottom - border.bottom) - (destrect.top + border.top));
+
+    float il[4];
+    renderer->getIdentityLighting(il);
+    for (int c = 0; c < 9; ++c) {
+        colorcodes[c].r     = (BYTE)((float)std_colorcodes[c].r * il[0]);
+        colorcodes[c].g     = (BYTE)((float)std_colorcodes[c].g * il[1]);
+        colorcodes[c].b     = (BYTE)((float)std_colorcodes[c].b * il[2]);
+        colorcodes[c].alpha = std_colorcodes[c].alpha;
+    }
+    textcolor.r     = (BYTE)((float)base_textcolor.r * il[0]);
+    textcolor.g     = (BYTE)((float)base_textcolor.g * il[1]);
+    textcolor.b     = (BYTE)((float)base_textcolor.b * il[2]);
+    textcolor.alpha = base_textcolor.alpha;
 
     glPushMatrix();
     glLoadIdentity();
@@ -320,7 +323,7 @@ void CGLText::FlushVertexArrays()
 
 void CGLText::SetColor(const COLOR& col)
 {
-    textcolor = col;
+    base_textcolor = col;
 }
 
 void CGLText::SetDestRect(const RECT& DestRect)
