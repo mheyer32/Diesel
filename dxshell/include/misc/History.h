@@ -1,7 +1,7 @@
 
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -51,5 +51,5 @@ protected:
     typename std::deque<T>::size_type max_size;
 };
 
-#include "History.hh"
+#include "history.hh"
 #endif  // !defined(AFX_HISTORY_H__324526A0_0B01_4674_B889_D14411D9C06A__INCLUDED_)

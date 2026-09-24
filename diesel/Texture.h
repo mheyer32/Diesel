@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <list>
 #include <string>
 
-#include "image.h"
+#include "Image.h"
 
 // Load Texture Optionen
 #define TEX_CLAMP (1 << 0)     // initially set clamping mode

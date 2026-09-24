@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -666,7 +666,7 @@ void C3DSLoader::Read24BitColor(GLfloat Color[4])
 
 float C3DSLoader::ReadPercent()
 {
-    float f;
+    float f  = 0.0f;
     if (Chunk.CName == 0x0030) {
         WORD i = file->readWORD();
         f      = (float)i / 100.0f;

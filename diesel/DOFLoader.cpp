@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <file/FileManager.h>
 #include "DOFLoader.h"
 #include "Mesh.h"
-#include "texturemanager.h"
+#include "TextureManager.h"
 #include "VBServices.h"
 #include "VertexBuffer.h"
 

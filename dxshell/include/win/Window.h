@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif  // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN
-#include <messaging/messagingobject.h>
+#include <messaging/MessagingObject.h>
 #include <win/WndProc.h>
 #include <windows.h>
 #include <string>

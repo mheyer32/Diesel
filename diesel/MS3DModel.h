@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <adt/NamedObject.h>
 #include <adt/RefCount.h>
 #include <adt/SmartPointer.h>
-#include <math/Matrix34.h>
+#include <math/matrix34.h>
 
 #include "Quaternion.h"
 

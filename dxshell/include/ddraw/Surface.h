@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "ddraw/DirectDraw.h"
 #include "ddraw/DDUtil.h"
-#include "messaging/messagingobject.h"
+#include "messaging/MessagingObject.h"
 
 #include <string>
 

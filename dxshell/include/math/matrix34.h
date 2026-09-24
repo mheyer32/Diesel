@@ -112,6 +112,6 @@ inline void Multiply(const MATRIX34& m, const VECTOR3& v, VECTOR3& result)
 #include "Matrix3.h"
 #include "Matrix4.h"
 
-#include "Matrix34.hh"
+#include "matrix34.hh"
 
 #endif

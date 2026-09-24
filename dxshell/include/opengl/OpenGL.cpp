@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <win/AppWindow.h>
 #include <win/ScreenmodeRequester.h>
 #include <win/resource.h>
-#include <win/winerr.h>
+#include <win/WinErr.h>
 #include <win/WinException.h>
 
 #undef min

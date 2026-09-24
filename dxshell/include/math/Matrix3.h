@@ -1,6 +1,6 @@
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -108,6 +108,6 @@ extern void FullInverse3(const MATRIX3& M, MATRIX3& Inv);
 
 #include "Matrix4.h"
 
-#include "Matrix3.hh"
+#include "matrix3.hh"
 
 #endif

@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <d3d.h>
 #include <ddraw/DirectDraw.h>
 #include <ddraw/Surface.h>
-#include <messaging/messagingobject.h>
+#include <messaging/MessagingObject.h>
 #include <win/DriverSelector.h>
 
 #define D3DINTERFACE IID_IDirect3D7

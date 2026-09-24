@@ -24,9 +24,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #undef GL_GLEXT_PROTOTYPES
 
 #include <gl/NewExt.h>
-#include <gl/glati.h>
+#include <gl/glATI.h>
 #include <gl/glext.h>
-#include <gl/wglati.h>
+#include <gl/wglATI.h>
 #include <gl/wglext.h>
 
 #define DECL_GL_EXT_TYPED(type, name) extern type name;

@@ -15,3 +15,4 @@ _install-*/
 *.sdf
 *.opensdf
 *.db
+tools/clazy_report.log

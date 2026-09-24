@@ -1,6 +1,6 @@
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -99,6 +99,6 @@ inline VECTOR2& VECTOR2::operator=(const VECTOR3& v2)
     y = v2.y;
     return *this;
 }
-#include "Vector2.hh"
+#include "vector2.hh"
 
 #endif

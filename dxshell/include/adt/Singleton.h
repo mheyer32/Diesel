@@ -65,6 +65,6 @@ private:
     static std::auto_ptr<T> s_instance;
 };
 
-#include "Singleton.hh"
+#include "singleton.hh"
 
 #endif  // !defined(AFX_SINGLETON_H__C7A159EF_174E_416E_9AA9_85D53EABC439__INCLUDED_)
