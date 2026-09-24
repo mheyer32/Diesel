@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -41,19 +41,19 @@ public:
         }
         return false;
     }
-    inline void Transformation::setTranslation(const VECTOR3& t)
+    inline void setTranslation(const VECTOR3& t)
     {
         (VECTOR3&)matrix.a[3] = t;
         inverse_matrix_good = matrix_identity = false;
         ++change_count;
     }
 
-    inline void Transformation::getTranslation(VECTOR3& t) const { t = (VECTOR3&)matrix.a[3]; }
+    inline void getTranslation(VECTOR3& t) const { t = (VECTOR3&)matrix.a[3]; }
 
-    inline const VECTOR3& Transformation::getTranslation() const { return (VECTOR3&)matrix.a[3]; }
+    inline const VECTOR3& getTranslation() const { return (VECTOR3&)matrix.a[3]; }
 
-    inline bool Transformation::isIdentity() const { return matrix_identity; }
-    inline void Transformation::setIdentity()
+    inline bool isIdentity() const { return matrix_identity; }
+    inline void setIdentity()
     {
         matrix = inverse_matrix = IdentityMatrix4;
         angles                  = NullVector3;
@@ -64,7 +64,7 @@ public:
 
     inline bool hasOrthonormalAxes() const { return normalized_axes; };
 
-    inline void Transformation::setMatrix(const MATRIX4& M, bool orthonormal_axes = false)
+    inline void setMatrix(const MATRIX4& M, bool orthonormal_axes = false)
     {
         matrix              = M;
         inverse_matrix_good = angles_good = matrix_identity = false;
@@ -72,16 +72,16 @@ public:
         ++change_count;
     }
 
-    inline const MATRIX4& Transformation::getMatrix() const { return matrix; }
+    inline const MATRIX4& getMatrix() const { return matrix; }
 
-    inline const MATRIX4& Transformation::getInverseMatrix()
+    inline const MATRIX4& getInverseMatrix()
     {
         if (!inverse_matrix_good)
             evaluateInverseMatrix();
         return inverse_matrix;
     }
 
-    inline void Transformation::setAngles(const VECTOR3& a)
+    inline void setAngles(const VECTOR3& a)
     {
         angles              = a;
         angles_good         = true;
@@ -90,19 +90,19 @@ public:
         evaluateMatrix();
     }
 
-    inline const VECTOR3& Transformation::getAngles() const
+    inline const VECTOR3& getAngles() const
     {
         // FIXME: check for angles_good, extract from matrix when needed
         return angles;
     }
 
-    inline void Transformation::getAngles(VECTOR3& anglevec) const
+    inline void getAngles(VECTOR3& anglevec) const
     {
         // FIXME: check for angles_good, extract from matrix when needed
         anglevec = angles;
     }
 
-    inline void Transformation::setScale(float s)
+    inline void setScale(float s)
     {
         scale               = s;
         inverse_matrix_good = matrix_identity = normalized_axes = false;
@@ -110,9 +110,9 @@ public:
         evaluateMatrix();
     }
 
-    inline float Transformation::getScale() const { return scale; }
+    inline float getScale() const { return scale; }
 
-    inline void Transformation::setRotation(const MATRIX3& R)
+    inline void setRotation(const MATRIX3& R)
     {
         // FIXME: scaling is overwritten here, assumes R is orthonormal!!!
         // need to extract angles from R
@@ -122,12 +122,12 @@ public:
         ++change_count;
     }
 
-    inline void Transformation::getRotation(MATRIX3& R) const
+    inline void getRotation(MATRIX3& R) const
     {
         R = matrix;  // extract rotational part
     }
 
-    inline const VECTOR3& Transformation::getColumnVector(const int c) const { return (VECTOR3&)matrix.a[c]; }
+    inline const VECTOR3& getColumnVector(const int c) const { return (VECTOR3&)matrix.a[c]; }
 
     Transformation& operator=(const Transformation& transformation2);
 

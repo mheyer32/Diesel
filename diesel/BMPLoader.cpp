@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -54,8 +54,8 @@ Image* BMPLoader::load(CFile& file)
         std::cout << "BMPLoader::LoadBMP() file is not a BMP" << std::endl;
     }
 
-    BITMAPINFOHEADER bmih;
-    BITMAPCOREHEADER bmic;
+    BITMAPINFOHEADER bmih = {0};
+    BITMAPCOREHEADER bmic = {0};
 
     int startheader = file.getPosition();
 

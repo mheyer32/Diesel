@@ -1,7 +1,7 @@
 
 /*
 This file is part of DXShell
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 
 DXShell is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ CSurface8::~CSurface8()
 
 CSurface8::CSurface8(DWORD w, DWORD h, DWORD bc, DWORD caps)
 {
-    if (!create(w, h, bc, caps))
+    if (!CSurface8::create(w, h, bc, caps))
         throw CException("CSurface8::CSurface8() could not create surface");
 }
 
