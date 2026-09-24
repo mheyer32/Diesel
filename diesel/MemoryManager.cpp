@@ -1,6 +1,6 @@
 /*
 This file is part of Diesel
-(c) 2002 by Mathias Heyer
+(c) 2002-2026 by Mathias Heyer
 email: sonode@gmx.de
 
 Diesel is free software; you can redistribute it and/or modify
@@ -92,7 +92,7 @@ void MemoryManager::setBasePointer(char* ptr, unsigned int size)
 
     // align base
     // FIXME: this method contradicts the possibility of using templates!
-    baseptr = (char*)((int)(realbaseptr + align) & ~align);
+    baseptr = (char*)((ptrdiff_t)(realbaseptr + (ptrdiff_t)align - 1) & ~(ptrdiff_t)align);
     memsize = realmemsize & ~align;
 
     memmap.initialize(memsize);
