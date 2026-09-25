@@ -119,7 +119,7 @@ protected:
     ConVar scr_conspeed;
 
     static void        KeymapCB(int key, void* userdata);
-    friend static void KeymapCB(int key, void* userdata);
+    friend void KeymapCB(int key, void* userdata);
 
     static void toggleconsole(ConCmd& command, const std::string& args);
 };

@@ -336,7 +336,7 @@ CShader* DOFLoader::readMaterial()
     std::string classname = readString();
 
     CShader* shader;
-    if (shader = CShader::findShader(name.c_str())) {
+    if ((shader = CShader::findShader(name.c_str()))) {
         exitSubChunk();
         return shader;
     }

@@ -70,6 +70,11 @@ Image* BMPLoader::load(CFile& file)
         width  = bmih.biWidth;
         height = bmih.biHeight;
         bpp    = bmih.biBitCount;
+
+        if (bmih.biCompression != BI_RGB) {
+            std::cout << "BMPLoader::LoadBMP() compressed image data not supported" << std::endl;
+            return NULL;
+        }
     } else if (headersize == sizeof(bmic)) {
         file.setPosition(startheader);
         file.readVOID(&bmic, sizeof(bmic));
@@ -99,11 +104,6 @@ Image* BMPLoader::load(CFile& file)
         std::cout << "BMPLoader::LoadBMP() bmp bitcount other than 24 or 32 not supported" << std::endl;
         return NULL;
         break;
-    }
-
-    if (bmih.biCompression != BI_RGB) {
-        std::cout << "BMPLoader::LoadBMP() compressed image data not supported" << std::endl;
-        return false;
     }
 
     Image* image = new Image(width, height, bytesperpixel, dstformat, memformat);

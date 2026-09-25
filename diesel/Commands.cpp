@@ -107,7 +107,7 @@ void exec(ConCmd& Command, const std::string& Arg)
     buffer[size] = 0;
     char* pos    = buffer;
     char* nextline;
-    while (nextline = ParseHelper::FindNextLine(pos)) {
+    while ((nextline = ParseHelper::FindNextLine(pos))) {
         ConCmd::executeCommandLine(std::string(pos, nextline - pos));
         pos = nextline;
     }

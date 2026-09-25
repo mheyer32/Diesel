@@ -178,7 +178,7 @@ void CVertexBuffer::OptimizeVBuffer()
     COLOR   tcol;
 
     if (num_indices < 3) {
-        cout << "OptimizeVBuffer for an empty buffer???!!!!" << endl;
+        cout << "OptimizeVBuffer for an empty buffer?" << endl;
         return;
     }
 

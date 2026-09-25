@@ -1101,7 +1101,7 @@ bool Q3EntityFactory::spawnFunc(Q3Entity& Entity)
     CEntity*    ent  = NULL;
     CMesh*      mesh = NULL;
     if (getValue("model", modelname)) {
-        if (mesh = CMesh::FindMesh(modelname)) {
+        if ((mesh = CMesh::FindMesh(modelname))) {
             ent = new CEntity(mesh);
             Entity.addChild(ent);
         } else {
@@ -1159,7 +1159,7 @@ bool Q3EntityFactory::spawnPortal(Q3Entity& Entity)
     std::string modelname;
     if (getValue("model", modelname)) {
         CEntity* ent = NULL;
-        if (ent = CEntity::findEntity(modelname)) {
+        if ((ent = CEntity::findEntity(modelname))) {
             Entity.model = ent;
         } else {
             cout << "Q3EntityFactory::spawnPortal() portal '" << Entity.getName() << "': could not find model: '"

@@ -105,7 +105,7 @@ void ConCmd::execute(const std::string& Command, const std::string& Arg)
 {
     ConCmd* cobj;
 
-    if (cobj = findCommand(Command))
+    if ((cobj = findCommand(Command)))
         cobj->execute(Arg);
     else
         std::cout << "no such command \"" << Command << "\"" << endl;
@@ -122,17 +122,17 @@ void ConCmd::executeCommandLine(const std::string& CommandLine)
     lineend        = cmdline + strlen(cmdline);
 
     do {
-        if (temp = strpbrk(cmdline, "\";")) {
+        if ((temp = strpbrk(cmdline, "\";"))) {
             if (*temp == '\"') {
                 *temp = ' ';
-                if (!(temp = strchr(temp, '\"'))) {
+                if (!((temp = strchr(temp, '\"')))) {
                     std::cout << "no closing \" found" << std::endl;
                     return;
                 }
                 *temp = ' ';
             }
             temp4 = temp;
-            if (!(temp = strchr(temp, ';')))
+            if (!((temp = strchr(temp, ';'))))
                 temp = temp4;
         } else {
             temp = cmdline + strlen(cmdline);
@@ -174,7 +174,7 @@ void ConCmd::AliasCmd(ConCmd& Command, const std::string& Arg)
     if (Arg.empty()) {
         COMMANDITERATOR c;
         for (c = CommandList->begin(); c != CommandList->end(); c++) {
-            if (alias = dynamic_cast<CAliasCmd*>((*c).second)) {
+            if ((alias = dynamic_cast<CAliasCmd*>((*c).second))) {
                 std::cout << alias->getCommandName() << ": " << alias->getCommandline() << std::endl;
             }
         }
@@ -186,7 +186,7 @@ void ConCmd::AliasCmd(ConCmd& Command, const std::string& Arg)
         std::cout << "too few arguments" << std::endl;
         return;
     }
-    if (cmd = findCommand(aliasname)) {
+    if ((cmd = findCommand(aliasname))) {
         if (!(alias = dynamic_cast<CAliasCmd*>(cmd))) {
             std::cout << "aliasname is already used by non-alias" << std::endl;
             return;

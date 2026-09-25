@@ -35,5 +35,5 @@ void debug(FILE* file, LPCSTR pszMsg, ...)
 
     OutputDebugString(ach);
 
-    fprintf(file, ach);
+    fprintf(file, "%s", ach);
 }

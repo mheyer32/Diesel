@@ -277,11 +277,11 @@ void EndFrame()
     g_Text->PrintAt(text, 42, 0);
     sprintf(text, "%2d:%2d", (int)g_Time / 60, (int)fmod(g_Time, 60));
     g_Text->PrintAt(text, 58, 1);
-    sprintf(text, "%3d drawnnodes %3d skippednodes\n%3d seenboxes %3d unseenboxes\n", drawnnodes, skippednodes,
-            seenboxes, unseenboxes);
+    sprintf(text, "%3u drawnnodes %3u skippednodes\n%3u seenboxes %3u unseenboxes\n", (unsigned)drawnnodes,
+            (unsigned)skippednodes, (unsigned)seenboxes, (unsigned)unseenboxes);
     g_Text->PrintAt(text, 0, 29);
-    sprintf(text, "%6d gl_apicalls %6d tris %5d strips %5d vbuffers", gl_apicalls, triangles, strippedtris,
-            num_framevbuffers);
+    sprintf(text, "%6u gl_apicalls %6u tris %5u strips %5u vbuffers", (unsigned)gl_apicalls, (unsigned)triangles,
+            (unsigned)strippedtris, (unsigned)num_framevbuffers);
     g_Text->PrintAt(text, 0, 30);
 
     g_Text->RenderBuffer();

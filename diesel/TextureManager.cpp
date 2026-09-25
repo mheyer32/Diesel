@@ -111,7 +111,7 @@ bool CTextureManager::loadTexture(CTexture* texture, const CPath& orgfilename, i
     std::string ext = filename.getExtension();
 
     if (ext == "tga") {
-        if (file = fman->open(filename)) {
+        if ((file = fman->open(filename))) {
             loader = new TGALoader();
             goto FILE_FOUND;
         }
@@ -119,7 +119,7 @@ bool CTextureManager::loadTexture(CTexture* texture, const CPath& orgfilename, i
         filename.setExtension(ext);
     }
     if (ext == "jpg") {
-        if (file = fman->open(filename)) {
+        if ((file = fman->open(filename))) {
             loader = new JPGLoader();
             goto FILE_FOUND;
         }
@@ -127,13 +127,13 @@ bool CTextureManager::loadTexture(CTexture* texture, const CPath& orgfilename, i
         filename.setExtension(ext);
     }
     if (ext == "ftx") {
-        if (file = fman->open(filename)) {
+        if ((file = fman->open(filename))) {
             loader = new FTXLoader();
             goto FILE_FOUND;
         }
     }
     if (ext == "bmp") {
-        if (file = fman->open(filename)) {
+        if ((file = fman->open(filename))) {
             loader = new BMPLoader();
             goto FILE_FOUND;
         }
@@ -170,7 +170,7 @@ CVideoTexture* CTextureManager::findOrLoadVideoTexture(const std::string& name)
 {
     CTexture*      tex = findTexture(name);
     CVideoTexture* vidtex;
-    if (vidtex = dynamic_cast<CVideoTexture*>(tex))
+    if ((vidtex = dynamic_cast<CVideoTexture*>(tex)))
         return vidtex;  // FIXME: check for right type
 
     CPath videofile(name);

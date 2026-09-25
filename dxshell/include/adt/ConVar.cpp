@@ -137,7 +137,7 @@ void ConVar::set(ConCmd& Command, const std::string& Arg)
 
     if (cmd) {
         // the variable´s name is found
-        if (!(cvar = dynamic_cast<ConVar*>(cmd))) {
+        if (!((cvar = dynamic_cast<ConVar*>(cmd)))) {
             // the found command is not a variable
             std::cout << "'" << var << "' is already defined as non-variable statement." << std::endl;
             return;

@@ -74,7 +74,7 @@ void CDInputDevice::releaseDevice()
     if (Format_autodetected) {
         KILLARRAY(DeviceDataFormat->rgodf)
         KILLOBJECT(DeviceDataFormat)
-        KILLOBJECT(DeviceState)
+        KILLARRAY(DeviceState)
     }
 }
 

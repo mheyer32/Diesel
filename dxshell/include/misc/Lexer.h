@@ -123,7 +123,9 @@ protected:
         {
             check();
         }
-        // inline maxint(const maxint &mint2){val=mint2.val;}; // for temporary objects only
+        inline maxint(const maxint& mint2)
+        : val(mint2.val)
+        , maxval(mint2.maxval) {};
         void setMax(int newmaxval) { maxval = newmaxval; };
         int  getMax() { return maxval; };
 

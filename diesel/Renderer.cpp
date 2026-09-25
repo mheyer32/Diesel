@@ -1765,7 +1765,7 @@ inline void Renderer::restoreSourcePointers()
 void Renderer::disableMTex()
 {
     int num_units;
-    if (num_units = ogl->getNumTextureUnits()) {
+    if ((num_units = ogl->getNumTextureUnits())) {
         for (int u = 1; u < num_units; ++u) {
             if (tustate[u].flags & TEXUNIT_ENABLED) {
                 tustate[u].flags &= ~TEXUNIT_ENABLED;

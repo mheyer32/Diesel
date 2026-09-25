@@ -244,8 +244,9 @@ bool COpenGL::InitOpenGL(CWindow* window, GLPIXELFORMAT format)
 
             Modes[numModes] = Mode;
             CHARLINE ModeString;
-            sprintf(ModeString, "%d x %d x %d @ %dHz", Modes[numModes].dmPelsWidth, Modes[numModes].dmPelsHeight,
-                    Modes[numModes].dmBitsPerPel, Modes[numModes].dmDisplayFrequency);
+            sprintf(ModeString, "%u x %u x %u @ %uHz", (unsigned)Modes[numModes].dmPelsWidth,
+                    (unsigned)Modes[numModes].dmPelsHeight, (unsigned)Modes[numModes].dmBitsPerPel,
+                    (unsigned)Modes[numModes].dmDisplayFrequency);
             SMR.AddScreenMode(ModeString);
             ++numModes;
         }

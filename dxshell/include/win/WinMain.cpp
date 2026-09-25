@@ -96,8 +96,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 #ifndef _DEBUG
         GameShutDown();
-#else
-        throw;
 #endif
         return_value = -1;
     } catch (...) {
@@ -114,9 +112,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 #ifndef _DEBUG
         GameShutDown();
-#endif
-#ifdef _DEBUG
-        throw;
 #endif
         return_value = -1;
     }

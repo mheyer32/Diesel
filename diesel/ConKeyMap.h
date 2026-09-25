@@ -59,8 +59,8 @@ protected:
     static void bind(ConCmd& Command, const std::string& Arg);  // callback for "bind" and "unbind" console commands
     static void ExecBinding(int key, void* userdata);           // called if a console-bound key was pressed
 
-    friend static void bind(ConCmd& Command, const std::string& Arg);
-    friend static void PrintBindings(int key);
+    friend void bind(ConCmd& Command, const std::string& Arg);
+    friend void PrintBindings(int key);
 };
 
 #endif  // !defined(AFX_CONKEYMAP_H__61D4CFE0_3E45_11D5_99C9_0000E85E86C1__INCLUDED_)

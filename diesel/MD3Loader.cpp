@@ -168,7 +168,7 @@ CEntity* MD3Loader::loadEntity(const CPath& Filename)
     file->readVOID(&header, sizeof(MD3HEADER));
 
     entity = new CEntity();
-    if (child = CEntity::findEntity(header.FileName)) {
+    if ((child = CEntity::findEntity(header.FileName))) {
         // cout<<"LoadMD3(): reusing existing equal named Entity"<<endl<<"^3     "<<child->getName()<<endl;
         entity = child->clone();
 
@@ -203,7 +203,7 @@ CEntity* MD3Loader::loadEntity(const CPath& Filename)
 
     if (!mesh_animated) {
         entity->collapseChildren();
-        if (mesh = entity->getMesh()) {
+        if ((mesh = entity->getMesh())) {
             mesh->mergeVertexBuffers();
             mesh->optimize();
             mesh->calcBoundingBox();
@@ -220,7 +220,7 @@ CMesh* MD3Loader::loadMesh(const CPath& Filename)
 {
     CMesh* mesh = NULL;
 
-    if (mesh = CMesh::FindMesh(Filename)) {
+    if ((mesh = CMesh::FindMesh(Filename))) {
         return mesh;
     }
 
@@ -255,7 +255,7 @@ CEntity* MD3Loader::loadSimpleEntity(const CPath& Filename)
 {
     CEntity* entity = NULL;
 
-    if (entity = CEntity::findEntity(Filename)) {
+    if ((entity = CEntity::findEntity(Filename))) {
         CEntity* copy = new CEntity;
         // cout<<"LoadMD3(): reusing existing equal named Entity"<<endl<<"^4 "<<Filename<<endl;
         copy = entity->clone();
@@ -276,7 +276,7 @@ CEntity* MD3Loader::loadSimpleLODEntity(const CPath& Filename)
 {
     CEntity* entity = NULL;
 
-    if (entity = CEntity::findEntity(Filename)) {
+    if ((entity = CEntity::findEntity(Filename))) {
         CEntity* copy = new CEntity;
         // cout<<"LoadMD3(): reusing existing equal named Entity"<<endl<<"^4 "<<Filename<<endl;
         copy = entity->clone();
@@ -324,7 +324,7 @@ CShader* MD3Loader::loadSkin(char* Meshname)
     CFileManager* fman = CFileManager::Instance();
     CFile*        skinfile;
 
-    if (skinfile = fman->open(skinfilename)) {
+    if ((skinfile = fman->open(skinfilename))) {
         char* contents = new char[skinfile->getSize() + 1];
         skinfile->readVOID(contents, skinfile->getSize());
         contents[skinfile->getSize()] = 0;

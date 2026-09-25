@@ -64,8 +64,8 @@ bool CDirectDraw::InitDisplay()
     MODEITERATOR mIt = modelist.begin();
     for (; mIt != modelist.end(); ++mIt) {
         CHARLINE ModeString;
-        sprintf(ModeString, "%d x %d x %d @ %dHz", (*mIt).dwWidth, (*mIt).dwHeight,
-                (*mIt).ddpfPixelFormat.dwRGBBitCount, (*mIt).dwRefreshRate);
+        sprintf(ModeString, "%u x %u x %u @ %uHz", (unsigned)(*mIt).dwWidth, (unsigned)(*mIt).dwHeight,
+                (unsigned)(*mIt).ddpfPixelFormat.dwRGBBitCount, (unsigned)(*mIt).dwRefreshRate);
         SMR.AddScreenMode(ModeString);
     }
 

@@ -115,7 +115,7 @@ LRESULT CAppWindow::WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l)
         break;
     case Msg::GAME_ACTIVATED:
         bRunning = true;
-        false;
+        break;
     }
 
     msg.message = m;

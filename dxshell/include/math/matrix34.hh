@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <cmath>
 #include <ostream>
 
-__inline void sincos34(float in_angle, float &out_sin, float &out_cos)
+static inline void sincos34(float in_angle, float &out_sin, float &out_cos)
 {
     out_sin = sinf(in_angle);
     out_cos = cosf(in_angle);
@@ -64,6 +64,7 @@ inline MATRIX34& MATRIX34::operator = (const MATRIX4 &m2)
 	m[9]=m2.m[12];
 	m[10]=m2.m[13];
 	m[11]=m2.m[14];
+	return *this;
 }
 
 
@@ -237,9 +238,9 @@ inline void SimpleInverse34(const MATRIX34 &mat, MATRIX34& inv)
 	inv.m[8]=mat.m[8];
 
 	const VECTOR3 &trans=(VECTOR3&)mat.a[3];
-	inv.m[12]=-trans*(VECTOR3&)mat.a[0];
-	inv.m[13]=-trans*(VECTOR3&)mat.a[1];
-	inv.m[14]=-trans*(VECTOR3&)mat.a[2];
+	inv.m[9]=-trans*(VECTOR3&)mat.a[0];
+	inv.m[10]=-trans*(VECTOR3&)mat.a[1];
+	inv.m[11]=-trans*(VECTOR3&)mat.a[2];
 }
 
 inline void AngleAxisMatrix34(MATRIX34& matrix,const VECTOR3 &axis, float angle)

@@ -155,7 +155,7 @@ void MS3DModel::fillVertexData(CMesh* mesh)
 
 void MS3DModel::evaluateRuntimePosture(float frame, CMesh* mesh, MS3DAnimation* anim)
 {
-    if (!m_num_joints == anim->m_num_joints) {
+    if (m_num_joints != anim->m_num_joints) {
         throw CException("MS3DModel::evaluateRuntimePosture() animation and model joint count do not match");
     }
 
@@ -216,7 +216,7 @@ void MS3DModel::evaluateRuntimePosture(CMesh* mesh, const FRAMEINFOS& animframes
             const FRAMEINFO&                     animframe      = animframes[af];
             const MS3DAnimation::JOINTKEYFRAMES& jointkeyframes = animframe.anim->m_jointkeyframes[j];
 
-            if (!m_num_joints == animframe.anim->m_num_joints) {
+            if (m_num_joints != animframe.anim->m_num_joints) {
                 throw CException("MS3DModel::evaluateRuntimePosture() animation and model joint count do not match");
             }
 

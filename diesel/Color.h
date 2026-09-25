@@ -47,6 +47,7 @@ struct COLOR
     , g((unsigned char)v.y)
     , b((unsigned char)v.z)
     , alpha((unsigned char)v.w) {};
+    inline COLOR(const COLOR& col2) { *(int*)this = *(int*)&col2; };
 
     inline COLOR& operator=(const COLOR& col2)
     {
