@@ -139,6 +139,8 @@ bool COpenGL::InitOpenGL(CWindow* window, int width, int height, bool fullscreen
         }
     } else {
         SetWindowPos(m_glwindow->getHWND(), NULL, 0, 0, width, height, 0);
+        // Remember desktop mode for a later Alt-Return into fullscreen
+        getCurrentScreenMode();
         EnableWindowed();
     }
 
@@ -583,22 +585,29 @@ bool COpenGL::SwitchToFullscreen()
     if (m_rendertarget && m_rendertarget->getRenderContext())
         glFinish();
 
-    // get current screenmode
     DEVMODE screenmode;
     ZeroMemory(&screenmode, sizeof(DEVMODE));
     screenmode.dmSize        = sizeof(DEVMODE);
     screenmode.dmDriverExtra = 0;
 
-    screenmode.dmPelsWidth        = m_screenwidth;   // Screen Width
-    screenmode.dmPelsHeight       = m_screenheight;  // Screen Height
-    screenmode.dmBitsPerPel       = m_pixelformat.colorbits;
-    screenmode.dmDisplayFrequency = m_hertz;
-    screenmode.dmFields           = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL | DM_DISPLAYFREQUENCY;  // Pixel Mode
+    screenmode.dmPelsWidth  = m_screenwidth;
+    screenmode.dmPelsHeight = m_screenheight;
+    screenmode.dmBitsPerPel = m_pixelformat.colorbits;
+    screenmode.dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
 
-    if (ChangeDisplaySettings(&screenmode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-        // throw CWinException("COpenGL::SwitchToFullscreen() -> ChangeDisplaySettings()");
-        return false;
+    if (m_hertz > 0) {
+        screenmode.dmDisplayFrequency = m_hertz;
+        screenmode.dmFields |= DM_DISPLAYFREQUENCY;
     }
+
+    LONG cds = ChangeDisplaySettings(&screenmode, CDS_FULLSCREEN);
+    if (cds != DISP_CHANGE_SUCCESSFUL && (screenmode.dmFields & DM_DISPLAYFREQUENCY)) {
+        screenmode.dmFields &= ~DM_DISPLAYFREQUENCY;
+        screenmode.dmDisplayFrequency = 0;
+        cds                           = ChangeDisplaySettings(&screenmode, CDS_FULLSCREEN);
+    }
+    if (cds != DISP_CHANGE_SUCCESSFUL)
+        return false;
 
     m_glwindow->setFullscreen(true);
     return true;
@@ -653,6 +662,9 @@ Msg::MSGRVAL COpenGL::handleMessage(Msg::MessagingObject* sender, Msg::MESSAGEID
             if (m_run_fullscreen) {
                 EnableWindowed();
             } else {
+                // Pick up whatever the desktop is now (may have changed, or
+                // we started windowed with only a small client size).
+                getCurrentScreenMode();
                 EnableFullscreen();
             }
         }

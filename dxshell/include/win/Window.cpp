@@ -36,8 +36,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CWindow::CWindow()
 {
-    hwnd        = NULL;
-    bFullscreen = false;
+    hwnd          = NULL;
+    hAccel        = NULL;
+    bFullscreen   = false;
+    bMouseGrabbed = false;
 }
 
 CWindow::~CWindow()
@@ -100,6 +102,9 @@ bool CWindow::open(int nCmdShow)
         }
 
         hAccel = LoadAccelerators(getInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
+        if (!hAccel) {
+            std::cout << "CWindow::open(): LoadAccelerators(IDR_ACCELERATOR) failed" << std::endl;
+        }
     }
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
@@ -123,6 +128,7 @@ bool CWindow::open(int nCmdShow)
 
 void CWindow::close()
 {
+    releaseMouse();
     if (hwnd) {
         DestroyWindow(hwnd);
     }
@@ -133,16 +139,12 @@ LRESULT CWindow::WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l)
 {
     switch (m) {
     case WM_SIZE:
-        if (w == SIZE_MINIMIZED || w == SIZE_RESTORED) {
-            bFullscreen = false;
-        } else if (w == SIZE_MAXIMIZED) {
-            bFullscreen = true;
-        }
-        // intentionally fall through
     case WM_MOVE:
         GetClientRect(hwnd, &window_rect);
         ClientToScreen(hwnd, (LPPOINT)&window_rect.left);
         ClientToScreen(hwnd, (LPPOINT)&window_rect.right);
+        if (bMouseGrabbed)
+            grabMouse();
         break;
     }
 
@@ -188,18 +190,42 @@ bool CWindow::setFullscreen(bool fs)
         WStyle &= ~(WS_OVERLAPPEDWINDOW);
         WStyle |= WS_POPUP;
         SetWindowLong(hwnd, GWL_STYLE, WStyle);
-        ShowWindow(hwnd, SW_SHOWMAXIMIZED);
+
+        MONITORINFO mi;
+        mi.cbSize = sizeof(mi);
+        GetMonitorInfo(MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST), &mi);
+
+        // Cover the full monitor — SW_SHOWMAXIMIZED only fills the work area
+        // (taskbar stays visible/interactive after a focus loss/regain cycle).
+        SetWindowPos(hwnd,
+                     HWND_TOPMOST,
+                     mi.rcMonitor.left,
+                     mi.rcMonitor.top,
+                     mi.rcMonitor.right - mi.rcMonitor.left,
+                     mi.rcMonitor.bottom - mi.rcMonitor.top,
+                     SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+        SetForegroundWindow(hwnd);
         SetFocus(hwnd);
         bFullscreen = true;
+        if (bMouseGrabbed)
+            grabMouse();
         return true;
     } else {
         WStyle = GetWindowLong(hwnd, GWL_STYLE);
         WStyle &= ~WS_POPUP;
         WStyle |= WS_OVERLAPPEDWINDOW;
         SetWindowLong(hwnd, GWL_STYLE, WStyle);
-        ShowWindow(hwnd, SW_RESTORE);
-        SetFocus(hwnd);
+        SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED | SWP_NOACTIVATE);
         bFullscreen = false;
+        // Avoid restore+focus when leaving exclusive mode due to focus loss —
+        // caller may ShowWindow(SW_SHOWMINNOACTIVE) next. Stealing focus here
+        // would immediately GAME_ACTIVATED → fullscreen again.
+        if (GetForegroundWindow() == hwnd && !IsIconic(hwnd)) {
+            ShowWindow(hwnd, SW_RESTORE);
+            SetFocus(hwnd);
+        }
+        if (bMouseGrabbed)
+            grabMouse();
         return true;
     }
 
@@ -209,4 +235,30 @@ bool CWindow::setFullscreen(bool fs)
 bool CWindow::isFullscreen() const
 {
     return bFullscreen;
+}
+
+void CWindow::grabMouse()
+{
+    if (!hwnd)
+        return;
+
+    RECT rc;
+    GetClientRect(hwnd, &rc);
+    MapWindowPoints(hwnd, NULL, (POINT*)&rc, 2);
+    ClipCursor(&rc);
+    SetCapture(hwnd);
+    SetCursor(NULL);
+    bMouseGrabbed = true;
+}
+
+void CWindow::releaseMouse()
+{
+    if (!bMouseGrabbed)
+        return;
+
+    ClipCursor(NULL);
+    if (hwnd && GetCapture() == hwnd)
+        ReleaseCapture();
+    SetCursor(LoadCursor(NULL, IDC_ARROW));
+    bMouseGrabbed = false;
 }

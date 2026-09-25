@@ -148,9 +148,10 @@ int MainEventLoop()
     do {
         if (appwindow->isActive() && appwindow->isReady()) {
             if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
-                TranslateAccelerator(appwindow->getHWND(), appwindow->getAcceleratorHandle(), &msg);
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
+                if (!TranslateAccelerator(appwindow->getHWND(), appwindow->getAcceleratorHandle(), &msg)) {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
             }
             // Situation kann sich durch die Messages geändert haben
             if (appwindow->isActive() && appwindow->isReady())

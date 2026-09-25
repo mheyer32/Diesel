@@ -38,13 +38,13 @@ CAppWindow::~CAppWindow()
 void CAppWindow::GameActivation()
 {
     if (bRunning == true) {
-        if (!bActive || bMinimized || !bFocus || !bAppActive) {
-            SendMessage(hwnd, Msg::GAME_DEACTIVATED, 0, 0);
+        // App-level deactivate / minimize: ignore transient WM_KILLFOCUS during mode switches
+        if (!bActive || bMinimized || !bAppActive) {
+            PostMessage(hwnd, Msg::GAME_DEACTIVATED, 0, 0);
         }
     } else {
         if (bActive && !bMinimized && bFocus && bAppActive) {
             PostMessage(hwnd, Msg::GAME_ACTIVATED, 0, 0);
-            // SendMessage(hwnd,WM_GAME_ACTIVATED,0,0);
         }
     }
 }
@@ -87,7 +87,7 @@ LRESULT CAppWindow::WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l)
         break;
     case WM_KILLFOCUS:
         bFocus = false;
-        GameActivation();
+        // do not GameActivation() here — focus blips during CDS/setFullscreen must not pause the game
         break;
 
     case WM_ACTIVATE:
@@ -105,16 +105,18 @@ LRESULT CAppWindow::WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l)
         GameActivation();
         break;
     case WM_SETCURSOR:
-        if (bFullscreen) {
+        if (bFullscreen || bMouseGrabbed) {
             SetCursor(NULL);
             return 1;
         }
         break;
     case Msg::GAME_DEACTIVATED:
         bRunning = false;
+        releaseMouse();
         break;
     case Msg::GAME_ACTIVATED:
         bRunning = true;
+        grabMouse();
         break;
     }
 

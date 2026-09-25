@@ -48,6 +48,10 @@ public:
     bool isFullscreen() const;
     bool setFullscreen(bool fs);
 
+    void grabMouse();
+    void releaseMouse();
+    bool isMouseGrabbed() const { return bMouseGrabbed; }
+
     HACCEL getAcceleratorHandle() const;
 
     HWND getHWND() const;
@@ -60,6 +64,7 @@ protected:
     virtual LRESULT WindowProc(HWND hWnd, UINT m, WPARAM w, LPARAM l);
 
     bool   bFullscreen;
+    bool   bMouseGrabbed;
     RECT   window_rect;
     HWND   hwnd;  // windows handle
     HACCEL hAccel;

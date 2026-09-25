@@ -355,6 +355,14 @@ void GameShutDown()
 
 void MouseHandler()
 {
+    CAppWindow* appwindow = CAppWindow::Instance();
+    if (CGLConsole::Instance()->GetShow() != CGLConsole::SHOW_NOT) {
+        appwindow->releaseMouse();
+        return;
+    }
+    if (appwindow->isActive())
+        appwindow->grabMouse();
+
     static float        filter[5][2] = {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}};
     static float        weights[5]   = {0.5f, 0.25f, 0.125f, 0.0625, 0.03125};
     static unsigned int latest       = 0;
