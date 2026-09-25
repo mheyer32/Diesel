@@ -1,0 +1,47 @@
+# clangd project config for Diesel.
+# Include paths match CMakeLists.txt (Diesel + DXShell + 3rdParty x64 prefix).
+# --target makes clangd pick up the MSVC STL and the Windows SDK (windows.h, GL).
+# -I paths are relative to the repo root. compile_flags.txt pins that directory.
+
+If:
+  PathMatch: .*\.(c|cpp|cxx|cc|h|hh)
+
+CompileFlags:
+  Add:
+    - --target=x86_64-pc-windows-msvc
+    - -DWIN32
+    - -D_WIN32
+    - -DNOMINMAX
+    - -D_CRT_SECURE_NO_WARNINGS
+    - -D_CRT_SECURE_NO_DEPRECATE
+    - -fms-extensions
+    - -fms-compatibility
+    - -fdelayed-template-parsing
+    - -ferror-limit=0
+    - -Idiesel
+    - -Idxshell/include
+    - -I3rdParty/_install-x64/include
+    - -I3rdParty/_install-x64/include/jpeg
+
+---
+If:
+  PathMatch: .*\.(cpp|cxx|cc|h|hh)
+
+CompileFlags:
+  # C++14 matches what MSVC actually compiles this tree as (CMake's
+  # CXX_STANDARD 98 does not pass /std: to cl). auto_ptr is still available.
+  Add: [-std=c++14]
+
+---
+If:
+  PathMatch: .*\.(h|hh)
+
+CompileFlags:
+  Add: [-xc++-header]
+
+---
+If:
+  PathMatch: .*\.c
+
+CompileFlags:
+  Add: [-std=c17, -xc]

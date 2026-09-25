@@ -6,7 +6,7 @@ set(CMAKE_INSTALL_PREFIX
     "${CMAKE_CURRENT_SOURCE_DIR}/_bin"
     CACHE PATH "Where to place the executable")
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # needs to be placed _before_ checking either CMAKE_CXX_COMPILER_ID or MSVC

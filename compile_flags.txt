@@ -1,0 +1,2 @@
+# Pins clangd's compile directory to the repo root so .clangd -I paths resolve.
+-Wno-unused-command-line-argument
